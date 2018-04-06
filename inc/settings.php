@@ -19,10 +19,10 @@ add_action( 'admin_enqueue_scripts', 'auhfc_admin_enqueue_scripts' );
  * Enqueue the admin style
  */
 function auhfc_admin_enqueue_scripts($hook) {
-	if ( 'tools_page_head_footer_code' == $hook ) {
+	if ( 'tools_page_head-footer-code' === $hook ) {
 		wp_enqueue_style(
 			'head-footer-code-admin',
-			plugin_dir_url( __FILE__ ) . '../assets/css/admin.css',
+			plugin_dir_url( dirname( __FILE__ ) ) . 'assets/css/admin.css',
 			array(),
 			WPAU_HEAD_FOOTER_CODE_VER
 		);
@@ -36,7 +36,7 @@ function auhfc_add_admin_menu(  ) {
 		'Head & Footer Code',
 		'Head & Footer Code',
 		'manage_options',
-		'head_footer_code',
+		'head-footer-code',
 		'auhfc_options_page'
 	);
 
@@ -276,7 +276,7 @@ function auhfc_options_page(  ) {
  * @return array        Updated array of plugin row links with link to Settings page
  */
 function auhfc_plugin_settings_link( $links ) {
-	$settings_link = '<a href="tools.php?page=head_footer_code">Settings</a>';
+	$settings_link = '<a href="tools.php?page=head-footer-code">Settings</a>';
 	array_unshift( $links, $settings_link );
 	return $links;
 } // END public static function auhfc_plugin_settings_link( $links )

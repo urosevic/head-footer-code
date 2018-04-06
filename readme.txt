@@ -32,7 +32,7 @@ It is very hard to continue development and support for this and my other free p
 * Set site-wide custom content for footer page section (before the `</body>`)
 * Set article specific custom code for head page section (before the `</head>`)
 * Set article specific custom content for footer page section (before the `</body>`)
-* Choose priority of printed custom code to head/footer sections (lower number mean far from `</head>` and `</body>`, higher number means closer to `</head>` and `</body>`)
+* Choose priority of printed custom code to head and to footer sections (lower number mean far from `</head>` and/or `</body>`, higher number means closer to `</head>` and/or `</body>`)
 * Choose which post types will have enabled article specific head/footer fields
 * Choose should article specific head/footer code be appended to site-wide code, or will replace site-wide code
 * Site-wide section located under **Tools** > **Head & Footer Code**
@@ -41,7 +41,7 @@ It is very hard to continue development and support for this and my other free p
 
 General settings, including HEAD, FOOTER global code and priority, have been saved to WordPress option `auhfc_settings`.
 Each post/page/custom post type specific HEAD and FOOTER code have been saved to post meta `_auhfc`.
-On plugin uninstall these data is also deleted from database.
+On plugin uninstall these data are deleted from database.
 
 == Installation ==
 
@@ -85,9 +85,10 @@ Because all other similar plugins could not satisfy my requirements. In general,
 Initial release of new plugin developed by Aleksandar Urosevic.
 
 == Changelog ==
-= 1.0.8 (20170626) =
+= 1.0.8 (20171114) =
 * Compatibility check: Tested for WordPress 4.9
-* Add: Separate priority for HEAD and FOOT so admin can choose different priorities for header and footer
+* Rename settings page slug to `header-footer-code`
+* (20170626) Add: Separate priority for HEAD and FOOT so admin can choose different priorities for header and footer
 * Add: Priority info to debug HTML comments
 * Add: Updater script to migrate legacy option settings to new version
 

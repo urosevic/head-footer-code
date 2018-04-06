@@ -17,16 +17,39 @@ function auhfc_defaults() {
 } // END function auhfc_defaults()
 
 /**
- * Activate the plugin
- * Credits: http://solislab.com/blog/plugin-activation-checklist/#update-routines
+ * Go through activation hook on single and network wide activation
+ * Credits: https://developer.wordpress.org/reference/functions/get_sites/#comment-1842
  */
-function auhfc_activate() {
-
-	auhfc_defaults();
-	auhfc_maybe_update();
-
+function auhfc_activate( $networkwide ) {
+	// Multisite Network Activate
+	if ( function_exists( 'is_multisite' ) && is_multisite() ) {
+		error_log( 'it is multisite' );
+		// Check if it is a network activation so we run activation for each site
+		if ( $networkwide ) {
+			error_log( 'it is networkwide' );
+			if ( function_exists( 'get_sites' ) && class_exists( 'WP_Site_Query' ) ) {
+				$sites = get_sites();
+				foreach ( $sites as $site ) {
+					error_log( 'it is site ID ' . $site->blog_id );
+					switch_to_blog( $site->blog_id );
+					_auhfc_activate();
+					restore_current_blog();
+				}
+				return;
+			}
+		}
+	}
+	_auhfc_activate();
 } // END function auhfc_activate()
 
+/**
+ * Activate plugin and run update if required
+ * 
+ */
+function _auhfc_activate() {
+	auhfc_defaults();
+	auhfc_maybe_update();
+} // END function _auhfc_activate() {
 
 /**
  * Check do we need to migrate options
