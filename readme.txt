@@ -5,8 +5,8 @@ Tags: wp_head, wp_footer, head footer code, custom head script, custom footer sc
 Requires at least: 4.6
 Tested up to: 4.9.5
 Stable tag: 1.0.7
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License: GPLv3 or later
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 Easy add site-wide and/or article specific custom code before the &lt;/head&gt; or &lt;/body&gt; by hooking to wp_head and wp_footer.
 
@@ -86,6 +86,7 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 
 == Changelog ==
 = 1.0.8 (20180406) =
+* Update Gnu GPL version to 3 in readme file
 * Do not show network wide code areas on plugin settings for single site WordPress installation
 * (20171114) Compatibility check: Tested for WordPress 4.9
 * Minimal WordPress version: 4.6 (because of multisite improvements)
