@@ -3,13 +3,16 @@
  * Inject site-wide code to head and footer with custom priorty.
  */
 $auhfc_defaults = auhfc_defaults();
-if ( empty( $auhfc_defaults['priority'] ) ) {
-	$auhfc_defaults['priority'] = 10;
+if ( empty( $auhfc_defaults['priority_h'] ) ) {
+	$auhfc_defaults['priority_h'] = 10;
+}
+if ( empty( $auhfc_defaults['priority_f'] ) ) {
+	$auhfc_defaults['priority_f'] = 10;
 }
 
 // Define actions for HEAD and FOOTER
-add_action( 'wp_head', 'auhfc_wp_head', $auhfc_defaults['priority'] );
-add_action( 'wp_footer', 'auhfc_wp_footer', $auhfc_defaults['priority'] );
+add_action( 'wp_head', 'auhfc_wp_head', $auhfc_defaults['priority_h'] );
+add_action( 'wp_footer', 'auhfc_wp_footer', $auhfc_defaults['priority_f'] );
 
 /**
  * Inject site-wide and Article specific head code before </head>

@@ -113,15 +113,31 @@ function auhfc_settings_init(  ) {
 	);
 
 	add_settings_field(
-		'auhfc_priority',
-		__( 'Priority', 'head-footer-code' ),
+		'auhfc_priority_h',
+		__( 'Priority for HEAD', 'head-footer-code' ),
 		'auhfc_number_field_render',
 		'head_footer_code',
 		'head_footer_code_sitewide_settings',
 		array(
-			'field'       => 'auhfc_settings[priority]',
-			'value'       => $auhfc_settings['priority'],
-			'description' => esc_html__( 'Priority of inserted head and footer code. Default is 10. Larger number inject code closer to </head> and </body>.', 'head-footer-code' ),
+			'field'       => 'auhfc_settings[priority_h]',
+			'value'       => $auhfc_settings['priority_h'],
+			'description' => esc_html__( 'Priority of inserted head code. Default is 10. Larger number inject code closer to </head>.', 'head-footer-code' ),
+			'class'       => 'num',
+			'min'         => 1,
+			'max'         => 1000,
+			'step'        => 1,
+		)
+	);
+	add_settings_field(
+		'auhfc_priority_f',
+		__( 'Priority for FOOTER', 'head-footer-code' ),
+		'auhfc_number_field_render',
+		'head_footer_code',
+		'head_footer_code_sitewide_settings',
+		array(
+			'field'       => 'auhfc_settings[priority_f]',
+			'value'       => $auhfc_settings['priority_f'],
+			'description' => esc_html__( 'Priority of inserted footer code. Default is 10. Larger number inject code closer to </body>.', 'head-footer-code' ),
 			'class'       => 'num',
 			'min'         => 1,
 			'max'         => 1000,

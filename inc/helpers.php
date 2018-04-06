@@ -7,13 +7,41 @@ function auhfc_defaults() {
 	$defaults = array(
 		'head'       => '',
 		'footer'     => '',
-		'priority'   => 10,
+		'priority_h' => 10,
+		'priority_f' => 10,
 		'post_types' => array(),
 	);
 	$auhfc_settings = get_option( 'auhfc_settings', $defaults );
 	$auhfc_settings = wp_parse_args( $auhfc_settings, $defaults );
 	return $auhfc_settings;
 } // END function auhfc_defaults()
+
+/**
+ * Activate the plugin
+ * Credits: http://solislab.com/blog/plugin-activation-checklist/#update-routines
+ */
+function auhfc_activate() {
+
+	auhfc_defaults();
+	auhfc_maybe_update();
+
+} // END function auhfc_activate()
+
+
+/**
+ * Check do we need to migrate options
+ */
+function auhfc_maybe_update() {
+
+	// bail if this plugin data doesn't need updating
+	if ( get_option( 'auhfc_db_ver' ) >= WPAU_HEAD_FOOTER_CODE_DB_VER ) {
+		return;
+	}
+
+	require_once( dirname( __FILE__ ) . '/update.php' );
+	auhfc_update();
+
+} // END function auhfc_maybe_update()
 
 /**
  * Get values of metabox fields

@@ -3,7 +3,7 @@ Contributors: urkekg
 Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: wp_head, wp_footer, head footer code, custom head script, custom footer script, google analytics, pixel tracking, tracking code, javascript, scripts, site verification, css
 Requires at least: 3.9
-Tested up to: 4.8
+Tested up to: 4.9
 Stable tag: 1.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -85,6 +85,11 @@ Because all other similar plugins could not satisfy my requirements. In general,
 Initial release of new plugin developed by Aleksandar Urosevic.
 
 == Changelog ==
+= 1.0.8 (20170626) =
+* Compatibility check: Tested for WordPress 4.9
+* Add: Separate priority for HEAD and FOOT so admin can choose different priorities for header and footer
+* Add: updater script to migrate legacy option settings to new version
+
 = 1.0.7 =
 * Compatibility check: Tested for WordPress 4.7.1
 * UX: Add right hand sidebar on global settings page with links to donate, FAQ, Community support and plugin Reviews page.
