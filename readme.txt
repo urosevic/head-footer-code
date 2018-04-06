@@ -88,7 +88,8 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 = 1.0.8 (20170626) =
 * Compatibility check: Tested for WordPress 4.9
 * Add: Separate priority for HEAD and FOOT so admin can choose different priorities for header and footer
-* Add: updater script to migrate legacy option settings to new version
+* Add: Priority info to debug HTML comments
+* Add: Updater script to migrate legacy option settings to new version
 
 = 1.0.7 =
 * Compatibility check: Tested for WordPress 4.7.1

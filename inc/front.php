@@ -35,13 +35,13 @@ function auhfc_wp_head() {
 		$auhfc_meta = auhfc_get_meta( 'head' );
 		$behavior = auhfc_get_meta( 'behavior' );
 		if ( WP_DEBUG ) {
-			$dbg_set = "(type: {$auhfc_post_type}; bahavior: {$behavior})";
+			$dbg_set = "(priority: {$auhfc_settings['priority_h']}; type: {$auhfc_post_type}; bahavior: {$behavior})";
 		}
 	} else {
 		$auhfc_meta = '';
 		$behavior = '';
 		if ( WP_DEBUG ) {
-			$dbg_set = "({$auhfc_post_type})";
+			$dbg_set = "(priority: {$auhfc_settings['priority_h']}; type: {$auhfc_post_type})";
 		}
 	}
 
@@ -103,13 +103,13 @@ function auhfc_wp_footer() {
 		$auhfc_meta = auhfc_get_meta( 'footer' );
 		$behavior = auhfc_get_meta( 'behavior' );
 		if ( WP_DEBUG ) {
-			$dbg_set = "(type: {$auhfc_post_type}; bahavior: {$behavior})";
+			$dbg_set = "(priority: {$auhfc_settings['priority_f']}; type: {$auhfc_post_type}; bahavior: {$behavior})";
 		}
 	} else {
 		$auhfc_meta = '';
 		$behavior = '';
 		if ( WP_DEBUG ) {
-			$dbg_set = "({$auhfc_post_type})";
+			$dbg_set = "(priority: {$auhfc_settings['priority_f']}; type: {$auhfc_post_type})";
 		}
 	}
 
