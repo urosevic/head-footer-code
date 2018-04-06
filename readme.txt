@@ -2,8 +2,8 @@
 Contributors: urkekg
 Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: wp_head, wp_footer, head footer code, custom head script, custom footer script, google analytics, pixel tracking, tracking code, javascript, scripts, site verification, css
-Requires at least: 3.9
-Tested up to: 4.9
+Requires at least: 4.6
+Tested up to: 4.9.5
 Stable tag: 1.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -85,9 +85,13 @@ Because all other similar plugins could not satisfy my requirements. In general,
 Initial release of new plugin developed by Aleksandar Urosevic.
 
 == Changelog ==
-= 1.0.8 (20171114) =
-* Compatibility check: Tested for WordPress 4.9
-* Rename settings page slug to `header-footer-code`
+= 1.0.8 (20180406) =
+* Do not show network wide code areas on plugin settings for single site WordPress installation
+* (20171114) Compatibility check: Tested for WordPress 4.9
+* Minimal WordPress version: 4.6 (because of multisite improvements)
+* Change: settings page slug to `header-footer-code`
+* Update: support for Multisite
+* Add: network-wide code for head and footer defined by network admin on multisite WordPress
 * (20170626) Add: Separate priority for HEAD and FOOT so admin can choose different priorities for header and footer
 * Add: Priority info to debug HTML comments
 * Add: Updater script to migrate legacy option settings to new version

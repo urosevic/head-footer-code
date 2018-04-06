@@ -23,7 +23,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 define( 'WPAU_HEAD_FOOTER_CODE_VER', '1.0.8' );
-define( 'WPAU_HEAD_FOOTER_CODE_DB_VER', '1' );
+define( 'WPAU_HEAD_FOOTER_CODE_DB_VER', '2' );
 
 // Load files.
 require_once 'inc/helpers.php';

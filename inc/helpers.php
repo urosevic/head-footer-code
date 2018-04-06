@@ -5,11 +5,13 @@
  */
 function auhfc_defaults() {
 	$defaults = array(
-		'head'       => '',
-		'footer'     => '',
-		'priority_h' => 10,
-		'priority_f' => 10,
-		'post_types' => array(),
+		'network_head'   => '',
+		'network_footer' => '',
+		'head'           => '',
+		'footer'         => '',
+		'priority_h'     => 10,
+		'priority_f'     => 10,
+		'post_types'     => array(),
 	);
 	$auhfc_settings = get_option( 'auhfc_settings', $defaults );
 	$auhfc_settings = wp_parse_args( $auhfc_settings, $defaults );
@@ -23,14 +25,11 @@ function auhfc_defaults() {
 function auhfc_activate( $networkwide ) {
 	// Multisite Network Activate
 	if ( function_exists( 'is_multisite' ) && is_multisite() ) {
-		error_log( 'it is multisite' );
 		// Check if it is a network activation so we run activation for each site
 		if ( $networkwide ) {
-			error_log( 'it is networkwide' );
 			if ( function_exists( 'get_sites' ) && class_exists( 'WP_Site_Query' ) ) {
 				$sites = get_sites();
 				foreach ( $sites as $site ) {
-					error_log( 'it is site ID ' . $site->blog_id );
 					switch_to_blog( $site->blog_id );
 					_auhfc_activate();
 					restore_current_blog();

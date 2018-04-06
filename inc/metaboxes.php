@@ -42,7 +42,7 @@ function auhfc_add_meta_boxes() {
 function auhfc_display_html( $post ) {
 	wp_nonce_field( '_head_footer_code_nonce', 'head_footer_code_nonce' ); ?>
 
-	<p>Here you can insert article specific code for Head (before the <code>&lt;/head&gt;</code>) and Footer (before the <code>&lt;/body&gt;</code>) sections. They work in exactly the same way as site-wide code, which you can configure under <a href="tools.php?page=head_footer_code">Tools / Head &amp; Footer Code</a>.</p>
+	<p>Here you can insert article specific code for Head (before the <code>&lt;/head&gt;</code>) and Footer (before the <code>&lt;/body&gt;</code>) sections. They work in exactly the same way as site-wide code, which you can configure under <a href="tools.php?page=head-footer-code">Tools / Head &amp; Footer Code</a>.</p>
 
 	<table class="form-table">
 	<tbody>
@@ -54,7 +54,11 @@ function auhfc_display_html( $post ) {
 			<input type="radio" name="auhfc[behavior]" id="auhfc_behavior_append" value="append" <?php echo ( 'append' === auhfc_get_meta( 'behavior' ) ) ? 'checked' : ''; ?>>
 			<label for="auhfc_behavior_append">Append to the site-wide code</label><br />
 			<input type="radio" name="auhfc[behavior]" id="auhfc_behavior_replace" value="replace" <?php echo ( 'replace' === auhfc_get_meta( 'behavior' ) ) ? 'checked' : ''; ?>>
-			<label for="auhfc_behavior_replace">Replace the site-wide code</label>
+			<label for="auhfc_behavior_replace">Replace the site-wide code <?php
+				if ( is_multisite() ) { ?>
+					<em>- you can't remove network-wide code set by network admin</em>
+				<?php }
+			?></label>
 		</td>
 	</tr>
 

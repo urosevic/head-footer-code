@@ -46,12 +46,25 @@ function auhfc_wp_head() {
 	}
 
 	// If no code to inject, simple exit
-	if ( empty( $auhfc_settings['head'] ) && empty( $auhfc_meta ) ) {
-		return;
-	}
+	// if ( empty( $auhfc_settings['head'] ) && empty( $auhfc_meta ) ) {
+		// return;
+	// }
 
 	// Prepare code output.
 	$out = '';
+
+	// Inject network-wide head code
+	if ( is_multisite() ) {
+		switch_to_blog(1);
+		$network_auhfc_settings = get_option( 'auhfc_settings' );
+		restore_current_blog();
+
+		if ( ! empty( $network_auhfc_settings['network_head'] ) ) {
+			if ( WP_DEBUG ) { $out .= "<!-- Head & Footer Code: Network-wide head section start {$dbg_set} -->\n"; }
+			$out .= $network_auhfc_settings['network_head'];
+			if ( WP_DEBUG ) { $out .= "<!-- Head & Footer Code: Network-wide head section end {$dbg_set} -->\n"; }
+		}
+	}
 
 	// Inject site-wide head code
 	if (
@@ -114,12 +127,25 @@ function auhfc_wp_footer() {
 	}
 
 	// If no code to inject, simple exit
-	if ( empty( $auhfc_settings['footer'] ) && empty( $auhfc_meta ) ) {
-		return;
-	}
+	// if ( empty( $auhfc_settings['footer'] ) && empty( $auhfc_meta ) ) {
+		// return;
+	// }
 
 	// Prepare code output
 	$out = '';
+
+	// Inject network-wide footer code
+	if ( is_multisite() ) {
+		switch_to_blog(1);
+		$network_auhfc_settings = get_option( 'auhfc_settings' );
+		restore_current_blog();
+
+		if ( ! empty( $network_auhfc_settings['network_footer'] ) ) {
+			if ( WP_DEBUG ) { $out .= "<!-- Head & Footer Code: Network-wide footer section start {$dbg_set} -->\n"; }
+			$out .= $network_auhfc_settings['network_footer'];
+			if ( WP_DEBUG ) { $out .= "<!-- Head & Footer Code: Network-wide footer section end {$dbg_set} -->\n"; }
+		}
+	}
 
 	// Inject site-wide head code
 	if (

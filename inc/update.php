@@ -49,7 +49,6 @@ function auhfc_update_routine_1() {
 
 	// split pre-1.0.8 priority to priority_h and priority_f
 	if ( isset( $defaults['priority'] ) ) {
-
 		// Split single to separate option values
 		if ( ! isset( $defaults['priority_h'] ) ) {
 			$defaults['priority_h'] = $defaults['priority'];
@@ -63,4 +62,20 @@ function auhfc_update_routine_1() {
 		update_option( 'auhfc_settings', $defaults );
 	}
 
+} // END function auhfc_update_routine_1()
+
+/**
+ * Add network wide head and footer defaults to main site
+ */
+function auhfc_update_routine_2() {
+	if ( is_multisite() && is_main_site() ) {
+		$defaults = get_option( 'auhfc_settings' );
+		if ( ! isset( $defaults['network_head'] ) ) {
+			$defaults['network_head'] = '';
+		}
+		if ( ! isset( $defaults['network_footer'] ) ) {
+			$defaults['network_footer'] = '';
+		}
+		update_option( 'auhfc_settings', $defaults );
+	}
 } // END function auhfc_update_routine_2()
