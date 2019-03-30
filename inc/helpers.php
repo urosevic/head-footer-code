@@ -5,65 +5,15 @@
  */
 function auhfc_defaults() {
 	$defaults = array(
-		'network_head'   => '',
-		'network_footer' => '',
-		'head'           => '',
-		'footer'         => '',
-		'priority_h'     => 10,
-		'priority_f'     => 10,
-		'post_types'     => array(),
+		'head'       => '',
+		'footer'     => '',
+		'priority'   => 10,
+		'post_types' => array(),
 	);
 	$auhfc_settings = get_option( 'auhfc_settings', $defaults );
 	$auhfc_settings = wp_parse_args( $auhfc_settings, $defaults );
 	return $auhfc_settings;
 } // END function auhfc_defaults()
-
-/**
- * Go through activation hook on single and network wide activation
- * Credits: https://developer.wordpress.org/reference/functions/get_sites/#comment-1842
- */
-function auhfc_activate( $networkwide ) {
-	// Multisite Network Activate
-	if ( function_exists( 'is_multisite' ) && is_multisite() ) {
-		// Check if it is a network activation so we run activation for each site
-		if ( $networkwide ) {
-			if ( function_exists( 'get_sites' ) && class_exists( 'WP_Site_Query' ) ) {
-				$sites = get_sites();
-				foreach ( $sites as $site ) {
-					switch_to_blog( $site->blog_id );
-					_auhfc_activate();
-					restore_current_blog();
-				}
-				return;
-			}
-		}
-	}
-	_auhfc_activate();
-} // END function auhfc_activate()
-
-/**
- * Activate plugin and run update if required
- * 
- */
-function _auhfc_activate() {
-	auhfc_defaults();
-	auhfc_maybe_update();
-} // END function _auhfc_activate() {
-
-/**
- * Check do we need to migrate options
- */
-function auhfc_maybe_update() {
-
-	// bail if this plugin data doesn't need updating
-	if ( get_option( 'auhfc_db_ver' ) >= WPAU_HEAD_FOOTER_CODE_DB_VER ) {
-		return;
-	}
-
-	require_once( dirname( __FILE__ ) . '/update.php' );
-	auhfc_update();
-
-} // END function auhfc_maybe_update()
 
 /**
  * Get values of metabox fields

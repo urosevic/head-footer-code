@@ -2,11 +2,11 @@
 Contributors: urkekg
 Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: wp_head, wp_footer, head footer code, custom head script, custom footer script, google analytics, pixel tracking, tracking code, javascript, scripts, site verification, css
-Requires at least: 4.6
-Tested up to: 4.9.5
+Requires at least: 3.9
+Tested up to: 4.8
 Stable tag: 1.0.7
-License: GPLv3 or later
-License URI: http://www.gnu.org/licenses/gpl-3.0.html
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Easy add site-wide and/or article specific custom code before the &lt;/head&gt; or &lt;/body&gt; by hooking to wp_head and wp_footer.
 
@@ -32,7 +32,7 @@ It is very hard to continue development and support for this and my other free p
 * Set site-wide custom content for footer page section (before the `</body>`)
 * Set article specific custom code for head page section (before the `</head>`)
 * Set article specific custom content for footer page section (before the `</body>`)
-* Choose priority of printed custom code to head and to footer sections (lower number mean far from `</head>` and/or `</body>`, higher number means closer to `</head>` and/or `</body>`)
+* Choose priority of printed custom code to head/footer sections (lower number mean far from `</head>` and `</body>`, higher number means closer to `</head>` and `</body>`)
 * Choose which post types will have enabled article specific head/footer fields
 * Choose should article specific head/footer code be appended to site-wide code, or will replace site-wide code
 * Site-wide section located under **Tools** > **Head & Footer Code**
@@ -41,7 +41,7 @@ It is very hard to continue development and support for this and my other free p
 
 General settings, including HEAD, FOOTER global code and priority, have been saved to WordPress option `auhfc_settings`.
 Each post/page/custom post type specific HEAD and FOOTER code have been saved to post meta `_auhfc`.
-On plugin uninstall these data are deleted from database.
+On plugin uninstall these data is also deleted from database.
 
 == Installation ==
 
@@ -85,18 +85,6 @@ Because all other similar plugins could not satisfy my requirements. In general,
 Initial release of new plugin developed by Aleksandar Urosevic.
 
 == Changelog ==
-= 1.0.8 (20180406) =
-* Update Gnu GPL version to 3 in readme file
-* Do not show network wide code areas on plugin settings for single site WordPress installation
-* (20171114) Compatibility check: Tested for WordPress 4.9
-* Minimal WordPress version: 4.6 (because of multisite improvements)
-* Change: settings page slug to `header-footer-code`
-* Update: support for Multisite
-* Add: network-wide code for head and footer defined by network admin on multisite WordPress
-* (20170626) Add: Separate priority for HEAD and FOOT so admin can choose different priorities for header and footer
-* Add: Priority info to debug HTML comments
-* Add: Updater script to migrate legacy option settings to new version
-
 = 1.0.7 =
 * Compatibility check: Tested for WordPress 4.7.1
 * UX: Add right hand sidebar on global settings page with links to donate, FAQ, Community support and plugin Reviews page.

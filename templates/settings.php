@@ -16,11 +16,6 @@
 	<div class="head_footer_code_wrapper">
 		<div class="content_cell">
 			<form method="post" action="options.php">
-			<?php if ( is_multisite() && is_main_site() ) { ?>
-				<div class="network-wide">
-				<?php @settings_fields( 'head_footer_code_networkwide_settings' ); ?>
-				</div>
-			<?php	} ?>
 			<?php
 				@settings_fields( 'head_footer_code_sitewide_settings' );
 				@settings_fields( 'head_footer_code_article_settings' );

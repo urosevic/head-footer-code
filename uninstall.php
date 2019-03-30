@@ -7,16 +7,14 @@
 
 // If uninstall is not called from WordPress, exit
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-	exit();
+		exit();
 }
 
-$auhfc_options = array( 'auhfc_settings', 'auhfc_db_ver' );
-foreach ( $auhfc_options as $option_name ) {
-	// Delete option on single site
-	delete_option( $option_name );
-	// For site options in Multisite
-	delete_site_option( $option_name );
-}
+$option_name = 'auhfc_settings';
+delete_option( $option_name );
+
+// For site options in Multisite
+delete_site_option( $option_name );
 
 // Delete post meta values
 $post_meta_key = '_auhfc';

@@ -19,10 +19,10 @@ add_action( 'admin_enqueue_scripts', 'auhfc_admin_enqueue_scripts' );
  * Enqueue the admin style
  */
 function auhfc_admin_enqueue_scripts($hook) {
-	if ( 'tools_page_head-footer-code' === $hook ) {
+	if ( 'tools_page_head_footer_code' == $hook ) {
 		wp_enqueue_style(
 			'head-footer-code-admin',
-			plugin_dir_url( dirname( __FILE__ ) ) . 'assets/css/admin.css',
+			plugin_dir_url( __FILE__ ) . '../assets/css/admin.css',
 			array(),
 			WPAU_HEAD_FOOTER_CODE_VER
 		);
@@ -36,7 +36,7 @@ function auhfc_add_admin_menu(  ) {
 		'Head & Footer Code',
 		'Head & Footer Code',
 		'manage_options',
-		'head-footer-code',
+		'head_footer_code',
 		'auhfc_options_page'
 	);
 
@@ -53,69 +53,14 @@ function auhfc_settings_init(  ) {
 	 */
 	$auhfc_settings = auhfc_defaults();
 
-	if ( is_multisite() && is_main_site() ) {
-		/**
-		 * Register a setting and its sanitization callback for main site on network.
-		 * This is part of the Settings API, which lets you automatically generate
-		 * wp-admin settings pages by registering your settings and using a few
-		 * callbacks to control the output.
-		 */
-		register_setting( 'head_footer_code_networkwide_settings', 'auhfc_settings' );
-
-		/**
-		 * Settings section for Network wide code
-		 */
-		add_settings_section(
-			'head_footer_code_networkwide_settings',
-			esc_attr__( 'Network-wide Head and Footer Code', 'head-footer-code' ),
-			'auhfc_networkwide_settings_section_description',
-			'head_footer_code'
-		);
-		/**
-		 * Register Network wide options
-		 */
-		add_settings_field(
-			'auhfc_head_code',
-			__( 'HEAD Code (Network)', 'head-footer-code' ),
-			'auhfc_textarea_field_render',
-			'head_footer_code',
-			'head_footer_code_networkwide_settings',
-			array(
-				'field'       => 'auhfc_settings[network_head]',
-				'value'       => ! empty( $auhfc_settings['network_head'] ) ? $auhfc_settings['network_head'] : '',
-				'description' => __( 'Code to enqueue in HEAD section of each site on network', 'head-footer-code' ),
-				'field_class' => 'widefat code',
-				'rows'        => 7,
-			)
-		);
-
-		add_settings_field(
-			'auhfc_footer_code',
-			__( 'FOOTER Code (Network)', 'head-footer-code' ),
-			'auhfc_textarea_field_render',
-			'head_footer_code',
-			'head_footer_code_networkwide_settings',
-			array(
-				'field'       => 'auhfc_settings[network_footer]',
-				'value'       => ! empty( $auhfc_settings['network_footer'] ) ? $auhfc_settings['network_footer'] : '',
-				'description' => esc_html__( 'Code to enqueue in footer section of each site on network (before the </body>)', 'head-footer-code' ),
-				'field_class' => 'widefat code',
-				'rows'        => 7,
-			)
-		);
-
-	} // END if ( is_main_site() ) {
-
 	/**
-	 * Register a setting and its sanitization callback for single website.
+	 * Register a setting and its sanitization callback.
 	 * This is part of the Settings API, which lets you automatically generate
 	 * wp-admin settings pages by registering your settings and using a few
 	 * callbacks to control the output.
 	 */
 	register_setting( 'head_footer_code_sitewide_settings', 'auhfc_settings' );
 	register_setting( 'head_footer_code_article_settings', 'auhfc_settings' );
-
-	$single_site_title = is_multisite() ? ' ' . __( '(Site)' ) : '';
 
 	/**
 	 * Settings Sections are the groups of settings you see on WordPress settings pages
@@ -139,7 +84,7 @@ function auhfc_settings_init(  ) {
 	 */
 	add_settings_field(
 		'auhfc_head_code',
-		__( 'HEAD Code', 'head-footer-code' ) . $single_site_title,
+		__( 'HEAD Code', 'head-footer-code' ),
 		'auhfc_textarea_field_render',
 		'head_footer_code',
 		'head_footer_code_sitewide_settings',
@@ -154,7 +99,7 @@ function auhfc_settings_init(  ) {
 
 	add_settings_field(
 		'auhfc_footer_code',
-		__( 'FOOTER Code', 'head-footer-code' ) . $single_site_title,
+		__( 'FOOTER Code', 'head-footer-code' ),
 		'auhfc_textarea_field_render',
 		'head_footer_code',
 		'head_footer_code_sitewide_settings',
@@ -168,31 +113,15 @@ function auhfc_settings_init(  ) {
 	);
 
 	add_settings_field(
-		'auhfc_priority_h',
-		__( 'Priority for HEAD', 'head-footer-code' ),
+		'auhfc_priority',
+		__( 'Priority', 'head-footer-code' ),
 		'auhfc_number_field_render',
 		'head_footer_code',
 		'head_footer_code_sitewide_settings',
 		array(
-			'field'       => 'auhfc_settings[priority_h]',
-			'value'       => $auhfc_settings['priority_h'],
-			'description' => esc_html__( 'Priority of inserted head code. Default is 10. Larger number inject code closer to </head>.', 'head-footer-code' ),
-			'class'       => 'num',
-			'min'         => 1,
-			'max'         => 1000,
-			'step'        => 1,
-		)
-	);
-	add_settings_field(
-		'auhfc_priority_f',
-		__( 'Priority for FOOTER', 'head-footer-code' ),
-		'auhfc_number_field_render',
-		'head_footer_code',
-		'head_footer_code_sitewide_settings',
-		array(
-			'field'       => 'auhfc_settings[priority_f]',
-			'value'       => $auhfc_settings['priority_f'],
-			'description' => esc_html__( 'Priority of inserted footer code. Default is 10. Larger number inject code closer to </body>.', 'head-footer-code' ),
+			'field'       => 'auhfc_settings[priority]',
+			'value'       => $auhfc_settings['priority'],
+			'description' => esc_html__( 'Priority of inserted head and footer code. Default is 10. Larger number inject code closer to </head> and </body>.', 'head-footer-code' ),
 			'class'       => 'num',
 			'min'         => 1,
 			'max'         => 1000,
@@ -305,13 +234,6 @@ function auhfc_checkbox_group_field_render( $args ) {
 
 } // eom settings_field_checkbox()
 
-function auhfc_networkwide_settings_section_description(  ) {
-?>
-<p>Define network-wide code. This code can not be overriden on sub-site level.</p>
-<p>You can Add custom content like JavaScript, CSS, HTML meta and link tags, Google Analytics, site verification, etc that will be applied to all sub-sites on network.</p>
-<?php
-} // END function auhfc_networkwide_settings_section_description(  )
-
 function auhfc_sitewide_settings_section_description(  ) {
 ?>
 <p>Define site-wide code and behavior. You can Add custom content like JavaScript, CSS, HTML meta and link tags, Google Analytics, site verification, etc.</p>
@@ -338,7 +260,7 @@ function auhfc_options_page(  ) {
  * @return array        Updated array of plugin row links with link to Settings page
  */
 function auhfc_plugin_settings_link( $links ) {
-	$settings_link = '<a href="tools.php?page=head-footer-code">Settings</a>';
+	$settings_link = '<a href="tools.php?page=head_footer_code">Settings</a>';
 	array_unshift( $links, $settings_link );
 	return $links;
 } // END public static function auhfc_plugin_settings_link( $links )
