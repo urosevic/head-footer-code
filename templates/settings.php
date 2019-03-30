@@ -5,7 +5,7 @@
  * @category Template
  * @package Head & Footer Code
  * @author Aleksandar Urosevic
- * @license https://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @license https://www.gnu.org/copyleft/gpl-3.0.html GNU General Public License v3.0
  * @link https://urosevic.net
  */
 

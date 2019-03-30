@@ -2,11 +2,12 @@
 Contributors: urkekg
 Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: wp_head, wp_footer, head footer code, custom head script, custom footer script, google analytics, pixel tracking, tracking code, javascript, scripts, site verification, css
-Requires at least: 3.9
-Tested up to: 4.8
-Stable tag: 1.0.7
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Requires at least: 4.8
+Tested up to: 5.1.1
+Stable tag: 1.0.8
+Requires PHP: 5.5
+License: GPLv3 or later
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 Easy add site-wide and/or article specific custom code before the &lt;/head&gt; or &lt;/body&gt; by hooking to wp_head and wp_footer.
 
@@ -36,8 +37,7 @@ It is very hard to continue development and support for this and my other free p
 * Choose which post types will have enabled article specific head/footer fields
 * Choose should article specific head/footer code be appended to site-wide code, or will replace site-wide code
 * Site-wide section located under **Tools** > **Head & Footer Code**
-* If you have enabled WP_DEBUG constant in `wp-config.php`, you'll see site-wide and article specific entries in page source code wrapped to comments.
-* Support [Multisite](https://codex.wordpress.org/Create_A_Network) environment.
+* If you have set WP_DEBUG constant in `wp-config.php` to `true`, you'll see site-wide and article specific entries in page source code wrapped to comments.
 
 General settings, including HEAD, FOOTER global code and priority, have been saved to WordPress option `auhfc_settings`.
 Each post/page/custom post type specific HEAD and FOOTER code have been saved to post meta `_auhfc`.
@@ -85,6 +85,14 @@ Because all other similar plugins could not satisfy my requirements. In general,
 Initial release of new plugin developed by Aleksandar Urosevic.
 
 == Changelog ==
+= 1.0.8 =
+* Test compatibility with WordPress 5.1.1 and PHP 7.2.15
+* Change: Meta boxes layout and type of behavior selector
+* Change: Convert Post metaboxes to OOP
+* Change: GNU GPL license to v3
+* Add: Bundle GNU GPLv3 license to plugin codebase
+* Update: Screenshots
+
 = 1.0.7 =
 * Compatibility check: Tested for WordPress 4.7.1
 * UX: Add right hand sidebar on global settings page with links to donate, FAQ, Community support and plugin Reviews page.

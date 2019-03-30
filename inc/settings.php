@@ -18,7 +18,7 @@ add_action( 'admin_enqueue_scripts', 'auhfc_admin_enqueue_scripts' );
 /**
  * Enqueue the admin style
  */
-function auhfc_admin_enqueue_scripts($hook) {
+function auhfc_admin_enqueue_scripts( $hook ) {
 	if ( 'tools_page_head_footer_code' == $hook ) {
 		wp_enqueue_style(
 			'head-footer-code-admin',
@@ -29,7 +29,7 @@ function auhfc_admin_enqueue_scripts($hook) {
 	}
 } // END function wpau_enqueue_colour_picker()
 
-function auhfc_add_admin_menu(  ) {
+function auhfc_add_admin_menu() {
 
 	add_submenu_page(
 		'tools.php',
@@ -46,7 +46,7 @@ function auhfc_add_admin_menu(  ) {
  * Register a setting and its sanitization callback
  * define section and settings fields
  */
-function auhfc_settings_init(  ) {
+function auhfc_settings_init() {
 
 	/**
 	 * Get settings from options table
@@ -168,17 +168,16 @@ function auhfc_settings_init(  ) {
  * This function provides textarea for settings fields
  */
 function auhfc_textarea_field_render( $args ) {
-	extract( $args );
-	if ( empty( $rows ) ) {
+	if ( empty( $args['rows'] ) ) {
 		$rows = 7;
 	}
 	printf(
 		'<textarea name="%1$s" id="%1$s" rows="%2$s" class="%3$s">%4$s</textarea><p class="description">%5$s</p>',
-		$field,
-		$rows,
-		$field_class,
-		$value,
-		$description
+		$args['field'],
+		$args['rows'],
+		$args['field_class'],
+		$args['value'],
+		$args['description']
 	);
 } // END function auhfc_textarea_field_render( $args )
 
@@ -187,16 +186,15 @@ function auhfc_textarea_field_render( $args ) {
  * This function provides number input for settings fields
  */
 function auhfc_number_field_render( $args ) {
-	extract( $args );
 	printf(
 		'<input type="number" name="%1$s" id="%1$s" value="%2$s" class="%3$s" min="%4$s" max="%5$s" step="%6$s" /><p class="description">%7$s</p>',
-		$field, // name/id
-		$value, // value
-		$class, // class
-		$min, // min
-		$max, // max
-		$step, // step
-		$description // description
+		$args['field'], // name/id
+		$args['value'], // value
+		$args['class'], // class
+		$args['min'], // min
+		$args['max'], // max
+		$args['step'], // step
+		$args['description'] // description
 	);
 } // END function auhfc_number_field_render($args)
 
@@ -205,23 +203,21 @@ function auhfc_number_field_render( $args ) {
  */
 function auhfc_checkbox_group_field_render( $args ) {
 
-	extract( $args );
-
 	// Checkbox items.
 	$out = '<fieldset>';
 
-	foreach ( $items as $key => $label ) {
+	foreach ( $args['items'] as $key => $label ) {
 
 		$checked = '';
-		if ( ! empty( $value ) ) {
-			$checked = ( in_array( $key, $value ) ) ? 'checked="checked"' : '';
+		if ( ! empty( $args['value'] ) ) {
+			$checked = ( in_array( $key, $args['value'] ) ) ? 'checked="checked"' : '';
 		}
 
 		$out .= sprintf(
 			'<label for="%1$s_%2$s"><input type="checkbox" name="%1$s[]" id="%1$s_%2$s" value="%2$s" class="%3$s" %4$s />%5$s</label><br>',
-			$field,
+			$args['field'],
 			$key,
-			$class,
+			$args['class'],
 			$checked,
 			$label
 		);
@@ -234,19 +230,19 @@ function auhfc_checkbox_group_field_render( $args ) {
 
 } // eom settings_field_checkbox()
 
-function auhfc_sitewide_settings_section_description(  ) {
+function auhfc_sitewide_settings_section_description() {
 ?>
 <p>Define site-wide code and behavior. You can Add custom content like JavaScript, CSS, HTML meta and link tags, Google Analytics, site verification, etc.</p>
 <?php
-} // END function auhfc_sitewide_settings_section_description(  )
+} // END function auhfc_sitewide_settings_section_description()
 
-function auhfc_article_settings_section_description(  ) {
+function auhfc_article_settings_section_description() {
 ?>
 <p>Define article specific behavior.</p>
 <?php
-} // END function auhfc_article_settings_section_description(  )
+} // END function auhfc_article_settings_section_description()
 
-function auhfc_options_page(  ) {
+function auhfc_options_page() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( esc_attr__( 'You do not have sufficient permissions to access this page.' ) );
 	}
