@@ -1,4 +1,37 @@
 <?php
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
+register_activation_hook( __FILE__, 'auhfc_activate' );
+/**
+  * Plugin Activation hook function to check for Minimum PHP and WordPress versions
+  */
+function auhfc_activate() {
+	global $wp_version;
+	$php_req = '5.5'; // Minimum version of PHP required for this plugin
+	$wp_req  = '4.9'; // Minimum version of WordPress required for this plugin
+
+	if ( version_compare( PHP_VERSION, $php_req, '<' ) ) {
+		$flag = 'PHP';
+	} elseif ( version_compare( $wp_version, $wp_req, '<' ) ) {
+		$flag = 'WordPress';
+	} else {
+		return;
+	}
+	$version = 'PHP' == $flag ? $php_req : $wp_req;
+	deactivate_plugins( WPAU_HEAD_FOOTER_CODE_FILE );
+	wp_die(
+		'<p>The <strong>Head & Footer Code</strong> plugin requires' . $flag . ' version ' . $version . ' or greater.</p>',
+		'Plugin Activation Error',
+		array(
+			'response' => 200,
+			'back_link' => true,
+		)
+	);
+} // END function auhfc_activate()
+
 /**
  * Provide global defaults
  * @return array Arary of defined global values

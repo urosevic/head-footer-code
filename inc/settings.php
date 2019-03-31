@@ -1,4 +1,8 @@
 <?php
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 // Initiate settings section and fields.
 add_action( 'admin_init', 'auhfc_settings_init' );
