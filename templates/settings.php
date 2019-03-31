@@ -41,3 +41,9 @@ if ( ! defined( 'WPINC' ) ) {
 		</div><!-- .sidebar_container -->
 	</div><!-- .head_footer_code_wrapper -->
 </div>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	wp.codeEditor.initialize($('#auhfc_settings_head'), cm_settings);
+	wp.codeEditor.initialize($('#auhfc_settings_footer'), cm_settings);
+});
+</script>

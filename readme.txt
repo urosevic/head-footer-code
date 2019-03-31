@@ -87,6 +87,7 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 == Changelog ==
 
 = 1.0.8.1 =
+* Enable CodeMirror code editor for HEAD and FOOTER code in plugin settings
 * Add plugin activation hook to prevent fatal errors in case of legacy WP and/or PHP
 * Improve loading security
 

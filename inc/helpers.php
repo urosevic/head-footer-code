@@ -6,8 +6,8 @@ if ( ! defined( 'WPINC' ) ) {
 
 register_activation_hook( __FILE__, 'auhfc_activate' );
 /**
-  * Plugin Activation hook function to check for Minimum PHP and WordPress versions
-  */
+ * Plugin Activation hook function to check for Minimum PHP and WordPress versions
+ */
 function auhfc_activate() {
 	global $wp_version;
 	$php_req = '5.5'; // Minimum version of PHP required for this plugin
@@ -31,6 +31,21 @@ function auhfc_activate() {
 		)
 	);
 } // END function auhfc_activate()
+
+add_action( 'admin_enqueue_scripts', 'auhfc_codemirror_enqueue_scripts' );
+/**
+ * CodeMirror enqueue hoot function to enable code editor in plugin settings
+ * @param  string $hook Current page hook
+ */
+function auhfc_codemirror_enqueue_scripts( $hook ) {
+	if ( 'tools_page_head_footer_code' !== $hook ) {
+		return;
+	}
+	$cm_settings['codeEditor'] = wp_enqueue_code_editor( array( 'type' => 'text/html' ) );
+	wp_localize_script( 'jquery', 'cm_settings', $cm_settings );
+	wp_enqueue_script( 'wp-codemirror' );
+	wp_enqueue_style( 'wp-codemirror' );
+} // END function auhfc_codemirror_enqueue_scripts( $hook )
 
 /**
  * Provide global defaults
