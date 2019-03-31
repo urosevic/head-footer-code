@@ -1,4 +1,8 @@
 <?php
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 // Initiate settings section and fields.
 add_action( 'admin_init', 'auhfc_settings_init' );
@@ -172,12 +176,13 @@ function auhfc_textarea_field_render( $args ) {
 		$rows = 7;
 	}
 	printf(
-		'<textarea name="%1$s" id="%1$s" rows="%2$s" class="%3$s">%4$s</textarea><p class="description">%5$s</p>',
+		'<textarea name="%1$s" id="%6$s" rows="%2$s" class="%3$s">%4$s</textarea><p class="description">%5$s</p>',
 		$args['field'],
 		$args['rows'],
 		$args['field_class'],
 		$args['value'],
-		$args['description']
+		$args['description'],
+		str_replace(']', '', str_replace( '[', '_', $args['field'] ) )
 	);
 } // END function auhfc_textarea_field_render( $args )
 
