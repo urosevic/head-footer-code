@@ -40,7 +40,7 @@ function auhfc_wp_head() {
 		$auhfc_meta = auhfc_get_meta( 'head' );
 		$behavior = auhfc_get_meta( 'behavior' );
 		if ( WP_DEBUG ) {
-			$dbg_set = "(type: {$auhfc_post_type}; bahavior: {$behavior})";
+			$dbg_set = "(type: {$auhfc_post_type}; bahavior: {$behavior}; priority: {$auhfc_settings['priority_h']}; do_shortcode: {$auhfc_settings['do_shortcode']})";
 		}
 	} else {
 		$auhfc_meta = '';
@@ -80,7 +80,7 @@ function auhfc_wp_head() {
 	}
 
 	// Print prepared code.
-	echo $out;
+	echo ( 'y' === $auhfc_settings['do_shortcode'] ) ? do_shortcode( $out ) : $out;
 
 	// Free some memory.
 	unset( $auhfc_post_type, $auhfc_settings, $auhfc_meta, $behavior, $out );
@@ -108,7 +108,7 @@ function auhfc_wp_footer() {
 		$auhfc_meta = auhfc_get_meta( 'footer' );
 		$behavior = auhfc_get_meta( 'behavior' );
 		if ( WP_DEBUG ) {
-			$dbg_set = "(type: {$auhfc_post_type}; bahavior: {$behavior})";
+			$dbg_set = "(type: {$auhfc_post_type}; bahavior: {$behavior}; priority: {$auhfc_settings['priority_f']}; do_shortcode: {$auhfc_settings['do_shortcode']})";
 		}
 	} else {
 		$auhfc_meta = '';
@@ -148,7 +148,7 @@ function auhfc_wp_footer() {
 	}
 
 	// Print prepared code.
-	echo $out;
+	echo ( 'y' === $auhfc_settings['do_shortcode'] ) ? do_shortcode( $out ) : $out;
 
 	// Free some memory.
 	unset( $auhfc_post_type, $auhfc_settings, $auhfc_meta, $behavior, $out );

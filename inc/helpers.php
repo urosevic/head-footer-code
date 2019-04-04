@@ -25,10 +25,10 @@ function auhfc_activate() {
 	wp_die(
 		'<p>The <strong>Head & Footer Code</strong> plugin requires' . $flag . ' version ' . $version . ' or greater.</p>',
 		'Plugin Activation Error',
-		array(
-			'response' => 200,
+		[
+			'response'  => 200,
 			'back_link' => true,
-		)
+		]
 	);
 
 	// Trigger updater function.
@@ -66,12 +66,14 @@ function auhfc_codemirror_enqueue_scripts( $hook ) {
  * @return array Arary of defined global values
  */
 function auhfc_defaults() {
-	$defaults = array(
-		'head'       => '',
-		'footer'     => '',
+	$defaults = [
+		'head'         => '',
+		'footer'       => '',
 		'priority_h'   => 10,
 		'priority_f'   => 10,
-	);
+		'post_types'   => [],
+		'do_shortcode' => 'n',
+	];
 	$auhfc_settings = get_option( 'auhfc_settings', $defaults );
 	$auhfc_settings = wp_parse_args( $auhfc_settings, $defaults );
 	return $auhfc_settings;

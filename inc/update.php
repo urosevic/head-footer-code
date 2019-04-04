@@ -24,13 +24,13 @@ function auhfc_update() {
 	// Get the target version that we need to reach.
 	$target_db_ver = WPAU_HEAD_FOOTER_CODE_DB_VER;
 
-	// run update routines one by one until the current version number
+	// Run update routines one by one until the current version number
 	// reaches the target version number.
 	while ( $current_db_ver < $target_db_ver ) {
 		// Increment the current_db_ver by one.
 		++$current_db_ver;
 
-		// each db version will require a separate update function
+		// Each DB version will require a separate update function
 		// for example, for db_ver 3, the function name should be auhfc_update_3.
 		$func = "auhfc_update_{$current_db_ver}";
 		if ( function_exists( $func ) ) {
@@ -70,17 +70,18 @@ function auhfc_update_1() {
 } // END function auhfc_update_1()
 
 /**
- * Add network wide head and footer defaults to main site
+ * Add shortcode processor option
  */
-function auhfc_update_routine_2() {
-	if ( is_multisite() && is_main_site() ) {
-		$defaults = get_option( 'auhfc_settings' );
-		if ( ! isset( $defaults['network_head'] ) ) {
-			$defaults['network_head'] = '';
-		}
-		if ( ! isset( $defaults['network_footer'] ) ) {
-			$defaults['network_footer'] = '';
-		}
-		update_option( 'auhfc_settings', $defaults );
+function auhfc_update_2() {
+
+	// Get options from DB.
+	$defaults = get_option( 'auhfc_settings' );
+
+	// Add new plugin option.
+	if ( ! isset( $defaults['do_shortcode'] ) ) {
+		$defaults['do_shortcode'] = 'n';
 	}
-} // END function auhfc_update_routine_2()
+	// Save settings to DB.
+	update_option( 'auhfc_settings', $defaults );
+
+} // END function auhfc_update_2()

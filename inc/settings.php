@@ -27,7 +27,7 @@ function auhfc_admin_enqueue_scripts( $hook ) {
 		wp_enqueue_style(
 			'head-footer-code-admin',
 			plugin_dir_url( __FILE__ ) . '../assets/css/admin.css',
-			array(),
+			[],
 			WPAU_HEAD_FOOTER_CODE_VER
 		);
 	}
@@ -92,13 +92,13 @@ function auhfc_settings_init() {
 		'auhfc_textarea_field_render',
 		'head_footer_code',
 		'head_footer_code_sitewide_settings',
-		array(
+		[
 			'field'       => 'auhfc_settings[head]',
 			'value'       => $auhfc_settings['head'],
 			'description' => __( 'Code to enqueue in HEAD section', 'head-footer-code' ),
 			'field_class' => 'widefat code',
 			'rows'        => 7,
-		)
+		]
 	);
 
 	add_settings_field(
@@ -123,13 +123,13 @@ function auhfc_settings_init() {
 		'auhfc_textarea_field_render',
 		'head_footer_code',
 		'head_footer_code_sitewide_settings',
-		array(
+		[
 			'field'       => 'auhfc_settings[footer]',
 			'value'       => $auhfc_settings['footer'],
 			'description' => esc_html__( 'Code to enqueue in footer section (before the </body>)', 'head-footer-code' ),
 			'field_class' => 'widefat code',
 			'rows'        => 7,
-		)
+		]
 	);
 
 	add_settings_field(
@@ -138,7 +138,7 @@ function auhfc_settings_init() {
 		'auhfc_number_field_render',
 		'head_footer_code',
 		'head_footer_code_sitewide_settings',
-		array(
+		[
 			'field'       => 'auhfc_settings[priority_f]',
 			'value'       => $auhfc_settings['priority_f'],
 			'description' => esc_html__( 'Priority for enqueued FOOTER code. Default is 10. Larger number inject code closer to </body>.', 'head-footer-code' ),
@@ -146,9 +146,26 @@ function auhfc_settings_init() {
 			'min'         => 1,
 			'max'         => 1000,
 			'step'        => 1,
-		)
+		]
 	);
 
+	add_settings_field(
+		'auhfc_do_shortcode',
+		__( 'Process Shortcodes', 'head-footer-code' ),
+		'auhfc_select_field_render',
+		'head_footer_code',
+		'head_footer_code_sitewide_settings',
+		[
+			'field'       => 'auhfc_settings[do_shortcode]',
+			'items'       => [
+				'y' => __( 'Enable' ),
+				'n' => __( 'Disable' ),
+			],
+			'value'       => $auhfc_settings['do_shortcode'],
+			'description' => esc_html__( 'If you wish to process shortcodes in HEAD and FOOTER sections, enable this option.', 'head-footer-code' ),
+			'class'       => 'regilar-text',
+		]
+	);
 	/**
 	 * Settings Sections are the groups of settings you see on WordPress settings pages
 	 * with a shared heading. In your plugin you can add new sections to existing
@@ -164,22 +181,22 @@ function auhfc_settings_init() {
 	);
 
 	// Prepare clean list of post types w/o attachment
-	$clean_post_types = get_post_types( array( 'public' => true ) );
+	$clean_post_types = get_post_types( [ 'public' => true ] );
 	unset( $clean_post_types['attachment'] );
 
 	add_settings_field(
 		'auhfc_post_types',
-		__( 'Post types', 'head-footer-code' ),
+		__( 'Post Types', 'head-footer-code' ),
 		'auhfc_checkbox_group_field_render',
 		'head_footer_code',
 		'head_footer_code_article_settings',
-		array(
+		[
 			'field'       => 'auhfc_settings[post_types]',
 			'items'       => $clean_post_types,
 			'value'       => $auhfc_settings['post_types'],
 			'description' => esc_html__( 'Select which post types will have Article specific section. Default is post and page. Please note, even if you have Head/Footer Code set per article and then you disable that post type, article specific code will not be printed but only site-wide code.', 'head-footer-code' ),
 			'class'       => 'checkbox',
-		)
+		]
 	);
 
 } // END function auhfc_settings_init(  )
@@ -257,6 +274,47 @@ function auhfc_checkbox_group_field_render( $args ) {
 
 } // eom settings_field_checkbox()
 
+
+/**
+ * This function provides select for settings fields
+ * @param  array $args Array of field arguments.
+ */
+function auhfc_select_field_render( $args ) {
+	if ( empty( $args['class'] ) ) {
+		$args['class'] = 'regular-text';
+	}
+	printf(
+		'<select id="%1$s" name="%1$s" class="%2$s">',
+		esc_attr( $args['field'] ),
+		sanitize_html_class( $args['class'] )
+	);
+	foreach ( $args['items'] as $key => $val ) {
+		$selected = ( $args['value'] == $key ) ? 'selected=selected' : '';
+		printf(
+			'<option %1$s value="%2$s">%3$s</option>',
+			esc_attr( $selected ),      // 1
+			sanitize_key( $key ),       // 2
+			sanitize_text_field( $val ) // 3
+		);
+	}
+	printf(
+		'</select><p class="description">%s</p>',
+		wp_kses(
+			$args['description'],
+			[
+				'a' => [
+					'href'   => [],
+					'target' => [ '_blank' ],
+				],
+				'strong',
+				'em',
+				'pre',
+				'code',
+			]
+		)
+	);
+} // END public function settings_field_select($args)
+
 function auhfc_sitewide_settings_section_description() {
 ?>
 <p>Define site-wide code and behavior. You can Add custom content like JavaScript, CSS, HTML meta and link tags, Google Analytics, site verification, etc.</p>
@@ -298,7 +356,7 @@ function auhfc_add_plugin_meta_links( $links, $file ) {
 	if ( 'head-footer-code/head-footer-code.php' === $file ) {
 		return array_merge(
 			$links,
-			array(
+			[
 				sprintf(
 					'<a href="https://wordpress.org/support/plugin/head-footer-code" target="_blank">%s</a>',
 					__( 'Support' )
@@ -307,7 +365,7 @@ function auhfc_add_plugin_meta_links( $links, $file ) {
 					'<a href="https://urosevic.net/wordpress/donate/?donate_for=head-footer-code" target="_blank">%s</a>',
 					__( 'Donate' )
 				),
-			)
+			]
 		);
 	}
 	return $links;
