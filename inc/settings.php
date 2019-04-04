@@ -181,8 +181,15 @@ function auhfc_settings_init() {
 	);
 
 	// Prepare clean list of post types w/o attachment
-	$clean_post_types = get_post_types( [ 'public' => true ] );
-	unset( $clean_post_types['attachment'] );
+	$public_post_types = get_post_types( [ 'public' => true ], 'objects' );
+	$clean_post_types = [];
+	foreach ( $public_post_types as $public_post_type => $public_post_object ) {
+		if ( 'attachment' === $public_post_type ) {
+			continue;
+		}
+		$clean_post_types[ $public_post_type ] = "{$public_post_object->label} ({$public_post_type})";
+	}
+	// unset( $clean_post_types['attachment'] );
 
 	add_settings_field(
 		'auhfc_post_types',
@@ -199,7 +206,7 @@ function auhfc_settings_init() {
 		]
 	);
 
-} // END function auhfc_settings_init(  )
+} // END function auhfc_settings_init()
 
 /**
  * This function provides textarea for settings fields
@@ -215,7 +222,7 @@ function auhfc_textarea_field_render( $args ) {
 		$args['field_class'],
 		$args['value'],
 		$args['description'],
-		str_replace(']', '', str_replace( '[', '_', $args['field'] ) )
+		str_replace( ']', '', str_replace( '[', '_', $args['field'] ) )
 	);
 } // END function auhfc_textarea_field_render( $args )
 
@@ -243,12 +250,6 @@ function auhfc_checkbox_group_field_render( $args ) {
 
 	// Checkbox items.
 	$out = '<fieldset>';
-	if ( ! empty( $args['description'] ) ) {
-		$out .= sprintf(
-			'<p class="description">%s</p>',
-			trim( $args['description'] )
-		);
-	}
 
 	foreach ( $args['items'] as $key => $label ) {
 
@@ -264,6 +265,13 @@ function auhfc_checkbox_group_field_render( $args ) {
 			$args['class'],
 			$checked,
 			$label
+		);
+	}
+
+	if ( ! empty( $args['description'] ) ) {
+		$out .= sprintf(
+			'<p class="description">%s</p>',
+			trim( $args['description'] )
 		);
 	}
 

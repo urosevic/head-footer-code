@@ -67,16 +67,16 @@ function auhfc_wp_head() {
 			( 'replace' == $behavior && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) && empty( $auhfc_meta ) )
 		)
 	) {
-		if ( WP_DEBUG ) { $out .= "<!-- Head & Footer Code: Site-wide head section start {$dbg_set} -->\n"; }
+		$out .= WP_DEBUG ? "<!-- Head & Footer Code: Site-wide head section start {$dbg_set} -->\n" : '';
 		$out .= $auhfc_settings['head'];
-		if ( WP_DEBUG ) { $out .= "<!-- Head & Footer Code: Site-wide head section end {$dbg_set} -->\n"; }
+		$out .= WP_DEBUG ? $out .= "<!-- Head & Footer Code: Site-wide head section end {$dbg_set} -->\n" : '';
 	}
 
 	// Inject article specific head code if post_type is allowed
 	if ( ! empty( $auhfc_meta ) && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) {
-		if ( WP_DEBUG ) { $out .= "<!-- Head & Footer Code: Article specific head section start {$dbg_set} -->\n"; }
+		$out .= WP_DEBUG ? "<!-- Head & Footer Code: Article specific head section start {$dbg_set} -->\n" : '';
 		$out .= $auhfc_meta;
-		if ( WP_DEBUG ) { $out .= "<!-- Head & Footer Code: Article specific head section end {$dbg_set} -->\n"; }
+		$out .= WP_DEBUG ? "<!-- Head & Footer Code: Article specific head section end {$dbg_set} -->\n" : '';
 	}
 
 	// Print prepared code.
@@ -135,16 +135,16 @@ function auhfc_wp_footer() {
 			( 'replace' == $behavior && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) && empty( $auhfc_meta ) )
 		)
 	) {
-		if ( WP_DEBUG ) { $out .= "<!-- Head & Footer Code: Site-wide footer section start {$dbg_set} -->\n"; }
+		$out .= WP_DEBUG ? "<!-- Head & Footer Code: Site-wide footer section start {$dbg_set} -->\n" : '';
 		$out .= $auhfc_settings['footer'];
-		if ( WP_DEBUG ) { $out .= "<!-- Head & Footer Code: Site-wide footer section end {$dbg_set} -->\n"; }
+		$out .= WP_DEBUG ? "<!-- Head & Footer Code: Site-wide footer section end {$dbg_set} -->\n" : '';
 	}
 
 	// Inject article specific head code if post_type is allowed
 	if ( ! empty( $auhfc_meta ) && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) {
-		if ( WP_DEBUG ) { $out .= "<!-- Head & Footer Code: Article specific footer section start {$dbg_set} -->\n"; }
+		$out .= WP_DEBUG ? "<!-- Head & Footer Code: Article specific footer section start {$dbg_set} -->\n" : '';
 		$out .= trim( $auhfc_meta );
-		if ( WP_DEBUG ) { $out .= "<!-- Head & Footer Code: Article specific footer section end {$dbg_set} -->\n"; }
+		$out .= WP_DEBUG ? "<!-- Head & Footer Code: Article specific footer section end {$dbg_set} -->\n" : '';
 	}
 
 	// Print prepared code.

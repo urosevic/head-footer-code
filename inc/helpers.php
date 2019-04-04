@@ -4,7 +4,15 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-register_activation_hook( __FILE__, 'auhfc_activate' );
+// Include back-end/front-end resources.
+if ( is_admin() ) {
+	require_once 'settings.php';
+	require_once 'class-auhfc-meta-box.php';
+} else {
+	require_once 'front.php';
+}
+
+register_activation_hook( WPAU_HEAD_FOOTER_CODE_FILE, 'auhfc_activate' );
 /**
  * Plugin Activation hook function to check for Minimum PHP and WordPress versions
  */
@@ -38,11 +46,13 @@ function auhfc_activate() {
 // Regular update trigger.
 add_action( 'plugins_loaded', 'auhfc_maybe_update' );
 function auhfc_maybe_update() {
-	// bail if this plugin data doesn't need updating
+	// Bail if this plugin data doesn't need updating.
 	if ( get_option( 'auhfc_db_ver' ) >= WPAU_HEAD_FOOTER_CODE_DB_VER ) {
 		return;
 	}
+	// Require update script.
 	require_once( dirname( __FILE__ ) . '/update.php' );
+	// Trigger update function.
 	auhfc_update();
 } // END function auhfc_maybe_update()
 
