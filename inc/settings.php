@@ -102,6 +102,22 @@ function auhfc_settings_init() {
 	);
 
 	add_settings_field(
+		'auhfc_priority_h',
+		__( 'HEAD Priority', 'head-footer-code' ),
+		'auhfc_number_field_render',
+		'head_footer_code',
+		'head_footer_code_sitewide_settings',
+		[
+			'field'       => 'auhfc_settings[priority_h]',
+			'value'       => $auhfc_settings['priority_h'],
+			'description' => esc_html__( 'Priority for enqueued HEAD code. Default is 10. Larger number inject code closer to </head>.', 'head-footer-code' ),
+			'class'       => 'num',
+			'min'         => 1,
+			'max'         => 1000,
+			'step'        => 1,
+		]
+	);
+	add_settings_field(
 		'auhfc_footer_code',
 		__( 'FOOTER Code', 'head-footer-code' ),
 		'auhfc_textarea_field_render',
@@ -117,15 +133,15 @@ function auhfc_settings_init() {
 	);
 
 	add_settings_field(
-		'auhfc_priority',
-		__( 'Priority', 'head-footer-code' ),
+		'auhfc_priority_f',
+		__( 'FOOTER Priority', 'head-footer-code' ),
 		'auhfc_number_field_render',
 		'head_footer_code',
 		'head_footer_code_sitewide_settings',
 		array(
-			'field'       => 'auhfc_settings[priority]',
-			'value'       => $auhfc_settings['priority'],
-			'description' => esc_html__( 'Priority of inserted head and footer code. Default is 10. Larger number inject code closer to </head> and </body>.', 'head-footer-code' ),
+			'field'       => 'auhfc_settings[priority_f]',
+			'value'       => $auhfc_settings['priority_f'],
+			'description' => esc_html__( 'Priority for enqueued FOOTER code. Default is 10. Larger number inject code closer to </body>.', 'head-footer-code' ),
 			'class'       => 'num',
 			'min'         => 1,
 			'max'         => 1000,
@@ -210,6 +226,12 @@ function auhfc_checkbox_group_field_render( $args ) {
 
 	// Checkbox items.
 	$out = '<fieldset>';
+	if ( ! empty( $args['description'] ) ) {
+		$out .= sprintf(
+			'<p class="description">%s</p>',
+			trim( $args['description'] )
+		);
+	}
 
 	foreach ( $args['items'] as $key => $label ) {
 

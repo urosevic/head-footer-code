@@ -23,6 +23,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 define( 'WPAU_HEAD_FOOTER_CODE_VER', '1.0.8.1' );
+define( 'WPAU_HEAD_FOOTER_CODE_DB_VER', '2' );
 define( 'WPAU_HEAD_FOOTER_CODE_FILE', basename( __FILE__ ) );
 
 // Load files.
