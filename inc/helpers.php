@@ -4,13 +4,21 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-register_activation_hook( __FILE__, 'auhfc_activate' );
+// Include back-end/front-end resources.
+if ( is_admin() ) {
+	require_once 'settings.php';
+	require_once 'class-auhfc-meta-box.php';
+} else {
+	require_once 'front.php';
+}
+
+register_activation_hook( WPAU_HEAD_FOOTER_CODE_FILE, 'auhfc_activate' );
 /**
  * Plugin Activation hook function to check for Minimum PHP and WordPress versions
  */
 function auhfc_activate() {
 	global $wp_version;
-	$php_req = '5.5'; // Minimum version of PHP required for this plugin
+	$php_req = '5.6'; // Minimum version of PHP required for this plugin
 	$wp_req  = '4.9'; // Minimum version of WordPress required for this plugin
 
 	if ( version_compare( PHP_VERSION, $php_req, '<' ) ) {
@@ -25,12 +33,28 @@ function auhfc_activate() {
 	wp_die(
 		'<p>The <strong>Head & Footer Code</strong> plugin requires' . $flag . ' version ' . $version . ' or greater.</p>',
 		'Plugin Activation Error',
-		array(
-			'response' => 200,
+		[
+			'response'  => 200,
 			'back_link' => true,
-		)
+		]
 	);
+
+	// Trigger updater function.
+	auhfc_maybe_update();
 } // END function auhfc_activate()
+
+// Regular update trigger.
+add_action( 'plugins_loaded', 'auhfc_maybe_update' );
+function auhfc_maybe_update() {
+	// Bail if this plugin data doesn't need updating.
+	if ( get_option( 'auhfc_db_ver' ) >= WPAU_HEAD_FOOTER_CODE_DB_VER ) {
+		return;
+	}
+	// Require update script.
+	require_once( dirname( __FILE__ ) . '/update.php' );
+	// Trigger update function.
+	auhfc_update();
+} // END function auhfc_maybe_update()
 
 add_action( 'admin_enqueue_scripts', 'auhfc_codemirror_enqueue_scripts' );
 /**
@@ -41,7 +65,7 @@ function auhfc_codemirror_enqueue_scripts( $hook ) {
 	if ( 'tools_page_head_footer_code' !== $hook ) {
 		return;
 	}
-	$cm_settings['codeEditor'] = wp_enqueue_code_editor( array( 'type' => 'text/html' ) );
+	$cm_settings['codeEditor'] = wp_enqueue_code_editor( [ 'type' => 'text/html' ] );
 	wp_localize_script( 'jquery', 'cm_settings', $cm_settings );
 	wp_enqueue_script( 'wp-codemirror' );
 	wp_enqueue_style( 'wp-codemirror' );
@@ -52,12 +76,14 @@ function auhfc_codemirror_enqueue_scripts( $hook ) {
  * @return array Arary of defined global values
  */
 function auhfc_defaults() {
-	$defaults = array(
-		'head'       => '',
-		'footer'     => '',
-		'priority'   => 10,
-		'post_types' => array(),
-	);
+	$defaults = [
+		'head'         => '',
+		'footer'       => '',
+		'priority_h'   => 10,
+		'priority_f'   => 10,
+		'post_types'   => [],
+		'do_shortcode' => 'n',
+	];
 	$auhfc_settings = get_option( 'auhfc_settings', $defaults );
 	$auhfc_settings = wp_parse_args( $auhfc_settings, $defaults );
 	return $auhfc_settings;
