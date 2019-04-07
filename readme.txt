@@ -88,7 +88,7 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 
 = 1.0.9 =
 * Add: Descriptive post types and descriptions for article specific sections
-* Add: Option to process shortcodes in HEAD and FOOTER sections (global setting for site-wide and article specific)
+* Add: Option to process shortcodes in FOOTER section (global setting for site-wide and article specific)
 * Change: Separate priority for HEAD and FOOT so admin can choose different priorities for header and footer
 * Add: CodeMirror code editor for HEAD and FOOTER code in plugin settings
 * Add: Plugin activation hook to prevent fatal errors in case of legacy WP and/or PHP

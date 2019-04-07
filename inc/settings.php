@@ -162,7 +162,7 @@ function auhfc_settings_init() {
 				'n' => __( 'Disable' ),
 			],
 			'value'       => $auhfc_settings['do_shortcode'],
-			'description' => esc_html__( 'If you wish to process shortcodes in HEAD and FOOTER sections, enable this option.', 'head-footer-code' ),
+			'description' => esc_html__( 'If you wish to process shortcodes in FOOTER section, enable this option.', 'head-footer-code' ),
 			'class'       => 'regilar-text',
 		]
 	);

@@ -80,7 +80,8 @@ function auhfc_wp_head() {
 	}
 
 	// Print prepared code.
-	echo ( 'y' === $auhfc_settings['do_shortcode'] ) ? do_shortcode( $out ) : $out;
+	echo $out;
+	// echo ( 'y' === $auhfc_settings['do_shortcode'] ) ? do_shortcode( $out ) : $out;
 
 	// Free some memory.
 	unset( $auhfc_post_type, $auhfc_settings, $auhfc_meta, $behavior, $out );
