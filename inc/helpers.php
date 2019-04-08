@@ -137,19 +137,25 @@ function auhfc_get_meta( $field_name = '' ) {
  * Return debugging string if WP_DEBUG constant is true.
  * @param  string $scope    Scope of output (s - SITE WIDE, a - ARTICLE SPECIFIC)
  * @param  string $location Location of output (h - HEAD, f - FOOTER)
- * @param  string $position Position of output (s - start, e - end)
  * @param  string $message  Output message
+ * @param  string $code     Code for output
  * @return string           Composed string
  */
-function auhfc_html_dbg( $scope = null, $location = null, $position = null, $message ) {
+function auhfc_out( $scope = null, $location = null, $message = null, $code = null ) {
 	if ( ! WP_DEBUG ) {
-		return;
+		return $code;
 	}
-	if ( null == $scope || null == $location || null == $position ) {
+	if ( null == $scope || null == $location || null == $message ) {
 		return;
 	}
 	$scope = 's' == $scope ? 'Site-wide' : 'Article specific';
 	$location = 'h' == $location ? 'HEAD' : 'FOOTER';
-	$position = 's' == $position ? 'start' : 'end';
-	return "<!-- Head & Footer Code: {$scope} {$location} section {$position} ({$message}) -->\n";
-} // END function auhfc_html_dbg( $scope = null, $location = null, $position = null, $message )
+	return sprintf(
+		'<!-- Head & Footer Code: %1$s %2$s section start (%3$s) -->%5$s %4$s%5$s<!-- Head & Footer Code: %1$s %2$s section end (%3$s) -->%5$s',
+		$scope,            // 1
+		$location,         // 2
+		trim( $message ),  // 3
+		trim( $code ),     // 4
+		"\n"               // 5
+	);
+} // END function auhfc_out( $scope = null, $location = null, $message = null, $code = null )

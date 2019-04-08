@@ -63,16 +63,12 @@ function auhfc_wp_head() {
 			( 'replace' == $behavior && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) && empty( $auhfc_meta ) )
 		)
 	) {
-		$out .= auhfc_html_dbg( 's', 'h', 's', $dbg_set );
-		$out .= $auhfc_settings['head'];
-		$out .= auhfc_html_dbg( 's', 'h', 'e', $dbg_set );
+		$out .= auhfc_out( 's', 'h', $dbg_set, $auhfc_settings['head'] );
 	}
 
 	// Inject article specific head code if post_type is allowed
 	if ( ! empty( $auhfc_meta ) && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) {
-		$out .= auhfc_html_dbg( 'a', 'h', 's', $dbg_set );
-		$out .= $auhfc_meta;
-		$out .= auhfc_html_dbg( 'a', 'h', 'e', $dbg_set );
+		$out .= auhfc_out( 'a', 'h', $dbg_set, $auhfc_meta );
 	}
 
 	// Print prepared code.
@@ -128,16 +124,12 @@ function auhfc_wp_footer() {
 			( 'replace' == $behavior && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) && empty( $auhfc_meta ) )
 		)
 	) {
-		$out .= auhfc_html_dbg( 's', 'f', 's', $dbg_set );
-		$out .= $auhfc_settings['footer'];
-		$out .= auhfc_html_dbg( 's', 'f', 'e', $dbg_set );
+		$out .= auhfc_out( 's', 'f', $dbg_set, $auhfc_settings['footer'] );
 	}
 
 	// Inject article specific head code if post_type is allowed
 	if ( ! empty( $auhfc_meta ) && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) {
-		$out .= auhfc_html_dbg( 'a', 'f', 's', $dbg_set );
-		$out .= trim( $auhfc_meta );
-		$out .= auhfc_html_dbg( 'a', 'f', 'e', $dbg_set );
+		$out .= auhfc_out( 'a', 'f', $dbg_set, $auhfc_meta );
 	}
 
 	// Print prepared code.
