@@ -4,12 +4,12 @@ Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: wp_head, wp_footer, head footer code, custom head script, custom footer script, google analytics, pixel tracking, tracking code, javascript, scripts, site verification, css
 Requires at least: 4.9
 Tested up to: 5.1.1
-Stable tag: 1.0.9
+Stable tag: 1.0.9.1
 Requires PHP: 5.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Easy add site-wide and/or article specific custom code before the &lt;/head&gt; or &lt;/body&gt; by hooking to wp_head and wp_footer.
+Easy add site-wide and/or article specific custom code before the &lt;/head&gt; or &lt;/body&gt; by hooking to wp_head and wp_footer. Multisite is supported!
 
 == Description ==
 
@@ -85,6 +85,9 @@ Because all other similar plugins could not satisfy my requirements. In general,
 Initial release of new plugin developed by Aleksandar Urosevic.
 
 == Changelog ==
+
+= 1.0.9.1 =
+* Fix: Fatal Error on Multisite WP's (thanks @kunzemarketing for reporting)
 
 = 1.0.9 =
 * Add: Descriptive post types and descriptions for article specific sections

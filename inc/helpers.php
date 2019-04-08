@@ -6,10 +6,10 @@ if ( ! defined( 'WPINC' ) ) {
 
 // Include back-end/front-end resources.
 if ( is_admin() ) {
-	require_once 'settings.php';
-	require_once 'class-auhfc-meta-box.php';
+	require_once WPAU_HEAD_FOOTER_CODE_INC.'settings.php';
+	require_once WPAU_HEAD_FOOTER_CODE_INC.'class-auhfc-meta-box.php';
 } else {
-	require_once 'front.php';
+	require_once WPAU_HEAD_FOOTER_CODE_INC.'front.php';
 }
 
 register_activation_hook( WPAU_HEAD_FOOTER_CODE_FILE, 'auhfc_activate' );
