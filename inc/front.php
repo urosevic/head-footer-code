@@ -38,16 +38,12 @@ function auhfc_wp_head() {
 	// Get meta for post only if it's singular
 	if ( 'not singular' !== $auhfc_post_type && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) {
 		$auhfc_meta = auhfc_get_meta( 'head' );
-		$behavior = auhfc_get_meta( 'behavior' );
-		if ( WP_DEBUG ) {
-			$dbg_set = "(type: {$auhfc_post_type}; bahavior: {$behavior}; priority: {$auhfc_settings['priority_h']}; do_shortcode: {$auhfc_settings['do_shortcode']})";
-		}
+		$behavior   = auhfc_get_meta( 'behavior' );
+		$dbg_set    = "type: {$auhfc_post_type}; bahavior: {$behavior}; priority: {$auhfc_settings['priority_h']}; do_shortcode: {$auhfc_settings['do_shortcode']}";
 	} else {
 		$auhfc_meta = '';
-		$behavior = '';
-		if ( WP_DEBUG ) {
-			$dbg_set = "({$auhfc_post_type})";
-		}
+		$behavior   = '';
+		$dbg_set    = $auhfc_post_type;
 	}
 
 	// If no code to inject, simple exit
@@ -67,16 +63,12 @@ function auhfc_wp_head() {
 			( 'replace' == $behavior && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) && empty( $auhfc_meta ) )
 		)
 	) {
-		$out .= WP_DEBUG ? "<!-- Head & Footer Code: Site-wide head section start {$dbg_set} -->\n" : '';
-		$out .= $auhfc_settings['head'];
-		$out .= WP_DEBUG ? $out .= "<!-- Head & Footer Code: Site-wide head section end {$dbg_set} -->\n" : '';
+		$out .= auhfc_out( 's', 'h', $dbg_set, $auhfc_settings['head'] );
 	}
 
 	// Inject article specific head code if post_type is allowed
 	if ( ! empty( $auhfc_meta ) && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) {
-		$out .= WP_DEBUG ? "<!-- Head & Footer Code: Article specific head section start {$dbg_set} -->\n" : '';
-		$out .= $auhfc_meta;
-		$out .= WP_DEBUG ? "<!-- Head & Footer Code: Article specific head section end {$dbg_set} -->\n" : '';
+		$out .= auhfc_out( 'a', 'h', $dbg_set, $auhfc_meta );
 	}
 
 	// Print prepared code.
@@ -108,15 +100,11 @@ function auhfc_wp_footer() {
 	if ( 'not singular' !== $auhfc_post_type && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) {
 		$auhfc_meta = auhfc_get_meta( 'footer' );
 		$behavior = auhfc_get_meta( 'behavior' );
-		if ( WP_DEBUG ) {
-			$dbg_set = "(type: {$auhfc_post_type}; bahavior: {$behavior}; priority: {$auhfc_settings['priority_f']}; do_shortcode: {$auhfc_settings['do_shortcode']})";
-		}
+		$dbg_set = "type: {$auhfc_post_type}; bahavior: {$behavior}; priority: {$auhfc_settings['priority_f']}; do_shortcode: {$auhfc_settings['do_shortcode']}";
 	} else {
 		$auhfc_meta = '';
 		$behavior = '';
-		if ( WP_DEBUG ) {
-			$dbg_set = "({$auhfc_post_type})";
-		}
+		$dbg_set = $auhfc_post_type;
 	}
 
 	// If no code to inject, simple exit
@@ -136,16 +124,12 @@ function auhfc_wp_footer() {
 			( 'replace' == $behavior && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) && empty( $auhfc_meta ) )
 		)
 	) {
-		$out .= WP_DEBUG ? "<!-- Head & Footer Code: Site-wide footer section start {$dbg_set} -->\n" : '';
-		$out .= $auhfc_settings['footer'];
-		$out .= WP_DEBUG ? "<!-- Head & Footer Code: Site-wide footer section end {$dbg_set} -->\n" : '';
+		$out .= auhfc_out( 's', 'f', $dbg_set, $auhfc_settings['footer'] );
 	}
 
 	// Inject article specific head code if post_type is allowed
 	if ( ! empty( $auhfc_meta ) && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) {
-		$out .= WP_DEBUG ? "<!-- Head & Footer Code: Article specific footer section start {$dbg_set} -->\n" : '';
-		$out .= trim( $auhfc_meta );
-		$out .= WP_DEBUG ? "<!-- Head & Footer Code: Article specific footer section end {$dbg_set} -->\n" : '';
+		$out .= auhfc_out( 'a', 'f', $dbg_set, $auhfc_meta );
 	}
 
 	// Print prepared code.
