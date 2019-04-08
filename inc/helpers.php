@@ -6,10 +6,10 @@ if ( ! defined( 'WPINC' ) ) {
 
 // Include back-end/front-end resources.
 if ( is_admin() ) {
-	require_once WPAU_HEAD_FOOTER_CODE_INC.'settings.php';
-	require_once WPAU_HEAD_FOOTER_CODE_INC.'class-auhfc-meta-box.php';
+	require_once WPAU_HEAD_FOOTER_CODE_INC . 'settings.php';
+	require_once WPAU_HEAD_FOOTER_CODE_INC . 'class-auhfc-meta-box.php';
 } else {
-	require_once WPAU_HEAD_FOOTER_CODE_INC.'front.php';
+	require_once WPAU_HEAD_FOOTER_CODE_INC . 'front.php';
 }
 
 register_activation_hook( WPAU_HEAD_FOOTER_CODE_FILE, 'auhfc_activate' );
@@ -132,3 +132,24 @@ function auhfc_get_meta( $field_name = '' ) {
 		return false;
 	}
 } // END function auhfc_get_meta( $field_name )
+
+/**
+ * Return debugging string if WP_DEBUG constant is true.
+ * @param  string $scope    Scope of output (s - SITE WIDE, a - ARTICLE SPECIFIC)
+ * @param  string $location Location of output (h - HEAD, f - FOOTER)
+ * @param  string $position Position of output (s - start, e - end)
+ * @param  string $message  Output message
+ * @return string           Composed string
+ */
+function auhfc_html_dbg( $scope = null, $location = null, $position = null, $message ) {
+	if ( ! WP_DEBUG ) {
+		return;
+	}
+	if ( null == $scope || null == $location || null == $position ) {
+		return;
+	}
+	$scope = 's' == $scope ? 'Site-wide' : 'Article specific';
+	$location = 'h' == $location ? 'HEAD' : 'FOOTER';
+	$position = 's' == $position ? 'start' : 'end';
+	return "<!-- Head & Footer Code: {$scope} {$location} section {$position} ({$message}) -->\n";
+} // END function auhfc_html_dbg( $scope = null, $location = null, $position = null, $message )

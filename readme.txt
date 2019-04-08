@@ -88,6 +88,7 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 
 = 1.0.9.1 =
 * Fix: Fatal Error on Multisite WP's (thanks @kunzemarketing for reporting)
+* Improve: DRI for front-end debugging
 
 = 1.0.9 =
 * Add: Descriptive post types and descriptions for article specific sections
