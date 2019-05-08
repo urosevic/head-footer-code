@@ -117,6 +117,47 @@ function auhfc_settings_init() {
 			'step'        => 1,
 		]
 	);
+
+	$wp52note = version_compare( get_bloginfo( 'version' ),'5.2', '<') ? ' Require WordPress 5.2+' : '';
+
+	add_settings_field(
+		'auhfc_body_code',
+		__( 'BODY Code', 'head-footer-code' ),
+		'auhfc_textarea_field_render',
+		'head_footer_code',
+		'head_footer_code_sitewide_settings',
+		[
+			'field'       => 'auhfc_settings[body]',
+			'value'       => $auhfc_settings['body'],
+			'description' => __(
+				auhfc_body_note() . 'Code to enqueue in BODY section.' . $wp52note,
+				'body-footer-code'
+			),
+			'field_class' => 'widefat code',
+			'rows'        => 7,
+		]
+	);
+
+	add_settings_field(
+		'auhfc_priority_b',
+		__( 'BODY Priority', 'head-footer-code' ),
+		'auhfc_number_field_render',
+		'head_footer_code',
+		'head_footer_code_sitewide_settings',
+		[
+			'field'       => 'auhfc_settings[priority_b]',
+			'value'       => $auhfc_settings['priority_b'],
+			'description' => esc_html__(
+				'Priority for enqueued BODY code. Default is 10. Smaller number inject code closer to <body>.' . $wp52note,
+				'head-footer-code'
+			),
+			'class'       => 'num',
+			'min'         => 1,
+			'max'         => 1000,
+			'step'        => 1,
+		]
+	);
+
 	add_settings_field(
 		'auhfc_footer_code',
 		__( 'FOOTER Code', 'head-footer-code' ),
@@ -126,7 +167,10 @@ function auhfc_settings_init() {
 		[
 			'field'       => 'auhfc_settings[footer]',
 			'value'       => $auhfc_settings['footer'],
-			'description' => esc_html__( 'Code to enqueue in footer section (before the </body>)', 'head-footer-code' ),
+			'description' => esc_html__(
+				'Code to enqueue in footer section (before the </body>)',
+				'head-footer-code'
+			),
 			'field_class' => 'widefat code',
 			'rows'        => 7,
 		]

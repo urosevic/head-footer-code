@@ -48,6 +48,7 @@ abstract class AUHfc_Meta_Box {
 		if ( ! empty( $_POST['auhfc'] ) ) {
 
 			$auhfc['head']     = ( ! empty( $_POST['auhfc']['head'] ) ) ? $_POST['auhfc']['head'] : '';
+			$auhfc['body']     = ( ! empty( $_POST['auhfc']['body'] ) ) ? $_POST['auhfc']['body'] : '';
 			$auhfc['footer']   = ( ! empty( $_POST['auhfc']['footer'] ) ) ? $_POST['auhfc']['footer'] : '';
 			$auhfc['behavior'] = ( ! empty( $_POST['auhfc']['behavior'] ) ) ? $_POST['auhfc']['behavior'] : '';
 
@@ -75,6 +76,10 @@ abstract class AUHfc_Meta_Box {
 		<label for="auhfc_head"><?php _e( 'Head Code', 'head-footer-code' ); ?></label><br />
 		<textarea name="auhfc[head]" id="auhfc_head" class="widefat code" rows="5"><?php echo auhfc_get_meta( 'head' ); ?></textarea>
 		<p class="description">Example: <code>&lt;link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri(); ?>/style.css" type="text/css" media="all"&gt;</code></p>
+		<br />
+		<label for="auhfc_body"><?php _e( 'Body Code', 'body-footer-code' ); ?></label><br />
+		<textarea name="auhfc[body]" id="auhfc_body" class="widefat code" rows="5"><?php echo auhfc_get_meta( 'body' ); ?></textarea>
+		<p class="description">Example: <code>&lt;script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/body-start.js" type="text/css" media="all"&gt;&lt;/script&gt;</code></p>
 		<br />
 		<label for="auhfc_footer"><?php _e( 'Footer Code', 'head-footer-code' ); ?></label><br />
 		<textarea name="auhfc[footer]" id="auhfc_footer" class="widefat code" rows="5"><?php echo auhfc_get_meta( 'footer' ); ?></textarea>

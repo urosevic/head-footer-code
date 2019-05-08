@@ -7,8 +7,8 @@
  * @wordpress-plugin
  * Plugin Name: Head & Footer Code
  * Plugin URI:  https://urosevic.net/wordpress/plugins/head-footer-code/
- * Description: Easy add site-wide and/or article specific custom code to head and/or footer sections (before the &lt;/head&gt; or &lt;/body&gt;) by hooking to <code>wp_head</code> and <code>wp_footer</code>.
- * Version:     1.0.9.1
+ * Description: Easy add site-wide and/or article specific custom code to head and/or footer sections (before the &lt;/head&gt; or &lt;/body&gt; or opening &lt;body&gt;) by hooking to <code>wp_head</code>, <code>wp_footer</code> and <code>wp_body_open</code>.
+ * Version:     1.1.0
  * Author:      Aleksandar Urosevic
  * Author URI:  https://urosevic.net
  * License:     GPL-3.0+
@@ -22,8 +22,8 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define( 'WPAU_HEAD_FOOTER_CODE_VER', '1.0.9.1' );
-define( 'WPAU_HEAD_FOOTER_CODE_DB_VER', '2' );
+define( 'WPAU_HEAD_FOOTER_CODE_VER', '1.1.0' );
+define( 'WPAU_HEAD_FOOTER_CODE_DB_VER', '3' );
 define( 'WPAU_HEAD_FOOTER_CODE_FILE', basename( __FILE__ ) );
 define( 'WPAU_HEAD_FOOTER_CODE_INC', dirname( __FILE__ ) . '/inc/' );
 
