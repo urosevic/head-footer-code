@@ -44,6 +44,7 @@ if ( ! defined( 'WPINC' ) ) {
 <script type="text/javascript">
 jQuery(document).ready(function($) {
 	wp.codeEditor.initialize($('#auhfc_settings_head'), cm_settings);
+	wp.codeEditor.initialize($('#auhfc_settings_body'), cm_settings);
 	wp.codeEditor.initialize($('#auhfc_settings_footer'), cm_settings);
 });
 </script>

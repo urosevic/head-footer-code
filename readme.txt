@@ -3,19 +3,19 @@ Contributors: urkekg
 Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: wp_head, wp_footer, head footer code, custom head script, custom footer script, google analytics, pixel tracking, tracking code, javascript, scripts, site verification, css
 Requires at least: 4.9
-Tested up to: 5.1.1
-Stable tag: 1.0.9.1
+Tested up to: 5.2.0
+Stable tag: 1.2.0
 Requires PHP: 5.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Easy add site-wide and/or article specific custom code before the &lt;/head&gt; or &lt;/body&gt; by hooking to wp_head and wp_footer. Multisite is supported!
+Easy add site-wide and/or article specific custom code before the &lt;/head&gt; or &lt;/body&gt; or opening &lt;body&gt; by hooking to wp_head, wp_footer and wp_body_open. Multisite is supported!
 
 == Description ==
 
-Let we say that you have been told to add some custom code (HTML, JavaScript or CSS style) to page's `<head>` (like site verification code, custom styles, webfont link, etc), or just before `</body>` (like pixel tracking, analytics code, heatmap code, etc), but you are not programmer. Then you can use Head &amp; Footer Code to do that.
+Let we say that you have been told to add some custom code (HTML, JavaScript or CSS style) to page's `<head>` (like site verification code, custom styles, webfont link, etc), just before `</body>` or right after opening `<body>` (like pixel tracking, analytics code, heatmap code, etc), but you are not programmer. Then you can use Head &amp; Footer Code to do that.
 
-Simply go to Tools &rarr; Head &amp; Footer Code in your website admin dashboard, and insert custom code to HEAD or FOOTER section (depending what you have to do).
+Simply go to Tools &rarr; Head &amp; Footer Code in your website admin dashboard, and insert custom code to HEAD, BODY or FOOTER section (depending what you have to do).
 
 If you have to insert some custom code specific for individual article (post, page, custom post type), then you can use Article specific metabox while you editing post/page/custom post type (check out [Screenshots](https://wordpress.org/plugins/head-footer-code/screenshots/)). There you can also set should that specific code be appended to site-wide code defined on **Tools** &rarr; **Head &amp; Footer Code**, or should be overwritten.
 
@@ -30,17 +30,19 @@ It is very hard to continue development and support for this and my other free p
 **Features**
 
 * Set site-wide custom content for head page section (before the `</head>`)
+* Set site-wide custom content for body section (after the `<body>`) - **Requires WordPress 5.2!**
 * Set site-wide custom content for footer page section (before the `</body>`)
 * Set article specific custom code for head page section (before the `</head>`)
+* Set article specific custom code for body section (after the `<body>`) - **Requires WordPress 5.2!**
 * Set article specific custom content for footer page section (before the `</body>`)
-* Choose priority of printed custom code to head/footer sections (lower number mean far from `</head>` and `</body>`, higher number means closer to `</head>` and `</body>`)
+* Choose priority of printed custom code to head/body/footer sections (lower number mean far from `</head>` and `</body>` and closer to `<body>`, higher number means closer to `</head>` and `</body>` and farther to `<body>`)
 * Choose which post types will have enabled article specific head/footer fields
-* Choose should article specific head/footer code be appended to site-wide code, or will replace site-wide code
+* Choose should article specific head/body/footer code be appended to site-wide code, or will replace site-wide code
 * Site-wide section located under **Tools** > **Head & Footer Code**
 * If you have set WP_DEBUG constant in `wp-config.php` to `true`, you'll see site-wide and article specific entries in page source code wrapped to comments.
 
 General settings, including HEAD, FOOTER global code and priority, have been saved to WordPress option `auhfc_settings`.
-Each post/page/custom post type specific HEAD and FOOTER code have been saved to post meta `_auhfc`.
+Each post/page/custom post type specific HEAD, BODY and FOOTER code have been saved to post meta `_auhfc`.
 On plugin uninstall these data is also deleted from database.
 
 == Installation ==
@@ -85,6 +87,9 @@ Because all other similar plugins could not satisfy my requirements. In general,
 Initial release of new plugin developed by Aleksandar Urosevic.
 
 == Changelog ==
+
+= 1.1.0 =
+* Add: Support for `wp_body_open` Body hook introduced in WordPress 5.2
 
 = 1.0.9.1 =
 * Fix: Fatal Error on Multisite WP's (thanks @kunzemarketing for reporting)

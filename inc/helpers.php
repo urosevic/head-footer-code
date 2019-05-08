@@ -136,7 +136,7 @@ function auhfc_get_meta( $field_name = '' ) {
 /**
  * Return debugging string if WP_DEBUG constant is true.
  * @param  string $scope    Scope of output (s - SITE WIDE, a - ARTICLE SPECIFIC)
- * @param  string $location Location of output (h - HEAD, f - FOOTER)
+ * @param  string $location Location of output (h - HEAD, b - BODY, f - FOOTER)
  * @param  string $message  Output message
  * @param  string $code     Code for output
  * @return string           Composed string
@@ -149,7 +149,7 @@ function auhfc_out( $scope = null, $location = null, $message = null, $code = nu
 		return;
 	}
 	$scope = 's' == $scope ? 'Site-wide' : 'Article specific';
-	$location = 'h' == $location ? 'HEAD' : 'FOOTER';
+	$location = 'h' == $location ? 'HEAD' : $location = 'b' ? 'BODY' : 'FOOTER';
 	return sprintf(
 		'<!-- Head & Footer Code: %1$s %2$s section start (%3$s) -->%5$s %4$s%5$s<!-- Head & Footer Code: %1$s %2$s section end (%3$s) -->%5$s',
 		$scope,            // 1
@@ -159,3 +159,7 @@ function auhfc_out( $scope = null, $location = null, $message = null, $code = nu
 		"\n"               // 5
 	);
 } // END function auhfc_out( $scope = null, $location = null, $message = null, $code = null )
+
+function auhfc_body_note() {
+	return '<p class="notice"><strong>Please note!</strong> Usage of this hook should be reserved for output of <em>unseen elements</em> like <code>&lt;script&gt;</code> tags or additional metadata. It should not be used to add arbitrary HTML content to a page that <em>could break layouts or lead to unexpected situations</em>.</p>';
+}

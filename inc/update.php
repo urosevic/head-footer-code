@@ -85,3 +85,26 @@ function auhfc_update_2() {
 	update_option( 'auhfc_settings', $defaults );
 
 } // END function auhfc_update_2()
+
+
+/**
+ * Initialize updater
+ */
+function auhfc_update_3() {
+
+	// Get options from DB.
+	$defaults = get_option( 'auhfc_settings' );
+
+	// Add empty body field to options.
+	if ( ! isset( $defaults['body'] ) ) {
+		$defaults['body'] = '';
+	}
+	// Add body field priority to options.
+	if ( ! isset( $defaults['priority_b'] ) ) {
+		$defaults['priority_b'] = 10;
+	}
+
+	// Save settings to DB.
+	update_option( 'auhfc_settings', $defaults );
+
+} // END function auhfc_update_3()
