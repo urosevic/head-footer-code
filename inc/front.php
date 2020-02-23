@@ -205,3 +205,12 @@ function auhfc_wp_footer() {
 	unset( $auhfc_post_type, $auhfc_settings, $auhfc_meta, $behavior, $out );
 
 } // END function auhfc_wp_footer()
+
+/**
+ * Add `wp_body_open` backward compatibility for WordPress installations prior 5.2
+ */
+if ( ! function_exists( 'wp_body_open' ) ) {
+	function wp_body_open() {
+		do_action( 'wp_body_open' );
+	}
+}
