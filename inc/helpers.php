@@ -149,7 +149,20 @@ function auhfc_out( $scope = null, $location = null, $message = null, $code = nu
 		return;
 	}
 	$scope = 's' == $scope ? 'Site-wide' : 'Article specific';
-	$location = 'h' == $location ? 'HEAD' : $location = 'b' ? 'BODY' : 'FOOTER';
+	switch ( $location ) {
+		case 'h':
+			$location = 'HEAD';
+			break;
+		case 'b':
+			$location = 'BODY';
+			break;
+		case 'f':
+			$location = 'FOOTER';
+			break;
+		default:
+			$location = 'UNKNOWN';
+			break;
+	}
 	return sprintf(
 		'<!-- Head & Footer Code: %1$s %2$s section start (%3$s) -->%5$s %4$s%5$s<!-- Head & Footer Code: %1$s %2$s section end (%3$s) -->%5$s',
 		$scope,            // 1
@@ -161,5 +174,5 @@ function auhfc_out( $scope = null, $location = null, $message = null, $code = nu
 } // END function auhfc_out( $scope = null, $location = null, $message = null, $code = null )
 
 function auhfc_body_note() {
-	return '<p class="notice"><strong>Please note!</strong> Usage of this hook should be reserved for output of <em>unseen elements</em> like <code>&lt;script&gt;</code> tags or additional metadata. It should not be used to add arbitrary HTML content to a page that <em>could break layouts or lead to unexpected situations</em>.</p>';
+	return '<p class="notice"><strong>Please note!</strong> Usage of this hook should be reserved for output of <em>unseen elements</em> like <code>&lt;script&gt;</code> tags or additional metadata. It should not be used to add arbitrary HTML content to a page that <em>could break layouts or lead to unexpected situations</em>. Make sure that theme you use support <a href="https://developer.wordpress.org/reference/hooks/wp_body_open/" target="_hook">wp_body_open</a> hook.</p>';
 }

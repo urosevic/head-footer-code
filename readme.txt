@@ -3,8 +3,8 @@ Contributors: urkekg
 Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: wp_head, wp_footer, head footer code, custom head script, custom footer script, google analytics, pixel tracking, tracking code, javascript, scripts, site verification, css
 Requires at least: 4.9
-Tested up to: 5.2.0
-Stable tag: 1.2.0
+Tested up to: 5.3.2
+Stable tag: 1.1.0
 Requires PHP: 5.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -73,6 +73,15 @@ Installation of this plugin is fairly easy as any other WordPress plugin.
 
 Because all other similar plugins could not satisfy my requirements. In general, they have too much features or lack some features I need.
 
+= I entered code to BODY section but nothing output on front-end =
+
+This feature is implemented since WordPress version 5.2, but also require compatibility theme. Make sure that your theme support [wp_body_open](https://developer.wordpress.org/reference/hooks/wp_body_open/) hook.
+
+Open in code editor `header.php` file from theme you use, and check if right after opening `<BODY>` tag there is following code (if it does not exists, add it or ask some developer to do that for you):
+```if ( function_exists( 'wp_body_open' ) ) {
+    wp_body_open();
+}```
+
 == Screenshots ==
 
 1. Head &amp; Footer Code box in Plugin search results
@@ -90,6 +99,7 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 
 = 1.1.0 =
 * Add: Support for `wp_body_open` Body hook introduced in WordPress 5.2
+* Add: Backward compatibility for `wp_body_open` for older WordPress installations
 
 = 1.0.9.1 =
 * Fix: Fatal Error on Multisite WP's (thanks @kunzemarketing for reporting)
