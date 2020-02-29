@@ -245,7 +245,7 @@ function auhfc_settings_init() {
 			'field'       => 'auhfc_settings[post_types]',
 			'items'       => $clean_post_types,
 			'value'       => $auhfc_settings['post_types'],
-			'description' => esc_html__( 'Select which post types will have Article specific section. Default is post and page. Please note, even if you have Head/Footer Code set per article and then you disable that post type, article specific code will not be printed but only site-wide code.', 'head-footer-code' ),
+			'description' => esc_html__( 'Select which post types will have Article specific section. Please note, even if you have Head/Footer Code set per article and then you disable that post type, article specific code will not be printed but only site-wide code.', 'head-footer-code' ),
 			'class'       => 'checkbox',
 		]
 	);

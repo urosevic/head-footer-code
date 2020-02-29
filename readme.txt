@@ -1,9 +1,9 @@
 === Head & Footer Code ===
 Contributors: urkekg
 Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
-Tags: wp_head, wp_footer, head footer code, custom head script, custom footer script, google analytics, pixel tracking, tracking code, javascript, scripts, site verification, css
+Tags: wp_head, wp_footer, head footer code, custom head script, custom body script, custom footer script, google analytics, facebook pixel, pixel tracking, tracking code, javascript, scripts, site verification, css
 Requires at least: 4.9
-Tested up to: 5.3.2
+Tested up to: 5.4-beta3
 Stable tag: 1.1.0
 Requires PHP: 5.6
 License: GPLv3 or later
@@ -17,11 +17,11 @@ Let we say that you have been told to add some custom code (HTML, JavaScript or 
 
 Simply go to Tools &rarr; Head &amp; Footer Code in your website admin dashboard, and insert custom code to HEAD, BODY or FOOTER section (depending what you have to do).
 
-If you have to insert some custom code specific for individual article (post, page, custom post type), then you can use Article specific metabox while you editing post/page/custom post type (check out [Screenshots](https://wordpress.org/plugins/head-footer-code/screenshots/)). There you can also set should that specific code be appended to site-wide code defined on **Tools** &rarr; **Head &amp; Footer Code**, or should be overwritten.
+If you have to insert some custom code specific for individual article (post, page, custom post type), then you can use Article specific metabox while you editing post/page/custom post type (check out [Screenshots](https://wordpress.org/plugins/head-footer-code/#screenshots)). There you can also set should that specific code be appended to site-wide code defined on **Tools** &rarr; **Head &amp; Footer Code**, or should be overwritten.
 
 **Works or broken?**
 
-Please, consider to vote for this plugin. When you vote for broken, be so kind and tell in the [Forum](https://wordpress.org/support/plugin/head-footer-code) what is broken. Maybe I might be able to fix it to make the plugin also work for you.
+Please, consider to vote for this plugin. When you vote for broken, be so kind and tell in the [Forum](https://wordpress.org/support/plugin/head-footer-code/) what is broken. Maybe I might be able to fix it to make the plugin also work for you.
 
 **I need your support**
 
@@ -36,12 +36,12 @@ It is very hard to continue development and support for this and my other free p
 * Set article specific custom code for body section (after the `<body>`) - **Requires WordPress 5.2!**
 * Set article specific custom content for footer page section (before the `</body>`)
 * Choose priority of printed custom code to head/body/footer sections (lower number mean far from `</head>` and `</body>` and closer to `<body>`, higher number means closer to `</head>` and `</body>` and farther to `<body>`)
-* Choose which post types will have enabled article specific head/footer fields
+* Choose which post types will have enabled article specific head/body/footer fields
 * Choose should article specific head/body/footer code be appended to site-wide code, or will replace site-wide code
 * Site-wide section located under **Tools** > **Head & Footer Code**
 * If you have set WP_DEBUG constant in `wp-config.php` to `true`, you'll see site-wide and article specific entries in page source code wrapped to comments.
 
-General settings, including HEAD, FOOTER global code and priority, have been saved to WordPress option `auhfc_settings`.
+General settings, including HEAD, BODY, FOOTER global code and priority, have been saved to WordPress option `auhfc_settings`.
 Each post/page/custom post type specific HEAD, BODY and FOOTER code have been saved to post meta `_auhfc`.
 On plugin uninstall these data is also deleted from database.
 
@@ -88,7 +88,8 @@ Open in code editor `header.php` file from theme you use, and check if right aft
 2. Site-wide settings page
 3. Article specific metabox
 4. Example of custom code inserted to HEAD section (site-wide with appended article specific)
-5. Example of custom code inserted to FOOTER section (site-wide with appended article specific)
+5. Example of custom code inserted to BODY section (site-wide with appended article specific)
+6. Example of custom code inserted to FOOTER section (site-wide with appended article specific)
 
 == Upgrade Notice ==
 
@@ -98,8 +99,13 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 == Changelog ==
 
 = 1.1.0 =
+* Tested: on WordPress 5.1.4, 5.3.2 and 5.4-beta3 with PHP 7.2.15 and 7.3.7
+* Fix: Backslashes are removed on post/page update in article specific HEAD/BODY/FOOTER code reported by @asherber (`update_post_meta` pass key and value to `update_metadata` which expect them slashed key and value)
 * Add: Support for `wp_body_open` Body hook introduced in WordPress 5.2
 * Add: Backward compatibility for `wp_body_open` for older WordPress installations
+* Add: FAQ Instructions on how to implement support for `wp_body_open` to any theme
+* Update: Links and wording on plugin settings page
+* Update: Screenshots
 
 = 1.0.9.1 =
 * Fix: Fatal Error on Multisite WP's (thanks @kunzemarketing for reporting)

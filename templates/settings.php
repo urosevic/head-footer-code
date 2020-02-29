@@ -33,11 +33,11 @@ if ( ! defined( 'WPINC' ) ) {
 		<div class="sidebar_container">
 			<a href="https://urosevic.net/wordpress/donate/?donate_for=head-footer-code" class="auhfc-button paypal_donate" target="_blank">Donate</a>
 			<br />
-			<a href="https://wordpress.org/plugins/head-footer-code/faq/" class="auhfc-button" target="_blank">FAQ</a>
+			<a href="https://wordpress.org/plugins/head-footer-code/#faq" class="auhfc-button" target="_blank">FAQ</a>
 			<br />
-			<a href="https://wordpress.org/support/plugin/head-footer-code" class="auhfc-button" target="_blank">Community Support</a>
+			<a href="https://wordpress.org/support/plugin/head-footer-code/" class="auhfc-button" target="_blank">Community Support</a>
 			<br />
-			<a href="https://wordpress.org/support/view/plugin-reviews/head-footer-code#postform" class="auhfc-button" target="_blank">Review this plugin</a>
+			<a href="https://wordpress.org/support/plugin/head-footer-code/reviews/#new-post" class="auhfc-button" target="_blank">Review this plugin</a>
 		</div><!-- .sidebar_container -->
 	</div><!-- .head_footer_code_wrapper -->
 </div>
