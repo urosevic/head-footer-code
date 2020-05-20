@@ -1,10 +1,10 @@
 === Head & Footer Code ===
 Contributors: urkekg
 Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
-Tags: wp_head, wp_footer, head footer code, custom head script, custom body script, custom footer script, google analytics, facebook pixel, pixel tracking, tracking code, javascript, scripts, site verification, css
+Tags: wp_head, wp_footer, wp_body_open, head footer code, custom head script, custom body script, custom footer script, google analytics, facebook pixel, pixel tracking, tracking code, javascript, scripts, site verification, css
 Requires at least: 4.9
-Tested up to: 5.4-beta3
-Stable tag: 1.1.0
+Tested up to: 5.4.1
+Stable tag: 1.1.1
 Requires PHP: 5.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -18,6 +18,8 @@ Let we say that you have been told to add some custom code (HTML, JavaScript or 
 Simply go to Tools &rarr; Head &amp; Footer Code in your website admin dashboard, and insert custom code to HEAD, BODY or FOOTER section (depending what you have to do).
 
 If you have to insert some custom code specific for individual article (post, page, custom post type), then you can use Article specific metabox while you editing post/page/custom post type (check out [Screenshots](https://wordpress.org/plugins/head-footer-code/#screenshots)). There you can also set should that specific code be appended to site-wide code defined on **Tools** &rarr; **Head &amp; Footer Code**, or should be overwritten.
+
+https://www.youtube.com/watch?v=Gd41Dv09UC4
 
 **Works or broken?**
 
@@ -97,6 +99,10 @@ Open in code editor `header.php` file from theme you use, and check if right aft
 Initial release of new plugin developed by Aleksandar Urosevic.
 
 == Changelog ==
+
+= 1.1.1 =
+* Tested: on WordPress 5.4.1
+* Add: Video tutorial on how to install, configure and use Head & Footer Code plugin
 
 = 1.1.0 =
 * Tested: on WordPress 5.1.4, 5.3.2 and 5.4-beta3 with PHP 7.2.15 and 7.3.7
