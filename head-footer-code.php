@@ -11,10 +11,9 @@
  * Version:     1.1.1
  * Author:      Aleksandar Urosevic
  * Author URI:  https://urosevic.net
- * License:     GPL-3.0+
+ * License:     GPLv3
  * License URI: https://www.gnu.org/licenses/gpl-3.0.txt
  * Text Domain: head-footer-code
- * Domain Path: /languages
  */
 
 // If this file is called directly, abort.

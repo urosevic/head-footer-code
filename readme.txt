@@ -1,12 +1,12 @@
 === Head & Footer Code ===
 Contributors: urkekg
 Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
-Tags: wp_head, wp_footer, wp_body_open, head footer code, custom head script, custom body script, custom footer script, google analytics, facebook pixel, pixel tracking, tracking code, javascript, scripts, site verification, css
+Tags: wp_head, wp_footer, wp_body_open, head footer code, custom script
 Requires at least: 4.9
-Tested up to: 5.4.1
+Tested up to: 5.5
 Stable tag: 1.1.1
 Requires PHP: 5.6
-License: GPLv3 or later
+License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 Easy add site-wide and/or article specific custom code before the &lt;/head&gt; or &lt;/body&gt; or opening &lt;body&gt; by hooking to wp_head, wp_footer and wp_body_open. Multisite is supported!
@@ -101,7 +101,7 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 == Changelog ==
 
 = 1.1.1 =
-* Tested: on WordPress 5.4.1
+* Tested: on WordPress 5.4.1, 5.5-RC2-48768 with PHP 7.4.1
 * Add: Video tutorial on how to install, configure and use Head & Footer Code plugin
 
 = 1.1.0 =
