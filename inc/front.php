@@ -24,125 +24,148 @@ add_action( 'wp_body_open', 'auhfc_wp_body', $auhfc_defaults['priority_b'] );
 add_action( 'wp_footer', 'auhfc_wp_footer', $auhfc_defaults['priority_f'] );
 
 /**
- * Inject site-wide and Article specific head code before </head>
+ * Inject site-wide and Homepage or Article specific head code before </head>
  */
 function auhfc_wp_head() {
 
-	// Get post type
+	// Get post type.
 	if ( is_singular() ) {
 		global $wp_the_query;
 		$auhfc_post_type = $wp_the_query->get_queried_object()->post_type;
+		$is_homepage_blog_posts = false;
 	} else {
 		$auhfc_post_type = 'not singular';
+		$is_homepage_blog_posts = auhfc_is_homepage_blog_posts();
 	}
 
-	// Get variables to test
+	// Get variables to test.
 	$auhfc_settings = auhfc_defaults();
 
-	// Get meta for post only if it's singular
+	// Get meta for post only if it's singular.
 	if ( 'not singular' !== $auhfc_post_type && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) {
-		$auhfc_meta = auhfc_get_meta( 'head' );
-		$behavior   = auhfc_get_meta( 'behavior' );
-		$dbg_set    = "type: {$auhfc_post_type}; bahavior: {$behavior}; priority: {$auhfc_settings['priority_h']}; do_shortcode: {$auhfc_settings['do_shortcode']}";
+		$article_code     = auhfc_get_meta( 'head' );
+		$article_behavior = auhfc_get_meta( 'behavior' );
+		$dbg_set          = "type: {$auhfc_post_type}; bahavior: {$article_behavior}; priority: {$auhfc_settings['priority_h']}; do_shortcode: {$auhfc_settings['do_shortcode']}";
 	} else {
-		$auhfc_meta = '';
-		$behavior   = '';
-		$dbg_set    = $auhfc_post_type;
+		$article_code     = '';
+		$article_behavior = '';
+		$dbg_set          = $auhfc_post_type;
+		// Get meta for homepage.
+		if ( $is_homepage_blog_posts ) {
+			$homepage_code     = $auhfc_settings['homepage_head'];
+			$homepage_behavior = $auhfc_settings['homepage_behavior'];
+			$dbg_set           = "type: homepage; bahavior: {$homepage_behavior}; priority: {$auhfc_settings['priority_h']}; do_shortcode: {$auhfc_settings['do_shortcode']}";
+		} else {
+			$homepage_code     = '';
+			$homepage_behavior = false;
+		}
 	}
 
-	// If no code to inject, simple exit
-	if ( empty( $auhfc_settings['head'] ) && empty( $auhfc_meta ) ) {
+	// If no code to inject, simply exit.
+	if ( empty( $auhfc_settings['head'] ) && empty( $article_code ) && empty( $homepage_code ) ) {
 		return;
 	}
 
 	// Prepare code output.
 	$out = '';
 
-	// Inject site-wide head code
+	// Inject site-wide head code.
 	if (
 		! empty( $auhfc_settings['head'] ) &&
 		(
-			'replace' !== $behavior ||
-			( 'replace' == $behavior && ! in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) ||
-			( 'replace' == $behavior && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) && empty( $auhfc_meta ) )
+			( ! $is_homepage_blog_posts && 'replace' !== $article_behavior ) ||
+			( ! $is_homepage_blog_posts && 'replace' == $article_behavior && ! in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) ||
+			( ! $is_homepage_blog_posts && 'replace' == $article_behavior && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) && empty( $article_code ) ) ||
+			( $is_homepage_blog_posts && 'replace' !== $homepage_behavior ) ||
+			( $is_homepage_blog_posts && 'replace' == $homepage_behavior && empty( $homepage_code ) )
 		)
 	) {
 		$out .= auhfc_out( 's', 'h', $dbg_set, $auhfc_settings['head'] );
 	}
 
-	// Inject article specific head code if post_type is allowed
-	if ( ! empty( $auhfc_meta ) && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) {
-		$out .= auhfc_out( 'a', 'h', $dbg_set, $auhfc_meta );
+	// Inject head code for Homepage in Blog Posts omde OR article specific (for allowed post_type) head code.
+	if ( $is_homepage_blog_posts && ! empty( $homepage_code ) ) {
+		$out .= auhfc_out( 'h', 'h', $dbg_set, $homepage_code );
+	} else if ( ! empty( $article_code ) && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) {
+		$out .= auhfc_out( 'a', 'h', $dbg_set, $article_code );
 	}
 
 	// Print prepared code.
 	echo $out;
 	// echo ( 'y' === $auhfc_settings['do_shortcode'] ) ? do_shortcode( $out ) : $out;
 
-	// Free some memory.
-	unset( $auhfc_post_type, $auhfc_settings, $auhfc_meta, $behavior, $out );
-
 } // END function auhfc_wp_head()
-
 
 /**
  * Inject site-wide and Article specific body code right after opening <body>
  */
 function auhfc_wp_body() {
 
-	// Get post type
+	// Get post type.
 	if ( is_singular() ) {
 		global $wp_the_query;
 		$auhfc_post_type = $wp_the_query->get_queried_object()->post_type;
+		$is_homepage_blog_posts = false;
 	} else {
 		$auhfc_post_type = 'not singular';
+		$is_homepage_blog_posts = auhfc_is_homepage_blog_posts();
 	}
 
-	// Get variables to test
+	// Get variables to test.
 	$auhfc_settings = auhfc_defaults();
 
-	// Get meta for post only if it's singular
+	// Get meta for post only if it's singular.
 	if ( 'not singular' !== $auhfc_post_type && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) {
-		$auhfc_meta = auhfc_get_meta( 'body' );
-		$behavior   = auhfc_get_meta( 'behavior' );
-		$dbg_set    = "type: {$auhfc_post_type}; bahavior: {$behavior}; priority: {$auhfc_settings['priority_b']}; do_shortcode: {$auhfc_settings['do_shortcode']}";
+		$article_code     = auhfc_get_meta( 'body' );
+		$article_behavior = auhfc_get_meta( 'behavior' );
+		$dbg_set          = "type: {$auhfc_post_type}; bahavior: {$article_behavior}; priority: {$auhfc_settings['priority_b']}; do_shortcode: {$auhfc_settings['do_shortcode']}";
 	} else {
-		$auhfc_meta = '';
-		$behavior   = '';
-		$dbg_set    = $auhfc_post_type;
+		$article_code     = '';
+		$article_behavior = '';
+		$dbg_set          = $auhfc_post_type;
+		// Get meta for homepage.
+		if ( $is_homepage_blog_posts ) {
+			$homepage_code     = $auhfc_settings['homepage_body'];
+			$homepage_behavior = $auhfc_settings['homepage_behavior'];
+			$dbg_set           = "type: homepage; bahavior: {$homepage_behavior}; priority: {$auhfc_settings['priority_b']}; do_shortcode: {$auhfc_settings['do_shortcode']}";
+		} else {
+			$homepage_code     = '';
+			$homepage_behavior = false;
+		}
 	}
 
-	// If no code to inject, simple exit
-	if ( empty( $auhfc_settings['body'] ) && empty( $auhfc_meta ) ) {
+	// If no code to inject, simple exit.
+	if ( empty( $auhfc_settings['body'] ) && empty( $article_code ) && empty( $homepage_code ) ) {
 		return;
 	}
 
 	// Prepare code output.
 	$out = '';
 
-	// Inject site-wide body code
+	// Inject site-wide body code.
 	if (
 		! empty( $auhfc_settings['body'] ) &&
 		(
-			'replace' !== $behavior ||
-			( 'replace' == $behavior && ! in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) ||
-			( 'replace' == $behavior && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) && empty( $auhfc_meta ) )
+			( ! $is_homepage_blog_posts && 'replace' !== $article_behavior ) ||
+			( ! $is_homepage_blog_posts && 'replace' == $article_behavior && ! in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) ||
+			( ! $is_homepage_blog_posts && 'replace' == $article_behavior && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) && empty( $article_code ) ) ||
+			( $is_homepage_blog_posts && 'replace' !== $homepage_behavior ) ||
+			( $is_homepage_blog_posts && 'replace' == $homepage_behavior && empty( $homepage_code ) )
 		)
 	) {
 		$out .= auhfc_out( 's', 'b', $dbg_set, $auhfc_settings['body'] );
 	}
 
-	// Inject article specific body code if post_type is allowed
-	if ( ! empty( $auhfc_meta ) && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) {
-		$out .= auhfc_out( 'a', 'b', $dbg_set, $auhfc_meta );
+	// Inject head code for Homepage in Blog Posts omde OR article specific (for allowed post_type) body code.
+	if ( $is_homepage_blog_posts && ! empty( $homepage_code ) ) {
+		$out .= auhfc_out( 'h', 'b', $dbg_set, $homepage_code );
+	} else if ( ! empty( $article_code ) && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) {
+		$out .= auhfc_out( 'a', 'b', $dbg_set, $article_code );
 	}
 
 	// Print prepared code.
 	echo $out;
 	// echo ( 'y' === $auhfc_settings['do_shortcode'] ) ? do_shortcode( $out ) : $out;
-
-	// Free some memory.
-	unset( $auhfc_post_type, $auhfc_settings, $auhfc_meta, $behavior, $out );
 
 } // END function auhfc_wp_body()
 
@@ -151,58 +174,70 @@ function auhfc_wp_body() {
  */
 function auhfc_wp_footer() {
 
-	// Get post type
+	// Get post type.
 	if ( is_singular() ) {
 		global $wp_the_query;
 		$auhfc_post_type = $wp_the_query->get_queried_object()->post_type;
+		$is_homepage_blog_posts = false;
 	} else {
 		$auhfc_post_type = 'not singular';
+		$is_homepage_blog_posts = auhfc_is_homepage_blog_posts();
 	}
 
-	// Get variables to test
+	// Get variables to test.
 	$auhfc_settings = auhfc_defaults();
 
-	// Get meta for post only if it's singular
+	// Get meta for post only if it's singular.
 	if ( 'not singular' !== $auhfc_post_type && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) {
-		$auhfc_meta = auhfc_get_meta( 'footer' );
-		$behavior = auhfc_get_meta( 'behavior' );
-		$dbg_set = "type: {$auhfc_post_type}; bahavior: {$behavior}; priority: {$auhfc_settings['priority_f']}; do_shortcode: {$auhfc_settings['do_shortcode']}";
+		$article_code = auhfc_get_meta( 'footer' );
+		$article_behavior   = auhfc_get_meta( 'behavior' );
+		$dbg_set    = "type: {$auhfc_post_type}; bahavior: {$article_behavior}; priority: {$auhfc_settings['priority_f']}; do_shortcode: {$auhfc_settings['do_shortcode']}";
 	} else {
-		$auhfc_meta = '';
-		$behavior = '';
-		$dbg_set = $auhfc_post_type;
+		$article_code = '';
+		$article_behavior   = '';
+		$dbg_set    = $auhfc_post_type;
+		// Get meta for homepage.
+		if ( $is_homepage_blog_posts ) {
+			$homepage_code     = $auhfc_settings['homepage_footer'];
+			$homepage_behavior = $auhfc_settings['homepage_behavior'];
+			$dbg_set           = "type: homepage; bahavior: {$homepage_behavior}; priority: {$auhfc_settings['priority_f']}; do_shortcode: {$auhfc_settings['do_shortcode']}";
+		} else {
+			$homepage_code     = '';
+			$homepage_behavior = false;
+		}
 	}
 
-	// If no code to inject, simple exit
-	if ( empty( $auhfc_settings['footer'] ) && empty( $auhfc_meta ) ) {
+	// If no code to inject, simple exit.
+	if ( empty( $auhfc_settings['footer'] ) && empty( $article_code ) ) {
 		return;
 	}
 
-	// Prepare code output
+	// Prepare code output.
 	$out = '';
 
-	// Inject site-wide head code
+	// Inject site-wide head code.
 	if (
 		! empty( $auhfc_settings['footer'] ) &&
 		(
-			'replace' !== $behavior ||
-			( 'replace' == $behavior && ! in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) ||
-			( 'replace' == $behavior && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) && empty( $auhfc_meta ) )
+			( ! $is_homepage_blog_posts && 'replace' !== $article_behavior ) ||
+			( ! $is_homepage_blog_posts && 'replace' == $article_behavior && ! in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) ||
+			( ! $is_homepage_blog_posts && 'replace' == $article_behavior && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) && empty( $article_code ) ) ||
+			( $is_homepage_blog_posts && 'replace' !== $homepage_behavior ) ||
+			( $is_homepage_blog_posts && 'replace' == $homepage_behavior && empty( $homepage_code ) )
 		)
 	) {
 		$out .= auhfc_out( 's', 'f', $dbg_set, $auhfc_settings['footer'] );
 	}
 
-	// Inject article specific head code if post_type is allowed
-	if ( ! empty( $auhfc_meta ) && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) {
-		$out .= auhfc_out( 'a', 'f', $dbg_set, $auhfc_meta );
+	// Inject head code for Homepage in Blog Posts omde OR article specific (for allowed post_type) footer code.
+	if ( $is_homepage_blog_posts && ! empty( $homepage_code ) ) {
+		$out .= auhfc_out( 'h', 'f', $dbg_set, $homepage_code );
+	} else if ( ! empty( $article_code ) && in_array( $auhfc_post_type, $auhfc_settings['post_types'] ) ) {
+		$out .= auhfc_out( 'a', 'f', $dbg_set, $article_code );
 	}
 
 	// Print prepared code.
 	echo ( 'y' === $auhfc_settings['do_shortcode'] ) ? do_shortcode( $out ) : $out;
-
-	// Free some memory.
-	unset( $auhfc_post_type, $auhfc_settings, $auhfc_meta, $behavior, $out );
 
 } // END function auhfc_wp_footer()
 

@@ -108,3 +108,33 @@ function auhfc_update_3() {
 	update_option( 'auhfc_settings', $defaults );
 
 } // END function auhfc_update_3()
+
+/**
+ * Add homepage blog posts code defaults
+ */
+function auhfc_update_4() {
+
+	// Get options from DB.
+	$defaults = get_option( 'auhfc_settings' );
+
+	// Add empty homepage_head field to options.
+	if ( ! isset( $defaults['homepage_head'] ) ) {
+		$defaults['homepage_head'] = '';
+	}
+	// Add empty homepage_body field to options.
+	if ( ! isset( $defaults['homepage_body'] ) ) {
+		$defaults['homepage_body'] = '';
+	}
+	// Add empty homepage_footer field to options.
+	if ( ! isset( $defaults['homepage_footer'] ) ) {
+		$defaults['homepage_footer'] = '';
+	}
+	// Add empty homepage_behavior field to options.
+	if ( ! isset( $defaults['homepage_behavior'] ) ) {
+		$defaults['homepage_behavior'] = 'append';
+	}
+
+	// Save settings to DB.
+	update_option( 'auhfc_settings', $defaults );
+
+} // END function auhfc_update_4()

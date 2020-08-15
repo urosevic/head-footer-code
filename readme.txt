@@ -4,7 +4,7 @@ Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: wp_head, wp_footer, wp_body_open, head footer code, custom script
 Requires at least: 4.9
 Tested up to: 5.5
-Stable tag: 1.1.1
+Stable tag: 1.2
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -17,7 +17,11 @@ Let we say that you have been told to add some custom code (HTML, JavaScript or 
 
 Simply go to Tools &rarr; Head &amp; Footer Code in your website admin dashboard, and insert custom code to HEAD, BODY or FOOTER section (depending what you have to do).
 
+If your WordPress uses latest posts on homepage, you can also add specific code only for homepage on Tools &rarr; Head &amp; Footer Code (there will be section **Head, body and footer code on Homepage in Blog Posts mode**)
+
 If you have to insert some custom code specific for individual article (post, page, custom post type), then you can use Article specific metabox while you editing post/page/custom post type (check out [Screenshots](https://wordpress.org/plugins/head-footer-code/#screenshots)). There you can also set should that specific code be appended to site-wide code defined on **Tools** &rarr; **Head &amp; Footer Code**, or should be overwritten.
+
+Please note that taxonomies does not have own specific code but global code is added on those pages (category, tag and custom taxonomy listing, individual category, tags and custom taxonomies).
 
 https://www.youtube.com/watch?v=Gd41Dv09UC4
 
@@ -34,6 +38,7 @@ It is very hard to continue development and support for this and my other free p
 * Set site-wide custom content for head page section (before the `</head>`)
 * Set site-wide custom content for body section (after the `<body>`) - **Requires WordPress 5.2!**
 * Set site-wide custom content for footer page section (before the `</body>`)
+* [NEW in 1.2] Set homepage specific custom code for head, body and/or footer if Homepage mode is se to Blog Posts
 * Set article specific custom code for head page section (before the `</head>`)
 * Set article specific custom code for body section (after the `<body>`) - **Requires WordPress 5.2!**
 * Set article specific custom content for footer page section (before the `</body>`)
@@ -43,8 +48,8 @@ It is very hard to continue development and support for this and my other free p
 * Site-wide section located under **Tools** > **Head & Footer Code**
 * If you have set WP_DEBUG constant in `wp-config.php` to `true`, you'll see site-wide and article specific entries in page source code wrapped to comments.
 
-General settings, including HEAD, BODY, FOOTER global code and priority, have been saved to WordPress option `auhfc_settings`.
-Each post/page/custom post type specific HEAD, BODY and FOOTER code have been saved to post meta `_auhfc`.
+General settings, including HEAD, BODY, FOOTER global code and priority, and also homepage code and behavior have been saved to WordPress option `auhfc_settings`.
+Each post/page/custom post type specific HEAD, BODY and FOOTER code and behavior have been saved to post meta `_auhfc`.
 On plugin uninstall these data is also deleted from database.
 
 == Installation ==
@@ -99,6 +104,11 @@ Open in code editor `header.php` file from theme you use, and check if right aft
 Initial release of new plugin developed by Aleksandar Urosevic.
 
 == Changelog ==
+
+= 1.2 =
+* Add: custom head, body and footer code for Homepage in Blog Posts mode.
+* Fix: Code Editor broken in WordPress 5.5 release.
+* Improve: all strings available to localize.
 
 = 1.1.1 =
 * Tested: on WordPress 5.4.1, 5.5-RC2-48768 with PHP 7.4.1
