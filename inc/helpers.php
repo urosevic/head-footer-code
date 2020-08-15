@@ -33,12 +33,15 @@ function auhfc_activate() {
 
 	wp_die(
 		'<p>' . sprintf(
-			__( 'The %1$s plugin requires %2$s version %3$s or greater.', 'head-footer-code' ),
-			sprintf( '<strong>%s</strong>', __( 'Head & Footer Code', 'head-footer-code' ) ),
+			/* translators: %1$s will be replaced with plugin name Head & Footer Code
+			%2$s will be replaced with related software name (PHP or WordPress)
+			%3$s will be replaved with minimal version of related software required to plugin work properly */
+			esc_html__( 'The %1$s plugin requires %2$s version %3$s or greater.', 'head-footer-code' ),
+			sprintf( '<strong>%s</strong>', esc_html__( 'Head & Footer Code', 'head-footer-code' ) ),
 			$flag,
 			$version
 		) . '</p>',
-		__( 'Plugin Activation Error', 'head-footer-code' ),
+		esc_html__( 'Plugin Activation Error', 'head-footer-code' ),
 		[
 			'response'  => 200,
 			'back_link' => true,
@@ -81,25 +84,37 @@ function auhfc_codemirror_enqueue_scripts( $hook ) {
  * Provide global defaults
  * @return array Arary of defined global values
  */
-function auhfc_defaults() {
+function auhfc_settings() {
+
 	$defaults = [
-		'head'              => '',
-		'body'              => '',
-		'footer'            => '',
-		'priority_h'        => 10,
-		'priority_b'        => 10,
-		'priority_f'        => 10,
-		'do_shortcode'      => 'n',
-		'homepage_head'     => '',
-		'homepage_body'     => '',
-		'homepage_footer'   => '',
-		'homepage_behavior' => 'append',
-		'post_types'        => [],
+		'sitewide' => [
+			'head'         => '',
+			'body'         => '',
+			'footer'       => '',
+			'priority_h'   => 10,
+			'priority_b'   => 10,
+			'priority_f'   => 10,
+			'do_shortcode' => 'n',
+		],
+		'homepage' => [
+			'head'         => '',
+			'body'         => '',
+			'footer'       => '',
+			'behavior'     => 'append',
+		],
+		'article' => [
+			'post_types'   => [],
+		],
 	];
-	$auhfc_settings = get_option( 'auhfc_settings', $defaults );
-	$auhfc_settings = wp_parse_args( $auhfc_settings, $defaults );
-	return $auhfc_settings;
-} // END function auhfc_defaults()
+	$auhfc_settings_sitewide = get_option( 'auhfc_settings_sitewide', $defaults['sitewide'] );
+	$defaults['sitewide'] = wp_parse_args( $auhfc_settings_sitewide, $defaults['sitewide'] );
+	$auhfc_settings_homepage = get_option( 'auhfc_settings_homepage', $defaults['homepage'] );
+	$defaults['homepage'] = wp_parse_args( $auhfc_settings_homepage, $defaults['homepage'] );
+	$auhfc_settings_article = get_option( 'auhfc_settings_article', $defaults['article'] );
+	$defaults['article'] = wp_parse_args( $auhfc_settings_article, $defaults['article'] );
+
+	return $defaults;
+} // END function auhfc_settings()
 
 /**
  * Get values of metabox fields
@@ -205,7 +220,13 @@ function auhfc_is_homepage_blog_posts() {
 } // END function auhfc_is_homepage_blog_posts()
 
 function auhfc_body_note() {
-	return '<p class="notice"><strong>Please note!</strong> Usage of this hook should be reserved for output of <em>unseen elements</em> like <code>&lt;script&gt;</code> tags or additional metadata. It should not be used to add arbitrary HTML content to a page that <em>could break layouts or lead to unexpected situations</em>. Make sure that your active theme support <a href="https://developer.wordpress.org/reference/hooks/wp_body_open/" target="_hook">wp_body_open</a> hook.</p>';
+	return '<p class="notice"><strong>' . esc_html__( 'Please note!', 'head-footer-code' ) . '</strong> ' . sprintf(
+		/* translators: %1$s will be replaced with preformatted HTML tag <script>
+		%2$s will be replaced with a link to wp_body_open page on WordPress.org */
+		esc_html__( 'Usage of this hook should be reserved for output of <em>unseen elements</em> like %1$s tags or additional metadata. It should not be used to add arbitrary HTML content to a page that <em>could break layouts or lead to unexpected situations</em>. Make sure that your active theme support %2$s hook.', 'head-footer-code' ),
+		auhfc_html2code( '<script>' ),
+		'<a href="https://developer.wordpress.org/reference/hooks/wp_body_open/" target="_hook">wp_body_open</a>'
+	) . '</p>';
 }
 
 function auhfc_html2code( $text ) {

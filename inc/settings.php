@@ -4,11 +4,11 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-// Initiate settings section and fields.
-add_action( 'admin_init', 'auhfc_settings_init' );
-
 // Create menu item for settings page.
 add_action( 'admin_menu', 'auhfc_add_admin_menu' );
+
+// Initiate settings section and fields.
+add_action( 'admin_init', 'auhfc_settings_init' );
 
 // Add Settings page link to plugin actions cell.
 add_filter( 'plugin_action_links_head-footer-code/head-footer-code.php', 'auhfc_plugin_settings_link' );
@@ -35,6 +35,8 @@ function auhfc_admin_enqueue_scripts( $hook ) {
 
 function auhfc_add_admin_menu() {
 
+	// add_options_page( $page_title, $menu_title, $capability, $menu_slug, $function )
+	// add_submenu_page( $parent_slug, $page_title, $menu_title, $capability, $menu_slug, $function, $position )
 	add_submenu_page(
 		'tools.php',
 		'Head & Footer Code',
@@ -55,20 +57,11 @@ function auhfc_settings_init() {
 	/**
 	 * Get settings from options table
 	 */
-	$auhfc_settings = auhfc_defaults();
+	// $auhfc_settings = get_option( 'auhfc_settings_sitewide' );
+	$auhfc_settings = auhfc_settings();
 	$auhfc_homepage_blog_posts = 'posts' == get_option( 'show_on_front', false ) ? true : false;
-	$wp52note = version_compare( get_bloginfo( 'version' ), '5.2', '<' ) ? __( ' Requires WordPress 5.2 or later.', 'head-footer-code' ) : '';
+	$wp52note = version_compare( get_bloginfo( 'version' ), '5.2', '<' ) ? ' ' . esc_html__( 'Requires WordPress 5.2 or later.', 'head-footer-code' ) : '';
 	$body_note = auhfc_body_note();
-
-	/**
-	 * Register a setting and its sanitization callback.
-	 * This is part of the Settings API, which lets you automatically generate
-	 * wp-admin settings pages by registering your settings and using a few
-	 * callbacks to control the output.
-	 */
-	register_setting( 'head_footer_code_sitewide_settings', 'auhfc_settings' );
-	register_setting( 'head_footer_code_homepage_settings', 'auhfc_settings' );
-	register_setting( 'head_footer_code_article_settings', 'auhfc_settings' );
 
 	/**
 	 * Settings Sections are the groups of settings you see on WordPress settings pages
@@ -77,9 +70,10 @@ function auhfc_settings_init() {
 	 * simpler to maintain and creates less new pages for users to learn.
 	 * You just tell them to change your setting on the relevant existing page.
 	 */
+	// add_settings_section( $id, $title, $callback, $page )
 	add_settings_section(
-		'head_footer_code_sitewide_settings',
-		esc_attr__( 'Site-wide head, body and footer code', 'head-footer-code' ),
+		'head_footer_code_settings_sitewide',
+		esc_html__( 'Site-wide head, body and footer code', 'head-footer-code' ),
 		'auhfc_sitewide_settings_section_description',
 		'head_footer_code'
 	);
@@ -90,16 +84,18 @@ function auhfc_settings_init() {
 	 * wp-admin settings pages by registering your settings and using a few
 	 * callbacks to control the output.
 	 */
+	// add_settings_field( $id, $title, $callback, $page, $section, $args )
 	add_settings_field(
 		'auhfc_head_code',
 		__( 'HEAD Code', 'head-footer-code' ),
 		'auhfc_textarea_field_render',
 		'head_footer_code',
-		'head_footer_code_sitewide_settings',
+		'head_footer_code_settings_sitewide',
 		[
-			'field'       => 'auhfc_settings[head]',
-			'value'       => $auhfc_settings['head'],
+			'field'       => 'auhfc_settings_sitewide[head]',
+			'value'       => $auhfc_settings['sitewide']['head'],
 			'description' => sprintf(
+				/* translators: %s will be replaced with preformatted HTML tag </head> */
 				esc_html__( 'Code to enqueue in HEAD section (before the %s).', 'head-footer-code' ),
 				auhfc_html2code( '</head>' )
 			),
@@ -113,11 +109,13 @@ function auhfc_settings_init() {
 		__( 'HEAD Priority', 'head-footer-code' ),
 		'auhfc_number_field_render',
 		'head_footer_code',
-		'head_footer_code_sitewide_settings',
+		'head_footer_code_settings_sitewide',
 		[
-			'field'       => 'auhfc_settings[priority_h]',
-			'value'       => $auhfc_settings['priority_h'],
+			'field'       => 'auhfc_settings_sitewide[priority_h]',
+			'value'       => $auhfc_settings['sitewide']['priority_h'],
 			'description' => sprintf(
+				/* translators: %1$d will be replaced with default HEAD priority
+				%2$s will be replaced with preformatted HTML tag </head> */
 				esc_html__( 'Priority for enqueued HEAD code. Default is %1$d. Larger number inject code closer to %2$s.', 'head-footer-code' ),
 				10,
 				auhfc_html2code( '</head>' )
@@ -134,16 +132,15 @@ function auhfc_settings_init() {
 		__( 'BODY Code', 'head-footer-code' ),
 		'auhfc_textarea_field_render',
 		'head_footer_code',
-		'head_footer_code_sitewide_settings',
+		'head_footer_code_settings_sitewide',
 		[
-			'field'       => 'auhfc_settings[body]',
-			'value'       => $auhfc_settings['body'],
-			'description' => sprintf(
-				__( '%1$sCode to enqueue in BODY section (after the %2$s).%3$s', 'head-footer-code' ),
-				$body_note,
-				auhfc_html2code( '<body>' ),
-				$wp52note
-			),
+			'field'       => 'auhfc_settings_sitewide[body]',
+			'value'       => $auhfc_settings['sitewide']['body'],
+			'description' => $body_note . sprintf(
+				/* translators: %s will be replaced with preformatted HTML tag <body> */
+				esc_html__( 'Code to enqueue in BODY section (after the %s).', 'head-footer-code' ),
+				auhfc_html2code( '<body>' )
+			) . $wp52note,
 			'field_class' => 'widefat code codeEditor',
 			'rows'        => 7,
 		]
@@ -154,15 +151,17 @@ function auhfc_settings_init() {
 		__( 'BODY Priority', 'head-footer-code' ),
 		'auhfc_number_field_render',
 		'head_footer_code',
-		'head_footer_code_sitewide_settings',
+		'head_footer_code_settings_sitewide',
 		[
-			'field'       => 'auhfc_settings[priority_b]',
-			'value'       => $auhfc_settings['priority_b'],
+			'field'       => 'auhfc_settings_sitewide[priority_b]',
+			'value'       => $auhfc_settings['sitewide']['priority_b'],
 			'description' => sprintf(
+				/* translators: %1$d will be replaced with default BODY priority
+				%2$s will be replaced with preformatted HTML tag <body> */
 				esc_html__(
-					'Priority for enqueued BODY code. Default is %1$d. Smaller number inject code closer to %2$s.%3$s',
+					'Priority for enqueued BODY code. Default is %1$d. Smaller number inject code closer to %2$s.',
 					'head-footer-code'
-				),
+				) . $wp52note,
 				10,
 				auhfc_html2code( '<body>' ),
 				$wp52note
@@ -179,11 +178,12 @@ function auhfc_settings_init() {
 		__( 'FOOTER Code', 'head-footer-code' ),
 		'auhfc_textarea_field_render',
 		'head_footer_code',
-		'head_footer_code_sitewide_settings',
+		'head_footer_code_settings_sitewide',
 		[
-			'field'       => 'auhfc_settings[footer]',
-			'value'       => $auhfc_settings['footer'],
+			'field'       => 'auhfc_settings_sitewide[footer]',
+			'value'       => $auhfc_settings['sitewide']['footer'],
 			'description' => sprintf(
+				/* translators: %s will be replaced with preformatted HTML tag </body> */
 				esc_html__( 'Code to enqueue in footer section (before the %s).', 'head-footer-code' ),
 				auhfc_html2code( '</body>' )
 			),
@@ -197,11 +197,13 @@ function auhfc_settings_init() {
 		__( 'FOOTER Priority', 'head-footer-code' ),
 		'auhfc_number_field_render',
 		'head_footer_code',
-		'head_footer_code_sitewide_settings',
+		'head_footer_code_settings_sitewide',
 		[
-			'field'       => 'auhfc_settings[priority_f]',
-			'value'       => $auhfc_settings['priority_f'],
+			'field'       => 'auhfc_settings_sitewide[priority_f]',
+			'value'       => $auhfc_settings['sitewide']['priority_f'],
 			'description' => sprintf(
+				/* translators: %1$d will be replaced with default FOOTER priority
+				%2$s will be replaced with preformatted HTML tag </body> */
 				esc_html__( 'Priority for enqueued FOOTER code. Default is %1$d. Larger number inject code closer to %2$s.', 'head-footer-code' ),
 				10,
 				auhfc_html2code( '</body>' )
@@ -218,23 +220,33 @@ function auhfc_settings_init() {
 		__( 'Process Shortcodes', 'head-footer-code' ),
 		'auhfc_select_field_render',
 		'head_footer_code',
-		'head_footer_code_sitewide_settings',
+		'head_footer_code_settings_sitewide',
 		[
-			'field'       => 'auhfc_settings[do_shortcode]',
+			'field'       => 'auhfc_settings_sitewide[do_shortcode]',
 			'items'       => [
 				'y' => __( 'Enable', 'head-footer-code' ),
 				'n' => __( 'Disable', 'head-footer-code' ),
 			],
-			'value'       => $auhfc_settings['do_shortcode'],
+			'value'       => $auhfc_settings['sitewide']['do_shortcode'],
 			'description' => esc_html__( 'If you wish to process shortcodes in FOOTER section, enable this option. Please note, shortcodes in HEAD and BODY sections are not processed!', 'head-footer-code' ),
-			'class'       => 'regilar-text',
+			'class'       => 'regular-text',
 		]
 	);
+
+	/**
+	 * Register a setting and its sanitization callback.
+	 * This is part of the Settings API, which lets you automatically generate
+	 * wp-admin settings pages by registering your settings and using a few
+	 * callbacks to control the output.
+	 */
+	// register_setting( $option_group, $option_name, $sanitize_callback )
+	register_setting( 'head_footer_code_settings', 'auhfc_settings_sitewide' );
 
 	/**
 	 * Add section for Homepage if show_on_front is set to Blog Posts
 	 */
 	if ( $auhfc_homepage_blog_posts ) {
+
 		/**
 		 * Settings Sections are the groups of settings you see on WordPress settings pages
 		 * with a shared heading. In your plugin you can add new sections to existing
@@ -242,8 +254,9 @@ function auhfc_settings_init() {
 		 * simpler to maintain and creates less new pages for users to learn.
 		 * You just tell them to change your setting on the relevant existing page.
 		 */
+		// add_settings_section( $id, $title, $callback, $page )
 		add_settings_section(
-			'head_footer_code_homepage_settings',
+			'head_footer_code_settings_homepage',
 			esc_html__( 'Head, body and footer code on Homepage in Blog Posts mode', 'head-footer-code' ),
 			'auhfc_homepage_settings_section_description',
 			'head_footer_code'
@@ -255,16 +268,18 @@ function auhfc_settings_init() {
 		 * wp-admin settings pages by registering your settings and using a few
 		 * callbacks to control the output.
 		 */
+		// add_settings_field( $id, $title, $callback, $page, $section, $args )
 		add_settings_field(
 			'auhfc_homepage_head_code',
 			__( 'Homepage HEAD Code', 'head-footer-code' ),
 			'auhfc_textarea_field_render',
 			'head_footer_code',
-			'head_footer_code_homepage_settings',
+			'head_footer_code_settings_homepage',
 			[
-				'field'       => 'auhfc_settings[homepage_head]',
-				'value'       => $auhfc_settings['homepage_head'],
+				'field'       => 'auhfc_settings_homepage[head]',
+				'value'       => $auhfc_settings['homepage']['head'],
 				'description' => sprintf(
+					/* translators: %s will be replaced with preformatted HTML tag </head> */
 					esc_html__( 'Code to enqueue in HEAD section (before the %s) on Homepage.', 'head-footer-code' ),
 					auhfc_html2code( '</head>' )
 				),
@@ -278,16 +293,15 @@ function auhfc_settings_init() {
 			__( 'Homepage BODY Code', 'head-footer-code' ),
 			'auhfc_textarea_field_render',
 			'head_footer_code',
-			'head_footer_code_homepage_settings',
+			'head_footer_code_settings_homepage',
 			[
-				'field'       => 'auhfc_settings[homepage_body]',
-				'value'       => $auhfc_settings['homepage_body'],
-				'description' => sprintf(
-					esc_html__( '%1$sCode to enqueue in BODY section (after the %2$s) on Homepage.%3$s', 'head-footer-code' ),
-					$body_note,
-					auhfc_html2code( '<body>' ),
-					$wp52note
-				),
+				'field'       => 'auhfc_settings_homepage[body]',
+				'value'       => $auhfc_settings['homepage']['body'],
+				'description' => $body_note . sprintf(
+					/* translators: %s will be replaced with preformatted HTML tag <body> */
+					esc_html__( 'Code to enqueue in BODY section (after the %s) on Homepage.', 'head-footer-code' ),
+					auhfc_html2code( '<body>' )
+				) . $wp52note,
 				'field_class' => 'widefat code codeEditor',
 				'rows'        => 5,
 			]
@@ -298,11 +312,12 @@ function auhfc_settings_init() {
 			__( 'Homepage FOOTER Code', 'head-footer-code' ),
 			'auhfc_textarea_field_render',
 			'head_footer_code',
-			'head_footer_code_homepage_settings',
+			'head_footer_code_settings_homepage',
 			[
-				'field'       => 'auhfc_settings[homepage_footer]',
-				'value'       => $auhfc_settings['homepage_footer'],
+				'field'       => 'auhfc_settings_homepage[footer]',
+				'value'       => $auhfc_settings['homepage']['footer'],
 				'description' => sprintf(
+					/* translators: %s will be replaced with preformatted HTML tag </body> */
 					esc_html__( 'Code to enqueue in footer section (before the %s) on Homepage.', 'head-footer-code' ),
 					auhfc_html2code( '</body>' )
 				),
@@ -316,18 +331,27 @@ function auhfc_settings_init() {
 			__( 'Behavior', 'head-footer-code' ),
 			'auhfc_select_field_render',
 			'head_footer_code',
-			'head_footer_code_homepage_settings',
+			'head_footer_code_settings_homepage',
 			[
-				'field'       => 'auhfc_settings[homepage_behavior]',
+				'field'       => 'auhfc_settings_homepage[behavior]',
 				'items'       => [
 					'append'  => esc_html__( 'Append to the site-wide code', 'head-footer-code' ),
 					'replace' => esc_html__( 'Replace the site-wide code', 'head-footer-code' ),
 				],
-				'value'       => $auhfc_settings['homepage_behavior'],
+				'value'       => $auhfc_settings['homepage']['behavior'],
 				'description' => esc_html__( 'Chose how the Homepage specific code will be enqueued in relation to site-wide code.', 'head-footer-code' ),
-				'class'       => 'regilar-text',
+				'class'       => 'regular-text',
 			]
 		);
+
+		/**
+		 * Register a setting and its sanitization callback.
+		 * This is part of the Settings API, which lets you automatically generate
+		 * wp-admin settings pages by registering your settings and using a few
+		 * callbacks to control the output.
+		 */
+		// register_setting( $option_group, $option_name, $sanitize_callback )
+		register_setting( 'head_footer_code_settings', 'auhfc_settings_homepage' );
 
 	} // END if ( $auhfc_homepage_blog_posts )
 
@@ -338,8 +362,9 @@ function auhfc_settings_init() {
 	 * simpler to maintain and creates less new pages for users to learn.
 	 * You just tell them to change your setting on the relevant existing page.
 	 */
+	// add_settings_section( $id, $title, $callback, $page )
 	add_settings_section(
-		'head_footer_code_article_settings',
+		'head_footer_code_settings_article',
 		esc_html__( 'Article specific settings', 'head-footer-code' ),
 		'auhfc_article_settings_section_description',
 		'head_footer_code'
@@ -355,20 +380,30 @@ function auhfc_settings_init() {
 		$clean_post_types[ $public_post_type ] = "{$public_post_object->label} ({$public_post_type})";
 	}
 
+	// add_settings_field( $id, $title, $callback, $page, $section, $args )
 	add_settings_field(
 		'auhfc_post_types',
 		__( 'Post Types', 'head-footer-code' ),
 		'auhfc_checkbox_group_field_render',
 		'head_footer_code',
-		'head_footer_code_article_settings',
+		'head_footer_code_settings_article',
 		[
-			'field'       => 'auhfc_settings[post_types]',
+			'field'       => 'auhfc_settings_article[post_types]',
 			'items'       => $clean_post_types,
-			'value'       => $auhfc_settings['post_types'],
+			'value'       => $auhfc_settings['article']['post_types'],
 			'description' => esc_html__( 'Select which post types will have Article specific section. Please note, even if you have Head/Footer Code set per article and then you disable that post type, article specific code will not be printed but only site-wide code.', 'head-footer-code' ),
 			'class'       => 'checkbox',
 		]
 	);
+
+	/**
+	 * Register a setting and its sanitization callback.
+	 * This is part of the Settings API, which lets you automatically generate
+	 * wp-admin settings pages by registering your settings and using a few
+	 * callbacks to control the output.
+	 */
+	// register_setting( $option_group, $option_name, $sanitize_callback )
+	register_setting( 'head_footer_code_settings', 'auhfc_settings_article' );
 
 } // END function auhfc_settings_init()
 
@@ -439,7 +474,6 @@ function auhfc_checkbox_group_field_render( $args ) {
 	}
 
 	$out .= '</fieldset>';
-	$out .= sprintf( '<p class="description">%s</p>', $description );
 
 	echo $out;
 
@@ -508,7 +542,7 @@ function auhfc_article_settings_section_description() {
 
 function auhfc_options_page() {
 	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_die( esc_attr__( 'You do not have sufficient permissions to access this page.', 'head-footer-code' ) );
+		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'head-footer-code' ) );
 	}
 	// Render the settings template.
 	include( sprintf( '%s/../templates/settings.php', dirname( __FILE__ ) ) );

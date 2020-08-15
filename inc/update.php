@@ -138,3 +138,38 @@ function auhfc_update_4() {
 	update_option( 'auhfc_settings', $defaults );
 
 } // END function auhfc_update_4()
+
+
+/**
+ * Split settings to 3 options (v1.2)
+ */
+function auhfc_update_5() {
+
+	// Get options from DB.
+	$defaults = get_option( 'auhfc_settings' );
+
+	$sitewide = [
+		'head'         => $defaults['head'],
+		'body'         => $defaults['body'],
+		'footer'       => $defaults['footer'],
+		'do_shortcode' => $defaults['do_shortcode'],
+	];
+	update_option( 'auhfc_settings_sitewide', $sitewide );
+
+	$homepage = [
+		'head'         => $defaults['homepage_head'],
+		'body'         => $defaults['homepage_body'],
+		'footer'       => $defaults['homepage_footer'],
+		'behavior'     => $defaults['homepage_behavior'],
+	];
+	update_option( 'auhfc_settings_homepage', $homepage );
+
+	$article = [
+		'post_types'   => $defaults['post_types'],
+	];
+	update_option( 'auhfc_settings_article', $article );
+
+	// Now delete old single option.
+	delete_option( 'auhfc_settings' );
+
+} // END function auhfc_update_5()
