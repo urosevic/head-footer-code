@@ -30,9 +30,15 @@ function auhfc_activate() {
 	}
 	$version = 'PHP' == $flag ? $php_req : $wp_req;
 	deactivate_plugins( WPAU_HEAD_FOOTER_CODE_FILE );
+
 	wp_die(
-		'<p>The <strong>Head & Footer Code</strong> plugin requires' . $flag . ' version ' . $version . ' or greater.</p>',
-		'Plugin Activation Error',
+		'<p>' . sprintf(
+			__( 'The %1$s plugin requires %2$s version %3$s or greater.', 'head-footer-code' ),
+			sprintf( '<strong>%s</strong>', __( 'Head & Footer Code', 'head-footer-code' ) ),
+			$flag,
+			$version
+		) . '</p>',
+		__( 'Plugin Activation Error', 'head-footer-code' ),
 		[
 			'response'  => 200,
 			'back_link' => true,
@@ -66,9 +72,9 @@ function auhfc_codemirror_enqueue_scripts( $hook ) {
 		return;
 	}
 	$cm_settings['codeEditor'] = wp_enqueue_code_editor( [ 'type' => 'text/html' ] );
-	wp_localize_script( 'jquery', 'cm_settings', $cm_settings );
-	wp_enqueue_script( 'wp-codemirror' );
+	wp_localize_script( 'code-editor', 'cm_settings', $cm_settings );
 	wp_enqueue_style( 'wp-codemirror' );
+	wp_enqueue_script( 'wp-codemirror' );
 } // END function auhfc_codemirror_enqueue_scripts( $hook )
 
 /**
@@ -77,12 +83,18 @@ function auhfc_codemirror_enqueue_scripts( $hook ) {
  */
 function auhfc_defaults() {
 	$defaults = [
-		'head'         => '',
-		'footer'       => '',
-		'priority_h'   => 10,
-		'priority_f'   => 10,
-		'post_types'   => [],
-		'do_shortcode' => 'n',
+		'head'              => '',
+		'body'              => '',
+		'footer'            => '',
+		'priority_h'        => 10,
+		'priority_b'        => 10,
+		'priority_f'        => 10,
+		'do_shortcode'      => 'n',
+		'homepage_head'     => '',
+		'homepage_body'     => '',
+		'homepage_footer'   => '',
+		'homepage_behavior' => 'append',
+		'post_types'        => [],
 	];
 	$auhfc_settings = get_option( 'auhfc_settings', $defaults );
 	$auhfc_settings = wp_parse_args( $auhfc_settings, $defaults );
@@ -135,7 +147,7 @@ function auhfc_get_meta( $field_name = '' ) {
 
 /**
  * Return debugging string if WP_DEBUG constant is true.
- * @param  string $scope    Scope of output (s - SITE WIDE, a - ARTICLE SPECIFIC)
+ * @param  string $scope    Scope of output (s - SITE WIDE, a - ARTICLE SPECIFIC, h - HOMEPAGE)
  * @param  string $location Location of output (h - HEAD, b - BODY, f - FOOTER)
  * @param  string $message  Output message
  * @param  string $code     Code for output
@@ -148,7 +160,19 @@ function auhfc_out( $scope = null, $location = null, $message = null, $code = nu
 	if ( null == $scope || null == $location || null == $message ) {
 		return;
 	}
-	$scope = 's' == $scope ? 'Site-wide' : 'Article specific';
+	switch ( $scope ) {
+		case 'h':
+			$scope = 'Homepage';
+			break;
+		case 's':
+			$scope = 'Site-wide';
+			break;
+		case 'a':
+			$scope = 'Article specific';
+			break;
+		default:
+			$scope = 'Unknown';
+	}
 	switch ( $location ) {
 		case 'h':
 			$location = 'HEAD';
@@ -173,6 +197,17 @@ function auhfc_out( $scope = null, $location = null, $message = null, $code = nu
 	);
 } // END function auhfc_out( $scope = null, $location = null, $message = null, $code = null )
 
+function auhfc_is_homepage_blog_posts() {
+	if ( is_home() && 'posts' == get_option( 'show_on_front', false ) ) {
+		return true;
+	}
+	return false;
+} // END function auhfc_is_homepage_blog_posts()
+
 function auhfc_body_note() {
 	return '<p class="notice"><strong>Please note!</strong> Usage of this hook should be reserved for output of <em>unseen elements</em> like <code>&lt;script&gt;</code> tags or additional metadata. It should not be used to add arbitrary HTML content to a page that <em>could break layouts or lead to unexpected situations</em>. Make sure that your active theme support <a href="https://developer.wordpress.org/reference/hooks/wp_body_open/" target="_hook">wp_body_open</a> hook.</p>';
 }
+
+function auhfc_html2code( $text ) {
+	return '<code>' . htmlspecialchars( $text ) . '</code>';
+} // END function auhfc_html2code( $text )

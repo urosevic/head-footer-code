@@ -66,24 +66,31 @@ abstract class AUHfc_Meta_Box {
 	 */
 	public static function html( $post ) {
 		wp_nonce_field( '_head_footer_code_nonce', 'head_footer_code_nonce' ); ?>
-		<p>Here you can insert article specific code for Head (before the <code>&lt;/head&gt;</code>), Body (after the <code>&lt;body&gt;</code>) and Footer (before the <code>&lt;/body&gt;</code>) sections. They work in exactly the same way as site-wide code, which you can configure under <a href="tools.php?page=head_footer_code">Tools / Head &amp; Footer Code</a>.</p>
+		<p><?php
+		printf( __( 'Here you can insert article specific code for Head (before the %1$s), Body (after the %2$s) and Footer (before the %3$s) sections. They work in exactly the same way as site-wide code, which you can configure under %4$s.', 'head-footer-code'),
+			'<code>&lt;/head&gt;</code>',
+			'<code>&lt;body&gt;</code>',
+			'<code>&lt;/body&gt;</code>',
+			sprintf( '<a href="tools.php?page=head_footer_code">%s</a>', __( 'Tools / Head &amp; Footer Code', 'head-footer-code' ) )
+		);
+		?></p>
 		<label><?php esc_attr_e( 'Behavior', 'head-footer-code' ); ?></label><br />
 		<select name="auhfc[behavior]" id="auhfc_behavior_replace">
-			<option value="append" <?php echo ( 'append' === auhfc_get_meta( 'behavior' ) ) ? 'selected' : ''; ?>>Append to the site-wide code</option>
-			<option value="replace" <?php echo ( 'replace' === auhfc_get_meta( 'behavior' ) ) ? 'selected' : ''; ?>>Replace the site-wide code</option>
+			<option value="append" <?php echo ( 'append' === auhfc_get_meta( 'behavior' ) ) ? 'selected' : ''; ?>><?php _e( 'Append to the site-wide code', 'head-footer-code' ); ?></option>
+			<option value="replace" <?php echo ( 'replace' === auhfc_get_meta( 'behavior' ) ) ? 'selected' : ''; ?>><?php _e( 'Replace the site-wide code', 'head-footer-code' ); ?></option>
 		</select>
 		<br /><br />
 		<label for="auhfc_head"><?php _e( 'Head Code', 'head-footer-code' ); ?></label><br />
 		<textarea name="auhfc[head]" id="auhfc_head" class="widefat code" rows="5"><?php echo auhfc_get_meta( 'head' ); ?></textarea>
-		<p class="description">Example: <code>&lt;link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri(); ?>/style.css" type="text/css" media="all"&gt;</code></p>
+		<p class="description"><?php _e( 'Example', 'head-footer-code'); ?>: <code>&lt;link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri(); ?>/style.css" type="text/css" media="all"&gt;</code></p>
 		<br />
-		<label for="auhfc_body"><?php _e( 'Body Code', 'body-footer-code' ); ?></label><br />
+		<label for="auhfc_body"><?php _e( 'Body Code', 'head-footer-code' ); ?></label><br />
 		<textarea name="auhfc[body]" id="auhfc_body" class="widefat code" rows="5"><?php echo auhfc_get_meta( 'body' ); ?></textarea>
-		<p class="description">Example: <code>&lt;script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/body-start.js" type="text/css" media="all"&gt;&lt;/script&gt;</code></p>
+		<p class="description"><?php _e( 'Example', 'head-footer-code'); ?>: <code>&lt;script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/body-start.js" type="text/css" media="all"&gt;&lt;/script&gt;</code></p>
 		<br />
 		<label for="auhfc_footer"><?php _e( 'Footer Code', 'head-footer-code' ); ?></label><br />
 		<textarea name="auhfc[footer]" id="auhfc_footer" class="widefat code" rows="5"><?php echo auhfc_get_meta( 'footer' ); ?></textarea>
-		<p class="description">Example: <code>&lt;script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/script.js"&gt;&lt;/script&gt;</code></p>
+		<p class="description"><?php _e( 'Example', 'head-footer-code'); ?>: <code>&lt;script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/script.js"&gt;&lt;/script&gt;</code></p>
 		<?php
 	} // END public static function html()
 
