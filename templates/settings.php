@@ -16,17 +16,15 @@ if ( ! defined( 'WPINC' ) ) {
 
 ?>
 <div class="wrap" id="head_footer_code_settings">
-	<h1><?php esc_attr_e( 'Head & Footer Code', 'head-footer-code' ); ?></h2>
-	<em><?php _e( 'Plugin version', 'head-footer-code' ); ?>: <?php echo WPAU_HEAD_FOOTER_CODE_VER; ?></em>
+	<h2><?php esc_html_e( 'Head & Footer Code', 'head-footer-code' ); ?></h2>
+	<em><?php esc_html_e( 'Plugin version', 'head-footer-code' ); ?>: <?php echo WPAU_HEAD_FOOTER_CODE_VER; ?></em>
 	<div class="head_footer_code_wrapper">
 		<div class="content_cell">
 			<form method="post" action="options.php">
 			<?php
-				@settings_fields( 'head_footer_code_sitewide_settings' );
-				@settings_fields( 'head_footer_code_homepage_settings' );
-				@settings_fields( 'head_footer_code_article_settings' );
-				@do_settings_sections( 'head_footer_code' );
-				@submit_button();
+				settings_fields( 'head_footer_code_settings' );
+				do_settings_sections( 'head_footer_code' );
+				submit_button();
 			?>
 			</form>
 		</div><!-- .content_cell -->

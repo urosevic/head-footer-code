@@ -108,6 +108,9 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 = 1.2 =
 * Add: custom head, body and footer code for Homepage in Blog Posts mode.
 * Fix: Code Editor broken in WordPress 5.5 release.
+* Fix: Invalid requests while saving settings https://github.com/urosevic/head-footer-code/issues/1
+* Improve: DRY for front-end conditions.
+* Improve: translators tips for complex strings.
 * Improve: all strings available to localize.
 
 = 1.1.1 =
