@@ -24,8 +24,8 @@ if ( ! defined( 'WPINC' ) ) {
 define( 'WPAU_HEAD_FOOTER_CODE_VER', '1.2' );
 define( 'WPAU_HEAD_FOOTER_CODE_DB_VER', '5' );
 define( 'WPAU_HEAD_FOOTER_CODE_FILE', __FILE__ );
-define( 'WPAU_HEAD_FOOTER_CODE_DIR', dirname( WPAU_HEAD_FOOTER_CODE_FILE ) );
-define( 'WPAU_HEAD_FOOTER_CODE_INC', WPAU_HEAD_FOOTER_CODE_DIR . '/inc/' );
+define( 'WPAU_HEAD_FOOTER_CODE_DIR', dirname( WPAU_HEAD_FOOTER_CODE_FILE ) . '/');
+define( 'WPAU_HEAD_FOOTER_CODE_INC', WPAU_HEAD_FOOTER_CODE_DIR . 'inc/' );
 
 // Load files.
 require_once 'inc/helpers.php';

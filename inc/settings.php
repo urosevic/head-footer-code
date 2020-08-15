@@ -57,7 +57,6 @@ function auhfc_settings_init() {
 	/**
 	 * Get settings from options table
 	 */
-	// $auhfc_settings = get_option( 'auhfc_settings_sitewide' );
 	$auhfc_settings = auhfc_settings();
 	$auhfc_homepage_blog_posts = 'posts' == get_option( 'show_on_front', false ) ? true : false;
 	$wp52note = version_compare( get_bloginfo( 'version' ), '5.2', '<' ) ? ' ' . esc_html__( 'Requires WordPress 5.2 or later.', 'head-footer-code' ) : '';
@@ -545,7 +544,7 @@ function auhfc_options_page() {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'head-footer-code' ) );
 	}
 	// Render the settings template.
-	include( sprintf( '%s/../templates/settings.php', dirname( __FILE__ ) ) );
+	include( WPAU_HEAD_FOOTER_CODE_DIR . 'templates/settings.php' );
 } // END function auhfc_options_page()
 
 /**

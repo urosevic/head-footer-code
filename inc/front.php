@@ -32,14 +32,15 @@ function auhfc_wp_head() {
 	if ( is_singular() ) {
 		global $wp_the_query;
 		$auhfc_post_type = $wp_the_query->get_queried_object()->post_type;
-		$is_homepage_blog_posts = false;
 	} else {
 		$auhfc_post_type = 'not singular';
-		$is_homepage_blog_posts = auhfc_is_homepage_blog_posts();
 	}
 
 	// Get variables to test.
-	$auhfc_settings = auhfc_settings();
+	$auhfc_settings         = auhfc_settings();
+	$is_homepage_blog_posts = auhfc_is_homepage_blog_posts();
+	$homepage_behavior      = false;
+	$homepage_code          = '';
 
 	// Get meta for post only if it's singular.
 	if ( 'not singular' !== $auhfc_post_type && in_array( $auhfc_post_type, $auhfc_settings['article']['post_types'] ) ) {
@@ -55,9 +56,6 @@ function auhfc_wp_head() {
 			$homepage_code     = $auhfc_settings['homepage']['head'];
 			$homepage_behavior = $auhfc_settings['homepage']['behavior'];
 			$dbg_set           = "type: homepage; bahavior: {$homepage_behavior}; priority: {$auhfc_settings['sitewide']['priority_h']}; do_shortcode: {$auhfc_settings['sitewide']['do_shortcode']}";
-		} else {
-			$homepage_code     = '';
-			$homepage_behavior = false;
 		}
 	}
 
@@ -72,13 +70,7 @@ function auhfc_wp_head() {
 	// Inject site-wide head code.
 	if (
 		! empty( $auhfc_settings['sitewide']['head'] ) &&
-		(
-			( ! $is_homepage_blog_posts && 'replace' !== $article_behavior ) ||
-			( ! $is_homepage_blog_posts && 'replace' == $article_behavior && ! in_array( $auhfc_post_type, $auhfc_settings['article']['post_types'] ) ) ||
-			( ! $is_homepage_blog_posts && 'replace' == $article_behavior && in_array( $auhfc_post_type, $auhfc_settings['article']['post_types'] ) && empty( $article_code ) ) ||
-			( $is_homepage_blog_posts && 'replace' !== $homepage_behavior ) ||
-			( $is_homepage_blog_posts && 'replace' == $homepage_behavior && empty( $homepage_code ) )
-		)
+		auhfc_print_sitewide( $article_behavior, $auhfc_post_type, $auhfc_settings['article']['post_types'], $article_code, $homepage_behavior, $homepage_code )
 	) {
 		$out .= auhfc_out( 's', 'h', $dbg_set, $auhfc_settings['sitewide']['head'] );
 	}
@@ -105,14 +97,15 @@ function auhfc_wp_body() {
 	if ( is_singular() ) {
 		global $wp_the_query;
 		$auhfc_post_type = $wp_the_query->get_queried_object()->post_type;
-		$is_homepage_blog_posts = false;
 	} else {
 		$auhfc_post_type = 'not singular';
-		$is_homepage_blog_posts = auhfc_is_homepage_blog_posts();
 	}
 
 	// Get variables to test.
-	$auhfc_settings = auhfc_settings();
+	$auhfc_settings         = auhfc_settings();
+	$is_homepage_blog_posts = auhfc_is_homepage_blog_posts();
+	$homepage_behavior      = false;
+	$homepage_code          = '';
 
 	// Get meta for post only if it's singular.
 	if ( 'not singular' !== $auhfc_post_type && in_array( $auhfc_post_type, $auhfc_settings['article']['post_types'] ) ) {
@@ -128,9 +121,6 @@ function auhfc_wp_body() {
 			$homepage_code     = $auhfc_settings['homepage']['body'];
 			$homepage_behavior = $auhfc_settings['homepage']['behavior'];
 			$dbg_set           = "type: homepage; bahavior: {$homepage_behavior}; priority: {$auhfc_settings['sitewide']['priority_b']}; do_shortcode: {$auhfc_settings['sitewide']['do_shortcode']}";
-		} else {
-			$homepage_code     = '';
-			$homepage_behavior = false;
 		}
 	}
 
@@ -145,13 +135,7 @@ function auhfc_wp_body() {
 	// Inject site-wide body code.
 	if (
 		! empty( $auhfc_settings['sitewide']['body'] ) &&
-		(
-			( ! $is_homepage_blog_posts && 'replace' !== $article_behavior ) ||
-			( ! $is_homepage_blog_posts && 'replace' == $article_behavior && ! in_array( $auhfc_post_type, $auhfc_settings['article']['post_types'] ) ) ||
-			( ! $is_homepage_blog_posts && 'replace' == $article_behavior && in_array( $auhfc_post_type, $auhfc_settings['article']['post_types'] ) && empty( $article_code ) ) ||
-			( $is_homepage_blog_posts && 'replace' !== $homepage_behavior ) ||
-			( $is_homepage_blog_posts && 'replace' == $homepage_behavior && empty( $homepage_code ) )
-		)
+		auhfc_print_sitewide( $article_behavior, $auhfc_post_type, $auhfc_settings['article']['post_types'], $article_code, $homepage_behavior, $homepage_code )
 	) {
 		$out .= auhfc_out( 's', 'b', $dbg_set, $auhfc_settings['sitewide']['body'] );
 	}
@@ -178,14 +162,15 @@ function auhfc_wp_footer() {
 	if ( is_singular() ) {
 		global $wp_the_query;
 		$auhfc_post_type = $wp_the_query->get_queried_object()->post_type;
-		$is_homepage_blog_posts = false;
 	} else {
 		$auhfc_post_type = 'not singular';
-		$is_homepage_blog_posts = auhfc_is_homepage_blog_posts();
 	}
 
 	// Get variables to test.
-	$auhfc_settings = auhfc_settings();
+	$auhfc_settings         = auhfc_settings();
+	$is_homepage_blog_posts = auhfc_is_homepage_blog_posts();
+	$homepage_behavior      = false;
+	$homepage_code          = '';
 
 	// Get meta for post only if it's singular.
 	if ( 'not singular' !== $auhfc_post_type && in_array( $auhfc_post_type, $auhfc_settings['article']['post_types'] ) ) {
@@ -201,9 +186,6 @@ function auhfc_wp_footer() {
 			$homepage_code     = $auhfc_settings['homepage']['footer'];
 			$homepage_behavior = $auhfc_settings['homepage']['behavior'];
 			$dbg_set           = "type: homepage; bahavior: {$homepage_behavior}; priority: {$auhfc_settings['sitewide']['priority_f']}; do_shortcode: {$auhfc_settings['sitewide']['do_shortcode']}";
-		} else {
-			$homepage_code     = '';
-			$homepage_behavior = false;
 		}
 	}
 
@@ -218,13 +200,7 @@ function auhfc_wp_footer() {
 	// Inject site-wide head code.
 	if (
 		! empty( $auhfc_settings['footer'] ) &&
-		(
-			( ! $is_homepage_blog_posts && 'replace' !== $article_behavior ) ||
-			( ! $is_homepage_blog_posts && 'replace' == $article_behavior && ! in_array( $auhfc_post_type, $auhfc_settings['article']['post_types'] ) ) ||
-			( ! $is_homepage_blog_posts && 'replace' == $article_behavior && in_array( $auhfc_post_type, $auhfc_settings['article']['post_types'] ) && empty( $article_code ) ) ||
-			( $is_homepage_blog_posts && 'replace' !== $homepage_behavior ) ||
-			( $is_homepage_blog_posts && 'replace' == $homepage_behavior && empty( $homepage_code ) )
-		)
+		auhfc_print_sitewide( $article_behavior, $auhfc_post_type, $auhfc_settings['article']['post_types'], $article_code, $homepage_behavior, $homepage_code )
 	) {
 		$out .= auhfc_out( 's', 'f', $dbg_set, $auhfc_settings['sitewide']['footer'] );
 	}

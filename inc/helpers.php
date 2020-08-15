@@ -232,3 +232,35 @@ function auhfc_body_note() {
 function auhfc_html2code( $text ) {
 	return '<code>' . htmlspecialchars( $text ) . '</code>';
 } // END function auhfc_html2code( $text )
+
+/**
+ * Determine should we print site-wide code
+ * or it should be replaced with homepage/article code.
+ * @param  string  $article_behavior       Behavior for article specific code (replace/append)
+ * @param  string  $article_post_type      Post type of current article
+ * @param  array   $article_post_types     Array of post types where article specific code is enabled
+ * @param  string  $article_code           Article specific custom code
+ * @param  string  $homepage_behavior      Behavior for homepage code (replace/append)
+ * @param  string  $homepage_code          Homepage specific custom code
+ * @return boolean                         Boolean that determine should site-wide code be printed (true) or not (false)
+ */
+function auhfc_print_sitewide(
+	$article_behavior = 'append',
+	$article_post_type = null,
+	$article_post_types = [],
+	$article_code = null,
+	$homepage_behavior = 'append',
+	$homepage_code = null
+) {
+	$is_homepage_blog_posts = auhfc_is_homepage_blog_posts();
+	if (
+		( ! $is_homepage_blog_posts && 'replace' !== $article_behavior ) ||
+		( ! $is_homepage_blog_posts && 'replace' == $article_behavior && ! in_array( $article_post_type, $article_post_types ) ) ||
+		( ! $is_homepage_blog_posts && 'replace' == $article_behavior && in_array( $article_post_type, $article_post_types ) && empty( $article_code ) ) ||
+		( $is_homepage_blog_posts && 'replace' !== $homepage_behavior ) ||
+		( $is_homepage_blog_posts && 'replace' == $homepage_behavior && empty( $homepage_code ) )
+	) {
+		return true;
+	}
+	return false;
+}
