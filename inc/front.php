@@ -190,7 +190,7 @@ function auhfc_wp_footer() {
 	}
 
 	// If no code to inject, simple exit.
-	if ( empty( $auhfc_settings['sitewide']['footer'] ) && empty( $article_code ) ) {
+	if ( empty( $auhfc_settings['sitewide']['footer'] ) && empty( $article_code ) && empty( $homepage_code ) ) {
 		return;
 	}
 
@@ -199,7 +199,7 @@ function auhfc_wp_footer() {
 
 	// Inject site-wide head code.
 	if (
-		! empty( $auhfc_settings['footer'] ) &&
+		! empty( $auhfc_settings['sitewide']['footer'] ) &&
 		auhfc_print_sitewide( $article_behavior, $auhfc_post_type, $auhfc_settings['article']['post_types'], $article_code, $homepage_behavior, $homepage_code )
 	) {
 		$out .= auhfc_out( 's', 'f', $dbg_set, $auhfc_settings['sitewide']['footer'] );
