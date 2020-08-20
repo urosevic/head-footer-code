@@ -221,9 +221,13 @@ function auhfc_is_homepage_blog_posts() {
 
 function auhfc_body_note() {
 	return '<p class="notice"><strong>' . esc_html__( 'Please note!', 'head-footer-code' ) . '</strong> ' . sprintf(
-		/* translators: %1$s will be replaced with preformatted HTML tag <script>
-		%2$s will be replaced with a link to wp_body_open page on WordPress.org */
-		esc_html__( 'Usage of this hook should be reserved for output of <em>unseen elements</em> like %1$s tags or additional metadata. It should not be used to add arbitrary HTML content to a page that <em>could break layouts or lead to unexpected situations</em>. Make sure that your active theme support %2$s hook.', 'head-footer-code' ),
+		/* translators: %1$s will be replaced with translated 'unseen elements'
+		%2$s will be replaced with preformatted HTML tag <script>
+		%3$s will be replaced with translated sentence 'could break layouts or lead to unexpected situations'
+		%4$s will be replaced with a link to wp_body_open page on WordPress.org */
+		esc_html__( 'Usage of this hook should be reserved for output of %1$s like %2$s tags or additional metadata. It should not be used to add arbitrary HTML content to a page that %3$s. Make sure that your active theme support %4$s hook.', 'head-footer-code' ),
+		'<em>' . esc_html__( 'unseen elements', 'head-footer-code' ) . '</em>',
+		'<em>' . esc_html__( 'could break layouts or lead to unexpected situations', 'head-footer-code' ) . '</em>',
 		auhfc_html2code( '<script>' ),
 		'<a href="https://developer.wordpress.org/reference/hooks/wp_body_open/" target="_hook">wp_body_open</a>'
 	) . '</p>';

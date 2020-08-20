@@ -535,7 +535,7 @@ function auhfc_homepage_settings_section_description() {
 function auhfc_article_settings_section_description() {
 	printf(
 		'<p>%s</p>',
-		esc_html__( 'Define article specific behavior.', 'head-footer-code' )
+		esc_html__( 'Define what post types will support article specific features.', 'head-footer-code' )
 	);
 } // END function auhfc_article_settings_section_description()
 
