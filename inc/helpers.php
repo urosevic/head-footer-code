@@ -66,12 +66,12 @@ function auhfc_maybe_update() {
 	auhfc_update();
 } // END function auhfc_maybe_update()
 
-add_action( 'admin_enqueue_scripts', 'auhfc_codemirror_enqueue_scripts' );
+add_action( 'admin_enqueue_scripts', 'auhfc_admin_enqueue_scripts' );
 /**
- * CodeMirror enqueue hoot function to enable code editor in plugin settings
+ * Enqueue admin styles and scripts to enable code editor in plugin settings and custom column on article listing
  * @param  string $hook Current page hook
  */
-function auhfc_codemirror_enqueue_scripts( $hook ) {
+function auhfc_admin_enqueue_scripts( $hook ) {
 	// Admin Stylesheet.
 	if ( in_array( $hook, [ 'edit.php', 'tools_page_head_footer_code' ] ) ) {
 		wp_enqueue_style(
@@ -89,7 +89,7 @@ function auhfc_codemirror_enqueue_scripts( $hook ) {
 		wp_enqueue_script( 'wp-codemirror' );
 	}
 	return;
-} // END function auhfc_codemirror_enqueue_scripts( $hook )
+} // END function auhfc_admin_enqueue_scripts( $hook )
 
 /**
  * Provide global defaults

@@ -9,7 +9,7 @@ Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Easy add site-wide and/or article specific custom code before the &lt;/head&gt; or &lt;/body&gt; or opening &lt;body&gt; by hooking to wp_head, wp_footer and wp_body_open. Multisite is supported!
+Easy add site-wide and/or article specific custom code before the closing &lt;/head&gt; and &lt;/body&gt;, or opening &lt;body&gt; tag.
 
 == Description ==
 
@@ -17,11 +17,13 @@ Let we say that you have been told to add some custom code (HTML, JavaScript or 
 
 Simply go to Tools &rarr; Head &amp; Footer Code in your website admin dashboard, and insert custom code to HEAD, BODY or FOOTER section (depending what you have to do).
 
-If your WordPress uses latest posts on homepage, you can also add specific code only for homepage on Tools &rarr; Head &amp; Footer Code (there will be section **Head, body and footer code on Homepage in Blog Posts mode**)
+If your WordPress show latest blog posts on homepage, you can also add specific code only for homepage on **Tools** &rarr; **Head &amp; Footer Code** (there will be section **Head, body and footer code on Homepage in Blog Posts mode**)
 
 If you have to insert some custom code specific for individual article (post, page, custom post type), then you can use Article specific metabox while you editing post/page/custom post type (check out [Screenshots](https://wordpress.org/plugins/head-footer-code/#screenshots)). There you can also set should that specific code be appended to site-wide code defined on **Tools** &rarr; **Head &amp; Footer Code**, or should be overwritten.
 
 Please note that taxonomies does not have own specific code but global code is added on those pages (category, tag and custom taxonomy listing, individual category, tags and custom taxonomies).
+
+This magic is done by hooking to WordPress hooks `wp_head`, `wp_footer` and `wp_body_open`.
 
 https://www.youtube.com/watch?v=Gd41Dv09UC4
 
@@ -38,15 +40,17 @@ It is very hard to continue development and support for this and my other free p
 * Set site-wide custom content for head page section (before the `</head>`)
 * Set site-wide custom content for body section (after the `<body>`) - **Requires WordPress 5.2!**
 * Set site-wide custom content for footer page section (before the `</body>`)
-* [NEW in 1.2] Set homepage specific custom code for head, body and/or footer if Homepage mode is se to Blog Posts
+* **[NEW in 1.2]** Set homepage specific custom code for head, body and/or footer if Homepage mode is se to Blog Posts
 * Set article specific custom code for head page section (before the `</head>`)
 * Set article specific custom code for body section (after the `<body>`) - **Requires WordPress 5.2!**
 * Set article specific custom content for footer page section (before the `</body>`)
 * Choose priority of printed custom code to head/body/footer sections (lower number mean far from `</head>` and `</body>` and closer to `<body>`, higher number means closer to `</head>` and `</body>` and farther to `<body>`)
 * Choose which post types will have enabled article specific head/body/footer fields
 * Choose should article specific head/body/footer code be appended to site-wide code, or will replace site-wide code
+* **[NEW in 1.2.1]** View on Posts/Pages/Custom Post Types listing if article has defined any article specific custom code
 * Site-wide section located under **Tools** > **Head & Footer Code**
 * If you have set WP_DEBUG constant in `wp-config.php` to `true`, you'll see site-wide and article specific entries in page source code wrapped to comments.
+* Multisite is supported.
 
 General settings, including HEAD, BODY, FOOTER global code and priority, and also homepage code and behavior have been saved to WordPress option `auhfc_settings`.
 Each post/page/custom post type specific HEAD, BODY and FOOTER code and behavior have been saved to post meta `_auhfc`.
@@ -92,11 +96,12 @@ Open in code editor `header.php` file from theme you use, and check if right aft
 == Screenshots ==
 
 1. Head &amp; Footer Code box in Plugin search results
-2. Site-wide settings page
+2. Plugin Settings page (Site-wide, Homepage and Article Post Types)
 3. Article specific metabox
 4. Example of custom code inserted to HEAD section (site-wide with appended article specific)
 5. Example of custom code inserted to BODY section (site-wide with appended article specific)
 6. Example of custom code inserted to FOOTER section (site-wide with appended article specific)
+7. Example of Head & Footer Code column on Pages listing, to identify which pages have set custom code, which one and what mode is selected
 
 == Upgrade Notice ==
 
