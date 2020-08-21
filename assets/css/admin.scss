@@ -49,3 +49,28 @@
         }
     }
 }
+.fixed .column-hfc {
+    width: 14%;
+    .n-a {
+        opacity: 0.5;
+        cursor: help;
+    }
+    // .label {
+    //     cursor: pointer;
+    // }
+    .badge {
+        padding: .1rem .5rem;
+        font-weight: 600;
+        font-size: .6rem;
+        margin: .5rem .5rem 0 0;
+        display: inline-block;
+        background: transparent;
+
+        &.blue {
+            border: 1px solid #bfe7f3;
+            &:hover {
+                border-color: #007cba;
+            }
+        }
+    }
+}

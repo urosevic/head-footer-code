@@ -16,23 +16,9 @@ add_filter( 'plugin_action_links_head-footer-code/head-footer-code.php', 'auhfc_
 // Update links in plugin row on Plugins page.
 add_filter( 'plugin_row_meta', 'auhfc_add_plugin_meta_links', 10, 2 );
 
-// Load admin styles on plugin settings page
-add_action( 'admin_enqueue_scripts', 'auhfc_admin_enqueue_scripts' );
-
 /**
- * Enqueue the admin style
+ * Add submenu for Head & Footer code to Tools.
  */
-function auhfc_admin_enqueue_scripts( $hook ) {
-	if ( 'tools_page_head_footer_code' == $hook ) {
-		wp_enqueue_style(
-			'head-footer-code-admin',
-			plugin_dir_url( __FILE__ ) . '../assets/css/admin.css',
-			[],
-			WPAU_HEAD_FOOTER_CODE_VER
-		);
-	}
-} // END function wpau_enqueue_colour_picker()
-
 function auhfc_add_admin_menu() {
 
 	// add_options_page( $page_title, $menu_title, $capability, $menu_slug, $function )
