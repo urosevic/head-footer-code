@@ -81,7 +81,7 @@ abstract class AUHfc_Meta_Box {
 		);
 		?></p>
 		<label><?php esc_html_e( 'Behavior', 'head-footer-code' ); ?></label><br />
-		<select name="auhfc[behavior]" id="auhfc_behavior_replace">
+		<select name="auhfc[behavior]" id="auhfc_behavior">
 			<option value="append" <?php echo ( 'append' === auhfc_get_meta( 'behavior' ) ) ? 'selected' : ''; ?>><?php esc_html_e( 'Append to the site-wide code', 'head-footer-code' ); ?></option>
 			<option value="replace" <?php echo ( 'replace' === auhfc_get_meta( 'behavior' ) ) ? 'selected' : ''; ?>><?php esc_html_e( 'Replace the site-wide code', 'head-footer-code' ); ?></option>
 		</select>

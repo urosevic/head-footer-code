@@ -7,6 +7,7 @@ if ( ! defined( 'WPINC' ) ) {
 // Include back-end/front-end resources.
 if ( is_admin() ) {
 	require_once WPAU_HEAD_FOOTER_CODE_INC . 'settings.php';
+	require_once WPAU_HEAD_FOOTER_CODE_INC . 'posts-custom-columns.php';
 	require_once WPAU_HEAD_FOOTER_CODE_INC . 'class-auhfc-meta-box.php';
 } else {
 	require_once WPAU_HEAD_FOOTER_CODE_INC . 'front.php';
@@ -71,13 +72,23 @@ add_action( 'admin_enqueue_scripts', 'auhfc_codemirror_enqueue_scripts' );
  * @param  string $hook Current page hook
  */
 function auhfc_codemirror_enqueue_scripts( $hook ) {
-	if ( 'tools_page_head_footer_code' !== $hook ) {
-		return;
+	// Admin Stylesheet.
+	if ( in_array( $hook, [ 'edit.php', 'tools_page_head_footer_code' ] ) ) {
+		wp_enqueue_style(
+			'head-footer-code-admin',
+			plugin_dir_url( __FILE__ ) . '../assets/css/admin.css',
+			[],
+			WPAU_HEAD_FOOTER_CODE_VER
+		);
 	}
-	$cm_settings['codeEditor'] = wp_enqueue_code_editor( [ 'type' => 'text/html' ] );
-	wp_localize_script( 'code-editor', 'cm_settings', $cm_settings );
-	wp_enqueue_style( 'wp-codemirror' );
-	wp_enqueue_script( 'wp-codemirror' );
+	// Codemirror Assets.
+	if ( 'tools_page_head_footer_code' === $hook ) {
+		$cm_settings['codeEditor'] = wp_enqueue_code_editor( [ 'type' => 'text/html' ] );
+		wp_localize_script( 'code-editor', 'cm_settings', $cm_settings );
+		wp_enqueue_style( 'wp-codemirror' );
+		wp_enqueue_script( 'wp-codemirror' );
+	}
+	return;
 } // END function auhfc_codemirror_enqueue_scripts( $hook )
 
 /**
@@ -119,30 +130,35 @@ function auhfc_settings() {
 /**
  * Get values of metabox fields
  * @param  string $field_name Post meta field key
+ * @param  string $post_id    Post ID (optional)
  * @return string             Post meta field value
  */
-function auhfc_get_meta( $field_name = '' ) {
+function auhfc_get_meta( $field_name = '', $post_id = null ) {
 
 	if ( empty( $field_name ) ) {
 		return false;
 	}
 
-	if ( is_admin() ) {
-		global $post;
+	if ( empty( $post_id ) || $post_id != intval( $post_id ) ) {
+		if ( is_admin() ) {
+			global $post;
 
-		// If $post has not an object, return false
-		if ( empty( $post ) || ! is_object( $post ) ) {
-			return false;
-		}
+			// If $post has not an object, return false
+			if ( empty( $post ) || ! is_object( $post ) ) {
+				return false;
+			}
 
-		$post_id = $post->ID;
-	} else {
-		if ( is_singular() ) {
-			global $wp_the_query;
-			$post_id = $wp_the_query->get_queried_object_id();
+			$post_id = $post->ID;
 		} else {
-			$post_id = false;
+			if ( is_singular() ) {
+				global $wp_the_query;
+				$post_id = $wp_the_query->get_queried_object_id();
+			} else {
+				$post_id = false;
+			}
 		}
+	} else {
+		$post_id = (int) $post_id;
 	}
 
 	if ( empty( $post_id ) ) {

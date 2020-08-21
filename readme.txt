@@ -4,7 +4,7 @@ Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: wp_head, wp_footer, wp_body_open, head footer code, custom script
 Requires at least: 4.9
 Tested up to: 5.5
-Stable tag: 1.2
+Stable tag: 1.2.1
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -104,6 +104,8 @@ Open in code editor `header.php` file from theme you use, and check if right aft
 Initial release of new plugin developed by Aleksandar Urosevic.
 
 == Changelog ==
+= 1.2.1 =
+* Add: Head & Footer Code column to post/page/custom post type listing to show if/what article specific custom code is defined
 
 = 1.2 =
 * Add: custom head, body and footer code for Homepage in Blog Posts mode.
