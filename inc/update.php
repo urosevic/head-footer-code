@@ -173,3 +173,14 @@ function auhfc_update_5() {
 	delete_option( 'auhfc_settings' );
 
 } // END function auhfc_update_5()
+
+/**
+ * Fix PHP Warning:  in_array() expects parameter 2 to be array, null given in head-footer-code/inc/front.php on line 46, 111, and 176
+ */
+function auhfc_update_6() {
+	$article = get_option( 'auhfc_settings_article' );
+	if ( is_null( $article['post_types'] ) ) {
+		$article['post_types'] = [];
+		update_option( 'auhfc_settings_article', $article );
+	}
+} // END function auhfc_update_6()

@@ -106,6 +106,7 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 == Changelog ==
 = 1.2.1 =
 * Add: Head & Footer Code column to post/page/custom post type listing to show if/what article specific custom code is defined
+* Fix: in_array() expects parameter 2 to be array, null given in head-footer-code/inc/front.php on line 46, 111, and 176
 
 = 1.2 =
 * Add: custom head, body and footer code for Homepage in Blog Posts mode.
