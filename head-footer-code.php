@@ -21,7 +21,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define( 'WPAU_HEAD_FOOTER_CODE_VER', '1.2.1' );
+define( 'WPAU_HEAD_FOOTER_CODE_VER', '1.2.2' );
 define( 'WPAU_HEAD_FOOTER_CODE_DB_VER', '6' );
 define( 'WPAU_HEAD_FOOTER_CODE_FILE', __FILE__ );
 define( 'WPAU_HEAD_FOOTER_CODE_DIR', dirname( WPAU_HEAD_FOOTER_CODE_FILE ) . '/');

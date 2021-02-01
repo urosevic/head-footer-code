@@ -71,7 +71,7 @@ function auhfc_posts_custom_columns( $column, $post_id ) {
 			/* translators: This is description for article without defined code */
 			esc_html__( 'No article specific code defined in any section', 'head-footer-code' ),
 			/* translators: This is label for article without defined code */
-			esc_html__( 'Not article code', 'head-footer-code' )
+			esc_html__( 'No custom code', 'head-footer-code' )
 		);
 	} else {
 		$mode = auhfc_get_meta( 'behavior', $post_id );

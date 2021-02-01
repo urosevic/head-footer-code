@@ -1,10 +1,10 @@
 === Head & Footer Code ===
-Contributors: urkekg
+Contributors: urkekg, techwebux
 Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: wp_head, wp_footer, wp_body_open, head footer code, custom script
 Requires at least: 4.9
-Tested up to: 5.5
-Stable tag: 1.2.1
+Tested up to: 5.6
+Stable tag: 1.2.2
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -109,6 +109,10 @@ Open in code editor `header.php` file from theme you use, and check if right aft
 Initial release of new plugin developed by Aleksandar Urosevic.
 
 == Changelog ==
+= 1.2.2 (2021-02-01) =
+* Fix: Noice errors in update script (thanks to @swinggraphics)
+* Improve: wording on post/page listing
+
 = 1.2.1 =
 * Add: Head & Footer Code column to post/page/custom post type listing to show if/what article specific custom code is defined
 * Fix: in_array() expects parameter 2 to be array, null given in head-footer-code/inc/front.php on line 46, 111, and 176

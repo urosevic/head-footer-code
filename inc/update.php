@@ -86,7 +86,6 @@ function auhfc_update_2() {
 
 } // END function auhfc_update_2()
 
-
 /**
  * Initialize updater
  */
@@ -139,7 +138,6 @@ function auhfc_update_4() {
 
 } // END function auhfc_update_4()
 
-
 /**
  * Split settings to 3 options (v1.2)
  */
@@ -149,23 +147,23 @@ function auhfc_update_5() {
 	$defaults = get_option( 'auhfc_settings' );
 
 	$sitewide = [
-		'head'         => $defaults['head'],
-		'body'         => $defaults['body'],
-		'footer'       => $defaults['footer'],
-		'do_shortcode' => $defaults['do_shortcode'],
+		'head'         => ! empty( $defaults['head'] ) ? $defaults['head'] : '',
+		'body'         => ! empty( $defaults['body'] ) ? $defaults['body'] : '',
+		'footer'       => ! empty( $defaults['footer'] ) ? $defaults['footer'] : '',
+		'do_shortcode' => ! empty( $defaults['do_shortcode'] ) ? $defaults['do_shortcode'] : 'n',
 	];
 	update_option( 'auhfc_settings_sitewide', $sitewide );
 
 	$homepage = [
-		'head'         => $defaults['homepage_head'],
-		'body'         => $defaults['homepage_body'],
-		'footer'       => $defaults['homepage_footer'],
-		'behavior'     => $defaults['homepage_behavior'],
+		'head'         => ! empty( $defaults['homepage_head'] ) ? $defaults['homepage_head'] : '',
+		'body'         => ! empty( $defaults['homepage_body'] ) ? $defaults['homepage_body'] : '',
+		'footer'       => ! empty( $defaults['homepage_footer'] ) ? $defaults['homepage_footer'] : '',
+		'behavior'     => ! empty( $defaults['homepage_behavior'] ) ? $defaults['homepage_behavior'] : 'append',
 	];
 	update_option( 'auhfc_settings_homepage', $homepage );
 
 	$article = [
-		'post_types'   => $defaults['post_types'],
+		'post_types'   => ! empty( $defaults['post_types'] ) ? $defaults['post_types'] : [],
 	];
 	update_option( 'auhfc_settings_article', $article );
 
