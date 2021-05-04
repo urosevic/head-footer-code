@@ -4,7 +4,7 @@ Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: head, header, footer, body, scripts, wp_head, wp_footer, wp_body_open, head footer code, custom script
 Requires at least: 4.9
 Tested up to: 5.7
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -123,6 +123,10 @@ To make sure if theme you use supports [wp_body_open](https://developer.wordpres
 Initial release of new plugin developed by Aleksandar Urosevic.
 
 == Changelog ==
+= 1.2.3 (2021-05-04) =
+* Fix: Notice errors Trying to get property 'post_type' of non-object in inc/front.php (thanks to @tekgirlymama)
+* Improve: DRY for getting post type.
+
 = 1.2.2 (2021-04-24) =
 * Tested: on WordPress 5.7.1
 * (2021-02-01) Fix: Noice errors in update script (thanks to @swinggraphics)

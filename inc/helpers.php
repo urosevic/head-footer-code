@@ -228,6 +228,19 @@ function auhfc_out( $scope = null, $location = null, $message = null, $code = nu
 	);
 } // END function auhfc_out( $scope = null, $location = null, $message = null, $code = null )
 
+function auhfc_get_post_type() {
+	$auhfc_post_type = 'not singular';
+	// Get post type.
+	if ( is_singular() ) {
+		global $wp_the_query;
+		$auhfc_query = $wp_the_query->get_queried_object();
+		if (is_object($auhfc_query)) {
+			$auhfc_post_type = $auhfc_query->post_type;
+		}
+	}
+	return $auhfc_post_type;
+} // END function auhfc_get_post_type()
+
 function auhfc_is_homepage_blog_posts() {
 	if ( is_home() && 'posts' == get_option( 'show_on_front', false ) ) {
 		return true;

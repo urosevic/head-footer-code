@@ -29,12 +29,7 @@ add_action( 'wp_footer', 'auhfc_wp_footer', $auhfc_settings['sitewide']['priorit
 function auhfc_wp_head() {
 
 	// Get post type.
-	if ( is_singular() ) {
-		global $wp_the_query;
-		$auhfc_post_type = $wp_the_query->get_queried_object()->post_type;
-	} else {
-		$auhfc_post_type = 'not singular';
-	}
+	$auhfc_post_type = auhfc_get_post_type();
 
 	// Get variables to test.
 	$auhfc_settings         = auhfc_settings();
@@ -94,12 +89,7 @@ function auhfc_wp_head() {
 function auhfc_wp_body() {
 
 	// Get post type.
-	if ( is_singular() ) {
-		global $wp_the_query;
-		$auhfc_post_type = $wp_the_query->get_queried_object()->post_type;
-	} else {
-		$auhfc_post_type = 'not singular';
-	}
+	$auhfc_post_type = auhfc_get_post_type();
 
 	// Get variables to test.
 	$auhfc_settings         = auhfc_settings();
@@ -159,12 +149,7 @@ function auhfc_wp_body() {
 function auhfc_wp_footer() {
 
 	// Get post type.
-	if ( is_singular() ) {
-		global $wp_the_query;
-		$auhfc_post_type = $wp_the_query->get_queried_object()->post_type;
-	} else {
-		$auhfc_post_type = 'not singular';
-	}
+	$auhfc_post_type = auhfc_get_post_type();
 
 	// Get variables to test.
 	$auhfc_settings         = auhfc_settings();
