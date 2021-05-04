@@ -1,9 +1,9 @@
 === Head & Footer Code ===
 Contributors: urkekg, techwebux
 Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
-Tags: wp_head, wp_footer, wp_body_open, head footer code, custom script
+Tags: head, header, footer, body, scripts, wp_head, wp_footer, wp_body_open, head footer code, custom script
 Requires at least: 4.9
-Tested up to: 5.6
+Tested up to: 5.7
 Stable tag: 1.2.2
 Requires PHP: 5.6
 License: GPLv3
@@ -13,27 +13,38 @@ Easy add site-wide and/or article specific custom code before the closing &lt;/h
 
 == Description ==
 
-Let we say that you have been told to add some custom code (HTML, JavaScript or CSS style) to page's `<head>` (like site verification code, custom styles, webfont link, etc), just before `</body>` or right after opening `<body>` (like pixel tracking, analytics code, heatmap code, etc), but you are not programmer. Then you can use Head &amp; Footer Code to do that.
+**Head &amp; Footer Code** plugin helps you add custom code snippets (JavaScript, CSS, or HTML) to the page even if you are not a programmer.  It could be `<head>` (site verification code for various services, custom styles, meta or Webfont link), just before `</body>` or right after opening `<body>` (pixel tracking, analytics or heatmap code).
 
-Simply go to Tools &rarr; Head &amp; Footer Code in your website admin dashboard, and insert custom code to HEAD, BODY or FOOTER section (depending what you have to do).
+Go to **Tools** &rarr; **Head &amp; Footer Code** in WordPress Dashboard. Insert custom code to HEAD, BODY or FOOTER section (depending on what you have to do).
 
-If your WordPress show latest blog posts on homepage, you can also add specific code only for homepage on **Tools** &rarr; **Head &amp; Footer Code** (there will be section **Head, body and footer code on Homepage in Blog Posts mode**)
+If your WordPress shows the latest blog posts on the homepage, you can also add specific code only for the homepage on **Tools** &rarr; **Head &amp; Footer Code** (there will be section **Head, body and footer code on Homepage in Blog Posts mode**)
 
-If you have to insert some custom code specific for individual article (post, page, custom post type), then you can use Article specific metabox while you editing post/page/custom post type (check out [Screenshots](https://wordpress.org/plugins/head-footer-code/#screenshots)). There you can also set should that specific code be appended to site-wide code defined on **Tools** &rarr; **Head &amp; Footer Code**, or should be overwritten.
+To insert custom code specific for individual article (post, page or custom post type), use article-specific Metabox while editing post/page/custom post type (check out [Screenshots](https://wordpress.org/plugins/head-footer-code/#screenshots)). There choose if that specific code appends to site-wide code defined on **Tools** &rarr; **Head &amp; Footer Code**, or to replace it.
 
-Please note that taxonomies does not have own specific code but global code is added on those pages (category, tag and custom taxonomy listing, individual category, tags and custom taxonomies).
+Taxonomies (category, tag and custom taxonomy listing, individual category, tags and custom taxonomies) do not have their specific code. Global code uses instead.
 
 This magic is done by hooking to WordPress hooks `wp_head`, `wp_footer` and `wp_body_open`.
 
 https://www.youtube.com/watch?v=Gd41Dv09UC4
 
+Various code snippets are supported, including but not limited to:
+
+* Google Analytics
+* Google Tag Manager
+* Google Ads Conversion
+* Facebook Pixel
+* Hotjar
+* FullStory
+* Google site verification
+* Bing site verification
+* Yandex site verification
+* Alexa site verification
+
 **Works or broken?**
 
-Please, consider to vote for this plugin. When you vote for broken, be so kind and tell in the [Forum](https://wordpress.org/support/plugin/head-footer-code/) what is broken. Maybe I might be able to fix it to make the plugin also work for you.
+If **Head &amp; Footer Code** does not work on your WordPress project, please let us know by [raising a new support ticket](https://wordpress.org/support/plugin/head-footer-code/#new-topic-0) in the [Community Forum](https://wordpress.org/support/plugin/head-footer-code/) and describe what does not works and how to reproduce the issue. We will make sure to resolve the issue as soon as possible.
 
-**I need your support**
-
-It is very hard to continue development and support for this and my other free plugisn without contributions from users like you. If you enjoy using Head &amp; Footer Code and find it useful, please consider [making a donation](https://urosevic.net/wordpress/donate/?donate_for=head-footer-code). Your donation will help encourage and support the plugin's continued development and better user support.
+If you find **Head &amp; Footer Code** useful for your project, please [review plugin](https://wordpress.org/support/plugin/head-footer-code/reviews/#new-post).
 
 **Features**
 
@@ -52,43 +63,46 @@ It is very hard to continue development and support for this and my other free p
 * If you have set WP_DEBUG constant in `wp-config.php` to `true`, you'll see site-wide and article specific entries in page source code wrapped to comments.
 * Multisite is supported.
 
-General settings, including HEAD, BODY, FOOTER global code and priority, and also homepage code and behavior have been saved to WordPress option `auhfc_settings`.
-Each post/page/custom post type specific HEAD, BODY and FOOTER code and behavior have been saved to post meta `_auhfc`.
-On plugin uninstall these data is also deleted from database.
+General settings (HEAD, BODY, FOOTER global code and priority, Homepage code and behaviour) saves in WordPress option `auhfc_settings`.
+Each post/page/custom post type specific HEAD, BODY and FOOTER code and behaviour saves to post meta `_auhfc`.
+This data deletes from the database on uninstall.
 
 == Installation ==
 
-Installation of this plugin is fairly easy as any other WordPress plugin.
+Installation of the **Head &amp; Footer Code** is easy as any other WordPress plugin.
 
 **Standard procedure**
 
-1. Go to **Plugins** &rarr; **Add New**.
-1. Search for **head footer code**.
-1. Enter to **Search Plugin** field `had footer code` and press Enter key.
-1. Locate plugin **Head &amp; Footer Code** and click **Install Now** button.
-1. After successfully installed plugin click link **Activate Plugin**.
-1. Visit the **Tools** &rarr; **Head &amp; Footer Code**.
-1. Add the desired code to proper section.
+1. In WordPress Dashboard go to **Plugins** &rarr; **Add New**.
+1. Enter `head footer code` to the **Search plugins...** field and wait for the moment.
+1. Locate **Head &amp; Footer Code** and click the **Install Now** button.
+1. After successful installation, click the **Activate** button.
+1. Click **Settings** link for **Head &amp; Footer Code** or visit the **Tools** &rarr; **Head &amp; Footer Code**.
+1. Add the desired code to the target section.
 
 **FTP procedure**
 
-1. Unpack `head-footer-code.zip`
-1. Upload the whole directory and everything underneath to the `/wp-content/plugins/` directory.
-1. Activate the plugin through the 'Plugins' menu in WordPress.
-1. Visit the **Tools** &rarr; **Head &amp; Footer Code** (**Settings** link).
-1. Add the desired code to proper section.
+1. Click on the **Download** button to get **Head &amp; Footer Code** installation package.
+1. Unpack archive **head-footer-code.zip** on local computer.
+1. Upload the entire directory **head-footer-code** to the `/wp-content/plugins/` directory on your server.
+1. In WordPress Dashboard go to **Plugins** &rarr; **Installed Plugins** and click the link **Activate** for the **Head &amp; Footer Code** plugin.
+1. Click **Settings** link for **Head &amp; Footer Code** or visit the **Tools** &rarr; **Head &amp; Footer Code**.
+1. Add the desired code to the target section.
 
 == Frequently Asked Questions ==
 
-= Why another one custom code plugin? =
+= Is supported PHP code in code snippets? =
 
-Because all other similar plugins could not satisfy my requirements. In general, they have too much features or lack some features I need.
+As it's a security risk, the **Head &amp; Footer Code** does not process PHP code if entered into any plugin field (global or article specific).
 
-= I entered code to BODY section but nothing output on front-end =
+Any content added to HFC fields is printed on the front-end as is.
 
-This feature is implemented since WordPress version 5.2, but also require compatibility theme. Make sure that your theme support [wp_body_open](https://developer.wordpress.org/reference/hooks/wp_body_open/) hook.
+= I entered code to BODY section, but nothing outputs on front-end =
 
-Open in code editor `header.php` file from theme you use, and check if right after opening `<BODY>` tag there is following code (if it does not exists, add it or ask some developer to do that for you):
+This feature is implemented since WordPress version 5.2 and requires theme compatibility.
+
+To make sure if theme you use supports [wp_body_open](https://developer.wordpress.org/reference/hooks/wp_body_open/) hook, open in code editor `header.php` file from theme you use, and check if right after opening `<BODY>` tag there is following code (if it does not exists, add it or ask some developer to do that for you):
+
 ```if ( function_exists( 'wp_body_open' ) ) {
     wp_body_open();
 }```
@@ -101,7 +115,7 @@ Open in code editor `header.php` file from theme you use, and check if right aft
 4. Example of custom code inserted to HEAD section (site-wide with appended article specific)
 5. Example of custom code inserted to BODY section (site-wide with appended article specific)
 6. Example of custom code inserted to FOOTER section (site-wide with appended article specific)
-7. Example of Head & Footer Code column on Pages listing, to identify which pages have set custom code, which one and what mode is selected
+7. Example of **Head &amp; Footer Code** column on Pages listing, to identify which pages have set custom code, which one and what mode is selected
 
 == Upgrade Notice ==
 
@@ -109,8 +123,9 @@ Open in code editor `header.php` file from theme you use, and check if right aft
 Initial release of new plugin developed by Aleksandar Urosevic.
 
 == Changelog ==
-= 1.2.2 (2021-02-01) =
-* Fix: Noice errors in update script (thanks to @swinggraphics)
+= 1.2.2 (2021-04-24) =
+* Tested: on WordPress 5.7.1
+* (2021-02-01) Fix: Noice errors in update script (thanks to @swinggraphics)
 * Improve: wording on post/page listing
 
 = 1.2.1 =
