@@ -3,7 +3,7 @@ Contributors: urkekg, techwebux
 Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: head, header, footer, body, scripts, wp_head, wp_footer, wp_body_open, head footer code, custom script
 Requires at least: 4.9
-Tested up to: 5.7
+Tested up to: 5.8
 Stable tag: 1.2.3
 Requires PHP: 5.6
 License: GPLv3
@@ -62,6 +62,7 @@ If you find **Head &amp; Footer Code** useful for your project, please [review p
 * Site-wide section located under **Tools** > **Head & Footer Code**
 * If you have set WP_DEBUG constant in `wp-config.php` to `true`, you'll see site-wide and article specific entries in page source code wrapped to comments.
 * Multisite is supported.
+* PHP 8 ready!
 
 General settings (HEAD, BODY, FOOTER global code and priority, Homepage code and behaviour) saves in WordPress option `auhfc_settings`.
 Each post/page/custom post type specific HEAD, BODY and FOOTER code and behaviour saves to post meta `_auhfc`.
@@ -103,9 +104,11 @@ This feature is implemented since WordPress version 5.2 and requires theme compa
 
 To make sure if theme you use supports [wp_body_open](https://developer.wordpress.org/reference/hooks/wp_body_open/) hook, open in code editor `header.php` file from theme you use, and check if right after opening `<BODY>` tag there is following code (if it does not exists, add it or ask some developer to do that for you):
 
-```if ( function_exists( 'wp_body_open' ) ) {
+```
+if ( function_exists( 'wp_body_open' ) ) {
     wp_body_open();
-}```
+}
+```
 
 == Screenshots ==
 
@@ -123,8 +126,9 @@ To make sure if theme you use supports [wp_body_open](https://developer.wordpres
 Initial release of new plugin developed by Aleksandar Urosevic.
 
 == Changelog ==
-= 1.2.3 (2021-05-04) =
-* Fix: Notice errors Trying to get property 'post_type' of non-object in inc/front.php (thanks to @tekgirlymama)
+= 1.2.3 (2021-07-19) =
+* Tested: on WordPress 5.8-RC4 and PHP 8.0.8
+* (2021-05-04) Fix: Notice errors Trying to get property 'post_type' of non-object in inc/front.php (thanks to @tekgirlymama)
 * Improve: DRY for getting post type.
 
 = 1.2.2 (2021-04-24) =
