@@ -4,7 +4,7 @@ Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: head, header, footer, body, scripts, wp_head, wp_footer, wp_body_open, head footer code, custom script
 Requires at least: 4.9
 Tested up to: 5.8
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -126,6 +126,10 @@ if ( function_exists( 'wp_body_open' ) ) {
 Initial release of new plugin developed by Aleksandar Urosevic.
 
 == Changelog ==
+= 1.2.3 (2021-08-23) =
+* Tested: on WordPress 5.8 and PHP 8.0.9
+* Improve: along to FOOTER, enable processing of shortcodes in HEAD and BODY (you has to enable this opetion per location)
+
 = 1.2.3 (2021-07-19) =
 * Tested: on WordPress 5.8-RC4 and PHP 8.0.8
 * (2021-05-04) Fix: Notice errors Trying to get property 'post_type' of non-object in inc/front.php (thanks to @tekgirlymama)

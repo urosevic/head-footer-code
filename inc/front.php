@@ -41,7 +41,7 @@ function auhfc_wp_head() {
 	if ( 'not singular' !== $auhfc_post_type && in_array( $auhfc_post_type, $auhfc_settings['article']['post_types'] ) ) {
 		$article_code     = auhfc_get_meta( 'head' );
 		$article_behavior = auhfc_get_meta( 'behavior' );
-		$dbg_set          = "type: {$auhfc_post_type}; bahavior: {$article_behavior}; priority: {$auhfc_settings['sitewide']['priority_h']}; do_shortcode: {$auhfc_settings['sitewide']['do_shortcode']}";
+		$dbg_set          = "type: {$auhfc_post_type}; bahavior: {$article_behavior}; priority: {$auhfc_settings['sitewide']['priority_h']}; do_shortcode_h: {$auhfc_settings['sitewide']['do_shortcode_h']}";
 	} else {
 		$article_code     = '';
 		$article_behavior = '';
@@ -50,7 +50,7 @@ function auhfc_wp_head() {
 		if ( $is_homepage_blog_posts ) {
 			$homepage_code     = $auhfc_settings['homepage']['head'];
 			$homepage_behavior = $auhfc_settings['homepage']['behavior'];
-			$dbg_set           = "type: homepage; bahavior: {$homepage_behavior}; priority: {$auhfc_settings['sitewide']['priority_h']}; do_shortcode: {$auhfc_settings['sitewide']['do_shortcode']}";
+			$dbg_set           = "type: homepage; bahavior: {$homepage_behavior}; priority: {$auhfc_settings['sitewide']['priority_h']}; do_shortcode_h: {$auhfc_settings['sitewide']['do_shortcode_h']}";
 		}
 	}
 
@@ -78,8 +78,8 @@ function auhfc_wp_head() {
 	}
 
 	// Print prepared code.
-	echo $out;
-	// echo ( 'y' === $auhfc_settings['sitewide']['do_shortcode'] ) ? do_shortcode( $out ) : $out;
+	// echo $out;
+	echo ( 'y' === $auhfc_settings['sitewide']['do_shortcode_h'] ) ? do_shortcode( $out ) : $out;
 
 } // END function auhfc_wp_head()
 
@@ -101,7 +101,7 @@ function auhfc_wp_body() {
 	if ( 'not singular' !== $auhfc_post_type && in_array( $auhfc_post_type, $auhfc_settings['article']['post_types'] ) ) {
 		$article_code     = auhfc_get_meta( 'body' );
 		$article_behavior = auhfc_get_meta( 'behavior' );
-		$dbg_set          = "type: {$auhfc_post_type}; bahavior: {$article_behavior}; priority: {$auhfc_settings['sitewide']['priority_b']}; do_shortcode: {$auhfc_settings['sitewide']['do_shortcode']}";
+		$dbg_set          = "type: {$auhfc_post_type}; bahavior: {$article_behavior}; priority: {$auhfc_settings['sitewide']['priority_b']}; do_shortcode_b: {$auhfc_settings['sitewide']['do_shortcode_b']}";
 	} else {
 		$article_code     = '';
 		$article_behavior = '';
@@ -110,7 +110,7 @@ function auhfc_wp_body() {
 		if ( $is_homepage_blog_posts ) {
 			$homepage_code     = $auhfc_settings['homepage']['body'];
 			$homepage_behavior = $auhfc_settings['homepage']['behavior'];
-			$dbg_set           = "type: homepage; bahavior: {$homepage_behavior}; priority: {$auhfc_settings['sitewide']['priority_b']}; do_shortcode: {$auhfc_settings['sitewide']['do_shortcode']}";
+			$dbg_set           = "type: homepage; bahavior: {$homepage_behavior}; priority: {$auhfc_settings['sitewide']['priority_b']}; do_shortcode_b: {$auhfc_settings['sitewide']['do_shortcode_b']}";
 		}
 	}
 
@@ -138,8 +138,8 @@ function auhfc_wp_body() {
 	}
 
 	// Print prepared code.
-	echo $out;
-	// echo ( 'y' === $auhfc_settings['sitewide']['do_shortcode'] ) ? do_shortcode( $out ) : $out;
+	// echo $out;
+	// echo ( 'y' === $auhfc_settings['sitewide']['do_shortcode_b'] ) ? do_shortcode( $out ) : $out;
 
 } // END function auhfc_wp_body()
 
@@ -161,7 +161,7 @@ function auhfc_wp_footer() {
 	if ( 'not singular' !== $auhfc_post_type && in_array( $auhfc_post_type, $auhfc_settings['article']['post_types'] ) ) {
 		$article_code     = auhfc_get_meta( 'footer' );
 		$article_behavior = auhfc_get_meta( 'behavior' );
-		$dbg_set          = "type: {$auhfc_post_type}; bahavior: {$article_behavior}; priority: {$auhfc_settings['sitewide']['priority_f']}; do_shortcode: {$auhfc_settings['sitewide']['do_shortcode']}";
+		$dbg_set          = "type: {$auhfc_post_type}; bahavior: {$article_behavior}; priority: {$auhfc_settings['sitewide']['priority_f']}; do_shortcode_f: {$auhfc_settings['sitewide']['do_shortcode_f']}";
 	} else {
 		$article_code     = '';
 		$article_behavior = '';
@@ -170,7 +170,7 @@ function auhfc_wp_footer() {
 		if ( $is_homepage_blog_posts ) {
 			$homepage_code     = $auhfc_settings['homepage']['footer'];
 			$homepage_behavior = $auhfc_settings['homepage']['behavior'];
-			$dbg_set           = "type: homepage; bahavior: {$homepage_behavior}; priority: {$auhfc_settings['sitewide']['priority_f']}; do_shortcode: {$auhfc_settings['sitewide']['do_shortcode']}";
+			$dbg_set           = "type: homepage; bahavior: {$homepage_behavior}; priority: {$auhfc_settings['sitewide']['priority_f']}; do_shortcode_f: {$auhfc_settings['sitewide']['do_shortcode_f']}";
 		}
 	}
 
@@ -198,7 +198,7 @@ function auhfc_wp_footer() {
 	}
 
 	// Print prepared code.
-	echo ( 'y' === $auhfc_settings['sitewide']['do_shortcode'] ) ? do_shortcode( $out ) : $out;
+	echo ( 'y' === $auhfc_settings['sitewide']['do_shortcode_f'] ) ? do_shortcode( $out ) : $out;
 
 } // END function auhfc_wp_footer()
 

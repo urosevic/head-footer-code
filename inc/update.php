@@ -182,3 +182,23 @@ function auhfc_update_6() {
 		update_option( 'auhfc_settings_article', $article );
 	}
 } // END function auhfc_update_6()
+
+/**
+ * Do Shortcode per location
+ */
+function auhfc_update_7() {
+	// Get options from DB.
+	$sitewide = get_option( 'auhfc_settings_sitewide' );
+
+	if ( ! empty( $sitewide['do_shortcode'] ) ) {
+		$sitewide['do_shortcode_h'] = 'n';
+		$sitewide['do_shortcode_b'] = 'n';
+		$sitewide['do_shortcode_f'] = $sitewide['do_shortcode'];
+	} else {
+		$sitewide['do_shortcode_h'] = 'n';
+		$sitewide['do_shortcode_b'] = 'n';
+		$sitewide['do_shortcode_f'] = 'n';
+	}
+	unset( $sitewide['do_shortcode'] );
+	update_option( 'auhfc_settings_sitewide', $sitewide );
+} // END function auhfc_update_7()

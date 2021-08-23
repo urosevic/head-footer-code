@@ -113,6 +113,24 @@ function auhfc_settings_init() {
 	);
 
 	add_settings_field(
+		'auhfc_do_shortcode_h',
+		__( 'Process HEAD Shortcodes', 'head-footer-code' ),
+		'auhfc_select_field_render',
+		'head_footer_code',
+		'head_footer_code_settings_sitewide',
+		[
+			'field'       => 'auhfc_settings_sitewide[do_shortcode_h]',
+			'items'       => [
+				'y' => __( 'Enable', 'head-footer-code' ),
+				'n' => __( 'Disable', 'head-footer-code' ),
+			],
+			'value'       => $auhfc_settings['sitewide']['do_shortcode_h'],
+			'description' => esc_html__( 'If you wish to process shortcodes in the HEAD section, enable this option. Please note, shortcodes with malformed output in the HEAD section can break the rendering of your website!', 'head-footer-code' ),
+			'class'       => 'regular-text',
+		]
+	);
+
+	add_settings_field(
 		'auhfc_body_code',
 		__( 'BODY Code', 'head-footer-code' ),
 		'auhfc_textarea_field_render',
@@ -155,6 +173,25 @@ function auhfc_settings_init() {
 			'min'         => 1,
 			'max'         => 1000,
 			'step'        => 1,
+		]
+	);
+
+
+	add_settings_field(
+		'auhfc_do_shortcode_b',
+		__( 'Process BODY Shortcodes', 'head-footer-code' ),
+		'auhfc_select_field_render',
+		'head_footer_code',
+		'head_footer_code_settings_sitewide',
+		[
+			'field'       => 'auhfc_settings_sitewide[do_shortcode_b]',
+			'items'       => [
+				'y' => __( 'Enable', 'head-footer-code' ),
+				'n' => __( 'Disable', 'head-footer-code' ),
+			],
+			'value'       => $auhfc_settings['sitewide']['do_shortcode_b'],
+			'description' => esc_html__( 'If you wish to process shortcodes in the BODY section, enable this option.', 'head-footer-code' ),
+			'class'       => 'regular-text',
 		]
 	);
 
@@ -201,19 +238,19 @@ function auhfc_settings_init() {
 	);
 
 	add_settings_field(
-		'auhfc_do_shortcode',
-		__( 'Process Shortcodes', 'head-footer-code' ),
+		'auhfc_do_shortcode_f',
+		__( 'Process FOOTER Shortcodes', 'head-footer-code' ),
 		'auhfc_select_field_render',
 		'head_footer_code',
 		'head_footer_code_settings_sitewide',
 		[
-			'field'       => 'auhfc_settings_sitewide[do_shortcode]',
+			'field'       => 'auhfc_settings_sitewide[do_shortcode_f]',
 			'items'       => [
 				'y' => __( 'Enable', 'head-footer-code' ),
 				'n' => __( 'Disable', 'head-footer-code' ),
 			],
-			'value'       => $auhfc_settings['sitewide']['do_shortcode'],
-			'description' => esc_html__( 'If you wish to process shortcodes in FOOTER section, enable this option. Please note, shortcodes in HEAD and BODY sections are not processed!', 'head-footer-code' ),
+			'value'       => $auhfc_settings['sitewide']['do_shortcode_f'],
+			'description' => esc_html__( 'If you wish to process shortcodes in the FOOTER section, enable this option.', 'head-footer-code' ),
 			'class'       => 'regular-text',
 		]
 	);

@@ -105,7 +105,9 @@ function auhfc_settings() {
 			'priority_h'   => 10,
 			'priority_b'   => 10,
 			'priority_f'   => 10,
-			'do_shortcode' => 'n',
+			'do_shortcode_h' => 'n',
+			'do_shortcode_b' => 'n',
+			'do_shortcode_f' => 'n',
 		],
 		'homepage' => [
 			'head'         => '',
