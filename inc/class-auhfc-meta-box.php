@@ -72,11 +72,12 @@ abstract class AUHfc_Meta_Box {
 			%2$s will be replaced with preformatted HTML tag <body>
 			%3$s will be replaced with preformatted HTML tag </body>
 			%4$s will be replaced with a link to Head & Footer Code Settings page */
-			esc_html__( 'Here you can insert article specific code for Head (before the %1$s), Body (after the %2$s) and Footer (before the %3$s) sections. They work in exactly the same way as site-wide code, which you can configure under %4$s.', 'head-footer-code'),
+			esc_html__( 'Here you can insert article specific code for Head (before the %1$s), Body (after the %2$s) and Footer (before the %3$s) sections. They work in exactly the same way as site-wide code, which you can configure under %5$s. Please note, if you leave empty any of article-specific fields and choose replace behavior, site-wide code will not be removed until you add empty space or empty HTML comment %4$s here.', 'head-footer-code'),
 			'<code>&lt;/head&gt;</code>',
 			'<code>&lt;body&gt;</code>',
 			'<code>&lt;/body&gt;</code>',
-			sprintf( '<a href="tools.php?page=head_footer_code">%s</a>', esc_html__( 'Tools / Head &amp; Footer Code', 'head-footer-code' ) 
+			'<code>&lt;!-- --&gt;</code>',
+			sprintf( '<a href="tools.php?page=head_footer_code">%s</a>', esc_html__( 'Tools / Head &amp; Footer Code', 'head-footer-code' )
 			)
 		);
 		?></p>

@@ -126,9 +126,10 @@ if ( function_exists( 'wp_body_open' ) ) {
 Initial release of new plugin developed by Aleksandar Urosevic.
 
 == Changelog ==
-= 1.2.3 (2021-08-23) =
-* Tested: on WordPress 5.8 and PHP 8.0.9
-* Improve: along to FOOTER, enable processing of shortcodes in HEAD and BODY (you has to enable this opetion per location)
+= 1.2.4 (2021-10-15) =
+* Tested: on WordPress 5.8.1 and PHP 8.0.9 and 8.0.11
+* Improve: clarify wihtin article metabox on how replace behaviour for article-specific code works
+* (2021-08-23) Improve: along to FOOTER, enable processing of shortcodes in HEAD and BODY (you has to enable this opetion per location)
 
 = 1.2.3 (2021-07-19) =
 * Tested: on WordPress 5.8-RC4 and PHP 8.0.8

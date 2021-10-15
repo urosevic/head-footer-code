@@ -138,8 +138,7 @@ function auhfc_wp_body() {
 	}
 
 	// Print prepared code.
-	// echo $out;
-	// echo ( 'y' === $auhfc_settings['sitewide']['do_shortcode_b'] ) ? do_shortcode( $out ) : $out;
+	echo ( 'y' === $auhfc_settings['sitewide']['do_shortcode_b'] ) ? do_shortcode( $out ) : $out;
 
 } // END function auhfc_wp_body()
 
