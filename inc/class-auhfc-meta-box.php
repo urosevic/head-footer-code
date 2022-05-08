@@ -1,9 +1,18 @@
 <?php
+/**
+ * Class for Head & Footer Code article metabox
+ *
+ * @package Head_Footer_Code
+ */
+
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+/**
+ * Class to compose Head & Footer article metabox
+ */
 abstract class AUHfc_Meta_Box {
 
 	/**
@@ -20,7 +29,7 @@ abstract class AUHfc_Meta_Box {
 			add_meta_box(
 				'auhfc-head-footer-code',
 				esc_html__( 'Head & Footer Code', 'head-footer-code' ),
-				[ self::class, 'html' ],
+				array( self::class, 'html' ),
 				$post_type,
 				'normal',
 				'low'
@@ -32,7 +41,7 @@ abstract class AUHfc_Meta_Box {
 	/**
 	 * Save meta box content.
 	 *
-	 * @param int $post_id Post ID
+	 * @param int $post_id Post ID.
 	 */
 	public static function save( $post_id ) {
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
@@ -61,26 +70,25 @@ abstract class AUHfc_Meta_Box {
 
 	/**
 	 * Meta box display callback.
-	 *
-	 * @param WP_Post $post Current post object.
 	 */
-	public static function html( $post ) {
+	public static function html() {
 		wp_nonce_field( '_head_footer_code_nonce', 'head_footer_code_nonce' ); ?>
-		<p><?php
+		<p>
+		<?php
 		printf(
-			/* translators: %1$s will be replaced with preformatted HTML tag </head>
-			%2$s will be replaced with preformatted HTML tag <body>
-			%3$s will be replaced with preformatted HTML tag </body>
-			%4$s will be replaced with a link to Head & Footer Code Settings page */
-			esc_html__( 'Here you can insert article specific code for Head (before the %1$s), Body (after the %2$s) and Footer (before the %3$s) sections. They work in exactly the same way as site-wide code, which you can configure under %5$s. Please note, if you leave empty any of article-specific fields and choose replace behavior, site-wide code will not be removed until you add empty space or empty HTML comment %4$s here.', 'head-footer-code'),
+			/* translators: 1: </head>, 2: <body>, 3: </body>, 4 link to Head & Footer Code Settings page */
+			esc_html__( 'Here you can insert article specific code for Head (before the %1$s), Body (after the %2$s) and Footer (before the %3$s) sections. They work in exactly the same way as site-wide code, which you can configure under %5$s. Please note, if you leave empty any of article-specific fields and choose replace behavior, site-wide code will not be removed until you add empty space or empty HTML comment %4$s here.', 'head-footer-code' ),
 			'<code>&lt;/head&gt;</code>',
 			'<code>&lt;body&gt;</code>',
 			'<code>&lt;/body&gt;</code>',
 			'<code>&lt;!-- --&gt;</code>',
-			sprintf( '<a href="tools.php?page=head_footer_code">%s</a>', esc_html__( 'Tools / Head &amp; Footer Code', 'head-footer-code' )
+			sprintf(
+				'<a href="tools.php?page=head_footer_code">%s</a>',
+				esc_html__( 'Tools / Head &amp; Footer Code', 'head-footer-code' )
 			)
 		);
-		?></p>
+		?>
+		</p>
 		<label><?php esc_html_e( 'Behavior', 'head-footer-code' ); ?></label><br />
 		<select name="auhfc[behavior]" id="auhfc_behavior">
 			<option value="append" <?php echo ( 'append' === auhfc_get_meta( 'behavior' ) ) ? 'selected' : ''; ?>><?php esc_html_e( 'Append to the site-wide code', 'head-footer-code' ); ?></option>
@@ -89,15 +97,15 @@ abstract class AUHfc_Meta_Box {
 		<br /><br />
 		<label for="auhfc_head"><?php esc_html_e( 'Head Code', 'head-footer-code' ); ?></label><br />
 		<textarea name="auhfc[head]" id="auhfc_head" class="widefat code" rows="5"><?php echo auhfc_get_meta( 'head' ); ?></textarea>
-		<p class="description"><?php esc_html_e( 'Example', 'head-footer-code'); ?>: <code>&lt;link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri(); ?>/style.css" type="text/css" media="all"&gt;</code></p>
+		<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri(); ?>/style.css" type="text/css" media="all"&gt;</code></p>
 		<br />
 		<label for="auhfc_body"><?php esc_html_e( 'Body Code', 'head-footer-code' ); ?></label><br />
 		<textarea name="auhfc[body]" id="auhfc_body" class="widefat code" rows="5"><?php echo auhfc_get_meta( 'body' ); ?></textarea>
-		<p class="description"><?php esc_html_e( 'Example', 'head-footer-code'); ?>: <code>&lt;script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/body-start.js" type="text/css" media="all"&gt;&lt;/script&gt;</code></p>
+		<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/body-start.js" type="text/css" media="all"&gt;&lt;/script&gt;</code></p>
 		<br />
 		<label for="auhfc_footer"><?php esc_html_e( 'Footer Code', 'head-footer-code' ); ?></label><br />
 		<textarea name="auhfc[footer]" id="auhfc_footer" class="widefat code" rows="5"><?php echo auhfc_get_meta( 'footer' ); ?></textarea>
-		<p class="description"><?php esc_html_e( 'Example', 'head-footer-code'); ?>: <code>&lt;script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/script.js"&gt;&lt;/script&gt;</code></p>
+		<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/script.js"&gt;&lt;/script&gt;</code></p>
 		<?php
 	} // END public static function html()
 
@@ -107,8 +115,8 @@ abstract class AUHfc_Meta_Box {
  * Initialize metabox on proper backend screens
  */
 function auhfc_init_meta_boxes() {
-	add_action( 'add_meta_boxes', [ 'AUHfc_Meta_Box', 'add' ] );
-	add_action( 'save_post', [ 'AUHfc_Meta_Box', 'save' ] );
+	add_action( 'add_meta_boxes', array( 'AUHfc_Meta_Box', 'add' ) );
+	add_action( 'save_post', array( 'AUHfc_Meta_Box', 'save' ) );
 }
 if ( is_admin() ) {
 	add_action( 'load-post.php', 'auhfc_init_meta_boxes' );

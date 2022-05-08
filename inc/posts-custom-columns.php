@@ -1,4 +1,10 @@
 <?php
+/**
+ * Generate Head & Footer Code indicator columns on article listing
+ *
+ * @package Head_Footer_Code
+ */
+
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -11,34 +17,50 @@ if ( ! is_admin() ) {
 
 // And do this only for post types enabled on plugin settings page.
 $auhfc_settings = auhfc_settings();
-if ( isset($auhfc_settings['article']['post_types'] ) ) {
-	foreach ($auhfc_settings['article']['post_types'] as $post_type) {
+if ( isset( $auhfc_settings['article']['post_types'] ) ) {
+	foreach ( $auhfc_settings['article']['post_types'] as $post_type ) {
 		// Add the custom column to the all post types that have enabled support for custom code.
 		add_filter( 'manage_' . $post_type . '_posts_columns', 'auhfc_posts_columns' );
 		// And make that column sortable.
 		add_filter( 'manage_edit-' . $post_type . '_sortable_columns', 'auhfc_posts_sortable_columns' );
 		// Add the data to the custom column for each enabled post types.
-		add_action( 'manage_' . $post_type . '_posts_custom_column' , 'auhfc_posts_custom_columns', 10, 2 );
+		add_action( 'manage_' . $post_type . '_posts_custom_column', 'auhfc_posts_custom_columns', 10, 2 );
 	}
 }
 
+/**
+ * Register Head & Footer Code column for posts table
+ *
+ * @param array $columns Array of existing columns for table.
+ */
 function auhfc_posts_columns( $columns ) {
 	$columns['hfc'] = __( 'Head & Footer Code', 'head-footer-code' );
 	return $columns;
 } // END function auhfc_posts_columns( $columns )
 
+/**
+ * Make Head & Footer Code column sortable
+ *
+ * @param array $columns Array of existing columns for table.
+ */
 function auhfc_posts_sortable_columns( $columns ) {
 	$columns['hfc'] = 'hfc';
 	return $columns;
 } // END function auhfc_posts_sortable_columns( $columns )
 
+/**
+ * Populate Head & Footer Code column with indicators
+ *
+ * @param string  $column Table column name.
+ * @param integer $post_id Current article ID.
+ */
 function auhfc_posts_custom_columns( $column, $post_id ) {
 	if ( 'hfc' !== $column ) {
 		return;
 	}
 
-	$sections = [];
-	if ( !empty( auhfc_get_meta('head', $post_id) ) ) {
+	$sections = array();
+	if ( ! empty( auhfc_get_meta( 'head', $post_id ) ) ) {
 		$sections[] = sprintf(
 			'<a href="post.php?post=%1$s&action=edit#auhfc_%2$s" class="badge blue %2$s" title="%3$s">%4$s</a>',
 			$post_id,
@@ -47,7 +69,7 @@ function auhfc_posts_custom_columns( $column, $post_id ) {
 			esc_html__( 'HEAD', 'head-footer-code' )
 		);
 	}
-	if ( !empty( auhfc_get_meta('body', $post_id) ) ) {
+	if ( ! empty( auhfc_get_meta( 'body', $post_id ) ) ) {
 		$sections[] = sprintf(
 			'<a href="post.php?post=%1$s&action=edit#auhfc_%2$s" class="badge blue %2$s" title="%3$s">%4$s</a>',
 			$post_id,
@@ -56,7 +78,7 @@ function auhfc_posts_custom_columns( $column, $post_id ) {
 			esc_html__( 'BODY', 'head-footer-code' )
 		);
 	}
-	if ( !empty( auhfc_get_meta('footer', $post_id) ) ) {
+	if ( ! empty( auhfc_get_meta( 'footer', $post_id ) ) ) {
 		$sections[] = sprintf(
 			'<a href="post.php?post=%1$s&action=edit#auhfc_%2$s" class="badge blue %2$s" title="%3$s">%4$s</a>',
 			$post_id,
@@ -75,8 +97,9 @@ function auhfc_posts_custom_columns( $column, $post_id ) {
 		);
 	} else {
 		$mode = auhfc_get_meta( 'behavior', $post_id );
-		if ( 'append' == $mode ) {
-			printf( '<a href="post.php?post=%1$s&action=edit#auhfc_%2$s" class="label" title="%3$s">%4$s</a><br />%5$s',
+		if ( 'append' === $mode ) {
+			printf(
+				'<a href="post.php?post=%1$s&action=edit#auhfc_%2$s" class="label" title="%3$s">%4$s</a><br />%5$s',
 				$post_id,
 				'behavior',
 				/* translators: This is description for article specific mode label 'Append' */
@@ -86,7 +109,8 @@ function auhfc_posts_custom_columns( $column, $post_id ) {
 				implode( '', $sections )
 			);
 		} else {
-			printf( '<a href="post.php?post=%1$s&action=edit#auhfc_%2$s" class="label" title="%3$s">%4$s</a><br />%5$s',
+			printf(
+				'<a href="post.php?post=%1$s&action=edit#auhfc_%2$s" class="label" title="%3$s">%4$s</a><br />%5$s',
 				$post_id,
 				'behavior',
 				/* translators: This is description for article specific mode label 'Replace' */

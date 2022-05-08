@@ -31,33 +31,29 @@
                     color: #6796a9;
                     background-color: #c2edff;
                 }
+                &.paypal em {
+                    font-weight: 500;
+                    font-style: italic;
 
-                &.paypal_donate:after {
-                    content: ' ';
-                    background-image: url(../img/paypal.png);
-                    background-repeat: no-repeat;
-                    background-position: center right;
-                    width: 62px;
-                    height: 100%;
-                    display: inline-block;
-                    position: absolute;
-                    right: 15px;
-                    top: 0;
-                    bottom: 0;
+                    i {
+                        color: #003087;
+
+                        &+i {
+                            color: #009cde
+                        }
+                    }
                 }
             }
         }
     }
 }
+
 .fixed .column-hfc {
     width: 14%;
     .n-a {
         opacity: 0.5;
         cursor: help;
     }
-    // .label {
-    //     cursor: pointer;
-    // }
     .badge {
         padding: .1rem .5rem;
         font-weight: 600;

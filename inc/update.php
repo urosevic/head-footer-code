@@ -1,4 +1,10 @@
 <?php
+/**
+ * Routines to update Head & Footer Code database through new versions
+ *
+ * @package Head_Footer_Code
+ */
+
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -9,11 +15,10 @@ if ( ! defined( 'WPINC' ) ) {
  *
  * For example, if the current DB version is 3, and the target DB version is 6,
  * this function will execute update routines if they exist:
- *  - auhfc_update_4()
- *  - auhfc_update_5()
- *  - auhfc_update_6()
+ * - auhfc_update_4()
+ * - auhfc_update_5()
+ * - auhfc_update_6()
  */
-
 function auhfc_update() {
 	// Disable PHP timeout for running updates.
 	set_time_limit( 0 );
@@ -146,25 +151,25 @@ function auhfc_update_5() {
 	// Get options from DB.
 	$defaults = get_option( 'auhfc_settings' );
 
-	$sitewide = [
+	$sitewide = array(
 		'head'         => ! empty( $defaults['head'] ) ? $defaults['head'] : '',
 		'body'         => ! empty( $defaults['body'] ) ? $defaults['body'] : '',
 		'footer'       => ! empty( $defaults['footer'] ) ? $defaults['footer'] : '',
 		'do_shortcode' => ! empty( $defaults['do_shortcode'] ) ? $defaults['do_shortcode'] : 'n',
-	];
+	);
 	update_option( 'auhfc_settings_sitewide', $sitewide );
 
-	$homepage = [
-		'head'         => ! empty( $defaults['homepage_head'] ) ? $defaults['homepage_head'] : '',
-		'body'         => ! empty( $defaults['homepage_body'] ) ? $defaults['homepage_body'] : '',
-		'footer'       => ! empty( $defaults['homepage_footer'] ) ? $defaults['homepage_footer'] : '',
-		'behavior'     => ! empty( $defaults['homepage_behavior'] ) ? $defaults['homepage_behavior'] : 'append',
-	];
+	$homepage = array(
+		'head'     => ! empty( $defaults['homepage_head'] ) ? $defaults['homepage_head'] : '',
+		'body'     => ! empty( $defaults['homepage_body'] ) ? $defaults['homepage_body'] : '',
+		'footer'   => ! empty( $defaults['homepage_footer'] ) ? $defaults['homepage_footer'] : '',
+		'behavior' => ! empty( $defaults['homepage_behavior'] ) ? $defaults['homepage_behavior'] : 'append',
+	);
 	update_option( 'auhfc_settings_homepage', $homepage );
 
-	$article = [
-		'post_types'   => ! empty( $defaults['post_types'] ) ? $defaults['post_types'] : [],
-	];
+	$article = array(
+		'post_types' => ! empty( $defaults['post_types'] ) ? $defaults['post_types'] : array(),
+	);
 	update_option( 'auhfc_settings_article', $article );
 
 	// Now delete old single option.
@@ -178,7 +183,7 @@ function auhfc_update_5() {
 function auhfc_update_6() {
 	$article = get_option( 'auhfc_settings_article' );
 	if ( is_null( $article['post_types'] ) ) {
-		$article['post_types'] = [];
+		$article['post_types'] = array();
 		update_option( 'auhfc_settings_article', $article );
 	}
 } // END function auhfc_update_6()
