@@ -14,7 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 // If uninstall is not called from WordPress, exit.
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-		exit();
+	exit();
 }
 
 $auhfc_options = array(

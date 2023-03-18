@@ -34,7 +34,7 @@ if ( isset( $auhfc_settings['article']['post_types'] ) ) {
  * @param array $columns Array of existing columns for table.
  */
 function auhfc_posts_columns( $columns ) {
-	$columns['hfc'] = __( 'Head & Footer Code', 'head-footer-code' );
+	$columns['hfc'] = esc_html__( 'Head & Footer Code', 'head-footer-code' );
 	return $columns;
 } // END function auhfc_posts_columns( $columns )
 
@@ -62,31 +62,26 @@ function auhfc_posts_custom_columns( $column, $post_id ) {
 	$sections = array();
 	if ( ! empty( auhfc_get_meta( 'head', $post_id ) ) ) {
 		$sections[] = sprintf(
-			'<a href="post.php?post=%1$s&action=edit#auhfc_%2$s" class="badge blue %2$s" title="%3$s">%4$s</a>',
+			'<a href="post.php?post=%1$s&action=edit#auhfc_head" class="badge" title="%2$s">H</a>',
 			$post_id,
-			'head',
-			esc_html__( 'Article specific code is defined in HEAD section', 'head-footer-code' ),
-			esc_html__( 'HEAD', 'head-footer-code' )
+			esc_html__( 'Article specific code is defined in HEAD section', 'head-footer-code' )
 		);
 	}
 	if ( ! empty( auhfc_get_meta( 'body', $post_id ) ) ) {
 		$sections[] = sprintf(
-			'<a href="post.php?post=%1$s&action=edit#auhfc_%2$s" class="badge blue %2$s" title="%3$s">%4$s</a>',
+			'<a href="post.php?post=%1$s&action=edit#auhfc_body" class="badge" title="%2$s">B</a>',
 			$post_id,
-			'body',
-			esc_html__( 'Article specific code is defined in BODY section', 'head-footer-code' ),
-			esc_html__( 'BODY', 'head-footer-code' )
+			esc_html__( 'Article specific code is defined in BODY section', 'head-footer-code' )
 		);
 	}
 	if ( ! empty( auhfc_get_meta( 'footer', $post_id ) ) ) {
 		$sections[] = sprintf(
-			'<a href="post.php?post=%1$s&action=edit#auhfc_%2$s" class="badge blue %2$s" title="%3$s">%4$s</a>',
+			'<a href="post.php?post=%1$s&action=edit#auhfc_footer" class="badge" title="%2$s">F</a>',
 			$post_id,
-			'footer',
-			esc_html__( 'Article specific code is defined in FOOTER section', 'head-footer-code' ),
-			esc_html__( 'FOOTER', 'head-footer-code' )
+			esc_html__( 'Article specific code is defined in FOOTER section', 'head-footer-code' )
 		);
 	}
+
 	if ( empty( $sections ) ) {
 		printf(
 			'<span class="n-a" title="%1$s">%2$s</span>',
@@ -98,28 +93,23 @@ function auhfc_posts_custom_columns( $column, $post_id ) {
 	} else {
 		$mode = auhfc_get_meta( 'behavior', $post_id );
 		if ( 'append' === $mode ) {
-			printf(
-				'<a href="post.php?post=%1$s&action=edit#auhfc_%2$s" class="label" title="%3$s">%4$s</a><br />%5$s',
-				$post_id,
-				'behavior',
-				/* translators: This is description for article specific mode label 'Append' */
-				esc_html__( 'Append article specific code to site-wide code', 'head-footer-code' ),
-				/* translators: This is label for article specific mode meaning 'Append to site-wide' ) */
-				esc_html__( 'Append', 'head-footer-code' ),
-				implode( '', $sections )
-			);
+			/* translators: This is description for article specific mode label 'Append' */
+			$method_description = esc_html__( 'Append article specific code to site-wide code', 'head-footer-code' );
+			/* translators: This is label for article specific mode meaning 'Append to site-wide' ) */
+			$method_label = esc_html__( 'Append', 'head-footer-code' );
 		} else {
-			printf(
-				'<a href="post.php?post=%1$s&action=edit#auhfc_%2$s" class="label" title="%3$s">%4$s</a><br />%5$s',
-				$post_id,
-				'behavior',
-				/* translators: This is description for article specific mode label 'Replace' */
-				esc_html__( 'Replace site-wide code with article specific code', 'head-footer-code' ),
-				/* translators: This is label for article specific mode meaning 'Replace site-wide with' */
-				esc_html__( 'Replace', 'head-footer-code' ),
-				implode( '', $sections )
-			);
+			/* translators: This is description for article specific mode label 'Replace' */
+			$method_description = esc_html__( 'Replace site-wide code with article specific code', 'head-footer-code' );
+			/* translators: This is label for article specific mode meaning 'Replace site-wide with' */
+			$method_label = esc_html__( 'Replace', 'head-footer-code' );
 		}
+		printf(
+			'<a href="post.php?post=%1$s&action=edit#auhfc_behavior" class="label" title="%2$s">%3$s</a><br />%4$s',
+			$post_id, // 1
+			$method_description, // 3
+			$method_label, // 4
+			'<div class="badges">' . implode( '', $sections ) . '</div>' // 5
+		);
 	}
 
 } // END function auhfc_posts_custom_columns( $column, $post_id )

@@ -4,8 +4,8 @@ Contributors: urkekg, techwebux
 Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: head, header, footer, body, scripts, wp_head, wp_footer, wp_body_open, head footer code, custom script
 Requires at least: 4.9
-Tested up to: 6.0
-Stable tag: 1.3.0
+Tested up to: 6.2
+Stable tag: 1.3.1
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -54,6 +54,7 @@ If you find **Head &amp; Footer Code** useful for your project, please [review p
 * Set site-wide custom content for body section (after the `<body>`) - **Requires WordPress 5.2!**
 * Set site-wide custom content for footer page section (before the `</body>`)
 * **[NEW in 1.2]** Set homepage specific custom code for head, body and/or footer if Homepage mode is se to Blog Posts
+* **[NEW in 1.3.1]** Toggle homepage specific custom code on paged Homepage in Blog Posts mode (page 2, 3, a nd so on)
 * Set article specific custom code for head page section (before the `</head>`)
 * Set article specific custom code for body section (after the `<body>`) - **Requires WordPress 5.2!**
 * Set article specific custom content for footer page section (before the `</body>`)
@@ -65,7 +66,7 @@ If you find **Head &amp; Footer Code** useful for your project, please [review p
 * Site-wide section located under **Tools** > **Head & Footer Code**
 * If you have set WP_DEBUG constant in `wp-config.php` to `true`, you'll see site-wide and article specific entries in page source code wrapped to comments.
 * **Multisite** is supported.
-* **PHP 8** ready!
+* **PHP 8.2** ready!
 
 General settings (HEAD, BODY, FOOTER global code and priority, Homepage code and behaviour) saves in WordPress option `auhfc_settings`.
 Each post/page/custom post type specific HEAD, BODY and FOOTER code and behaviour saves to post meta `_auhfc`.
@@ -120,9 +121,11 @@ if ( function_exists( 'wp_body_open' ) ) {
 2. Plugin Settings page (Site-wide, Homepage and Article Post Types)
 3. Article specific metabox
 4. Example of custom code inserted to HEAD section (site-wide with appended article specific)
-5. Example of custom code inserted to BODY section (site-wide with appended article specific)
-6. Example of custom code inserted to FOOTER section (site-wide with appended article specific)
-7. Example of **Head &amp; Footer Code** column on Pages listing, to identify which pages have set custom code, which one and what mode is selected
+5. Example of custom code inserted to BODY and FOOTER sections (site-wide with appended article specific)
+6. Category specific metabox
+7. Example of custom code inserted to HEAD section (site-wide with appended category specific)
+8. Example of custom code inserted to BODY and FOOTER section (site-wide with appended category specific)
+9. Example of **Head &amp; Footer Code** column on Pages listing, to identify which pages have set custom code, which one and what mode is selected
 
 ## Upgrade Notice
 
@@ -131,6 +134,15 @@ if ( function_exists( 'wp_body_open' ) ) {
 Initial release of new plugin developed by Aleksandar Urosevic.
 
 ## Changelog
+
+### 1.3.1 (2023-03-18)
+* Tested: on PHP 8.1.14/8.2.1 and WordPress 6.2-RC2 with Twenty Twenty-Three theme (Single and Multisite)
+* Add: support do not add homepage in Blog Post related code on paged pages (2, 3, and so on)
+* Add: CodeEditor on textareas in article Meta boxes
+* Fix: Fatal error due to relocated plugin update file
+* Cleanup: Remove donate button from settings page
+* Improve: Security.
+* Improve: Coding Standard.
 
 ### 1.3.0 (2022-05-08)
 
@@ -144,7 +156,7 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 ### 1.2.4 (2021-10-15)
 
 * Tested: on WordPress 5.8.1 and PHP 8.0.9 and 8.0.11
-* Improve: clarify wihtin article metabox on how replace behaviour for article-specific code works
+* Improve: clarify within article metabox on how replace behaviour for article-specific code works
 * (2021-08-23) Improve: along to FOOTER, enable processing of shortcodes in HEAD and BODY (you has to enable this opetion per location)
 
 ### 1.2.3 (2021-07-19)

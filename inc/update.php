@@ -27,7 +27,7 @@ function auhfc_update() {
 	$current_db_ver = get_option( 'auhfc_db_ver', 0 );
 
 	// Get the target version that we need to reach.
-	$target_db_ver = WPAU_HEAD_FOOTER_CODE_DB_VER;
+	$target_db_ver = HFC_VER_DB;
 
 	// Run update routines one by one until the current version number
 	// reaches the target version number.
@@ -207,3 +207,16 @@ function auhfc_update_7() {
 	unset( $sitewide['do_shortcode'] );
 	update_option( 'auhfc_settings_sitewide', $sitewide );
 } // END function auhfc_update_7()
+
+/**
+ * Add or not homepage in Blog Post mode on paged pages
+ */
+function auhfc_update_8() {
+	// Get options from DB.
+	$homepage = get_option( 'auhfc_settings_homepage' );
+
+	if ( empty( $homepage['paged'] ) ) {
+		$homepage['paged'] = 'yes';
+	}
+	update_option( 'auhfc_settings_homepage', $homepage );
+} // END function auhfc_update_8()

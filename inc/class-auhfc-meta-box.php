@@ -47,6 +47,7 @@ abstract class AUHfc_Meta_Box {
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
 		}
+
 		if ( ! isset( $_POST['head_footer_code_nonce'] ) || ! wp_verify_nonce( $_POST['head_footer_code_nonce'], '_head_footer_code_nonce' ) ) {
 			return;
 		}
@@ -82,10 +83,7 @@ abstract class AUHfc_Meta_Box {
 			'<code>&lt;body&gt;</code>',
 			'<code>&lt;/body&gt;</code>',
 			'<code>&lt;!-- --&gt;</code>',
-			sprintf(
-				'<a href="tools.php?page=head_footer_code">%s</a>',
-				esc_html__( 'Tools / Head &amp; Footer Code', 'head-footer-code' )
-			)
+			'<a href="tools.php?page=' . HFC_PLUGIN_SLUG . '">' . esc_html__( 'Tools / Head &amp; Footer Code', 'head-footer-code' ) . '</a>'
 		);
 		?>
 		</p>
@@ -96,16 +94,27 @@ abstract class AUHfc_Meta_Box {
 		</select>
 		<br /><br />
 		<label for="auhfc_head"><?php esc_html_e( 'Head Code', 'head-footer-code' ); ?></label><br />
-		<textarea name="auhfc[head]" id="auhfc_head" class="widefat code" rows="5"><?php echo auhfc_get_meta( 'head' ); ?></textarea>
+		<textarea name="auhfc[head]" id="auhfc_head" class="widefat code" rows="5"><?php echo esc_textarea( auhfc_get_meta( 'head' ) ); ?></textarea>
 		<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri(); ?>/style.css" type="text/css" media="all"&gt;</code></p>
 		<br />
 		<label for="auhfc_body"><?php esc_html_e( 'Body Code', 'head-footer-code' ); ?></label><br />
-		<textarea name="auhfc[body]" id="auhfc_body" class="widefat code" rows="5"><?php echo auhfc_get_meta( 'body' ); ?></textarea>
+		<textarea name="auhfc[body]" id="auhfc_body" class="widefat code" rows="5"><?php echo esc_textarea( auhfc_get_meta( 'body' ) ); ?></textarea>
 		<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/body-start.js" type="text/css" media="all"&gt;&lt;/script&gt;</code></p>
 		<br />
 		<label for="auhfc_footer"><?php esc_html_e( 'Footer Code', 'head-footer-code' ); ?></label><br />
-		<textarea name="auhfc[footer]" id="auhfc_footer" class="widefat code" rows="5"><?php echo auhfc_get_meta( 'footer' ); ?></textarea>
+		<textarea name="auhfc[footer]" id="auhfc_footer" class="widefat code" rows="5"><?php echo esc_textarea( auhfc_get_meta( 'footer' ) ); ?></textarea>
 		<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/script.js"&gt;&lt;/script&gt;</code></p>
+		<script type="text/javascript">
+		(function(){
+			'use strict';
+			var auhfc_cm_head = wp.codeEditor.initialize(document.getElementById('auhfc_head'), cm_settings);
+			auhfc_cm_head.codemirror.on('change', function(el) { el.save(); });
+			var auhfc_cm_body = wp.codeEditor.initialize(document.getElementById('auhfc_body'), cm_settings);
+			auhfc_cm_body.codemirror.on('change', function(el) { el.save(); });
+			var auhfc_cm_footer = wp.codeEditor.initialize(document.getElementById('auhfc_footer'), cm_settings);
+			auhfc_cm_footer.codemirror.on('change', function(el) { el.save(); });
+		})();
+		</script>
 		<?php
 	} // END public static function html()
 

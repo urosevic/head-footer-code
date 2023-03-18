@@ -38,6 +38,8 @@ function auhfc_wp_head() {
 	$auhfc_settings         = auhfc_settings();
 	$auhfc_post_type        = auhfc_get_post_type();
 	$is_homepage_blog_posts = auhfc_is_homepage_blog_posts();
+	$add_to_homepage_pagged = auhfc_add_to_homepage_paged( $is_homepage_blog_posts, $auhfc_settings );
+	$is_paged               = is_paged() ? 'yes' : 'no';
 	$head_behavior          = 'none';
 	$head_code              = '';
 
@@ -60,8 +62,8 @@ function auhfc_wp_head() {
 		// Get meta for homepage.
 		if ( $is_homepage_blog_posts ) {
 			$head_behavior = $auhfc_settings['homepage']['behavior'];
-			$head_code     = $auhfc_settings['homepage']['head'];
-			$dbg_set       = "type: homepage; bahavior: {$head_behavior}; priority: {$auhfc_settings['sitewide']['priority_h']}; do_shortcode_h: {$auhfc_settings['sitewide']['do_shortcode_h']}";
+			$head_code     = $add_to_homepage_pagged ? $auhfc_settings['homepage']['head'] : ' ';
+			$dbg_set       = "type: homepage; bahavior: {$head_behavior}; is_paged: {$is_paged}; add_on_paged: {$auhfc_settings['homepage']['paged']}; priority: {$auhfc_settings['sitewide']['priority_h']}; do_shortcode_h: {$auhfc_settings['sitewide']['do_shortcode_h']}";
 		}
 	}
 
@@ -106,6 +108,8 @@ function auhfc_wp_body() {
 	$auhfc_settings         = auhfc_settings();
 	$auhfc_post_type        = auhfc_get_post_type();
 	$is_homepage_blog_posts = auhfc_is_homepage_blog_posts();
+	$add_to_homepage_pagged = auhfc_add_to_homepage_paged( $is_homepage_blog_posts, $auhfc_settings );
+	$is_paged               = is_paged() ? 'yes' : 'no';
 	$body_behavior          = 'none';
 	$body_code              = '';
 
@@ -128,8 +132,8 @@ function auhfc_wp_body() {
 		// Get meta for homepage.
 		if ( $is_homepage_blog_posts ) {
 			$body_behavior = $auhfc_settings['homepage']['behavior'];
-			$body_code     = $auhfc_settings['homepage']['body'];
-			$dbg_set       = "type: homepage; bahavior: {$body_behavior}; priority: {$auhfc_settings['sitewide']['priority_b']}; do_shortcode_b: {$auhfc_settings['sitewide']['do_shortcode_b']}";
+			$body_code     = $add_to_homepage_pagged ? $auhfc_settings['homepage']['body'] : ' ';
+			$dbg_set       = "type: homepage; bahavior: {$body_behavior}; is_paged: {$is_paged}; add_on_paged: {$auhfc_settings['homepage']['paged']}; priority: {$auhfc_settings['sitewide']['priority_b']}; do_shortcode_b: {$auhfc_settings['sitewide']['do_shortcode_b']}";
 		}
 	}
 
@@ -174,6 +178,8 @@ function auhfc_wp_footer() {
 	$auhfc_settings         = auhfc_settings();
 	$auhfc_post_type        = auhfc_get_post_type();
 	$is_homepage_blog_posts = auhfc_is_homepage_blog_posts();
+	$add_to_homepage_pagged = auhfc_add_to_homepage_paged( $is_homepage_blog_posts, $auhfc_settings );
+	$is_paged               = is_paged() ? 'yes' : 'no';
 	$footer_behavior        = 'none';
 	$footer_code            = '';
 
@@ -195,9 +201,9 @@ function auhfc_wp_footer() {
 		$dbg_set = $auhfc_post_type;
 		// Get meta for homepage.
 		if ( $is_homepage_blog_posts ) {
-			$footer_code     = $auhfc_settings['homepage']['footer'];
+			$footer_code     = $add_to_homepage_pagged ? $auhfc_settings['homepage']['footer'] : ' ';
 			$footer_behavior = $auhfc_settings['homepage']['behavior'];
-			$dbg_set         = "type: homepage; bahavior: {$footer_behavior}; priority: {$auhfc_settings['sitewide']['priority_f']}; do_shortcode_f: {$auhfc_settings['sitewide']['do_shortcode_f']}";
+			$dbg_set         = "type: homepage; bahavior: {$footer_behavior}; is_paged: {$is_paged}; add_on_paged: {$auhfc_settings['homepage']['paged']}; priority: {$auhfc_settings['sitewide']['priority_f']}; do_shortcode_f: {$auhfc_settings['sitewide']['do_shortcode_f']}";
 		}
 	}
 

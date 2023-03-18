@@ -12,15 +12,15 @@ if ( ! defined( 'WPINC' ) ) {
 
 // Include back-end/front-end resources.
 if ( is_admin() ) {
-	require_once WPAU_HEAD_FOOTER_CODE_INC . 'settings.php';
-	require_once WPAU_HEAD_FOOTER_CODE_INC . 'posts-custom-columns.php';
-	require_once WPAU_HEAD_FOOTER_CODE_INC . 'class-auhfc-meta-box.php';
-	require_once WPAU_HEAD_FOOTER_CODE_INC . 'auhfc-category-meta-box.php';
+	require_once HFC_DIR_INC . 'settings.php';
+	require_once HFC_DIR_INC . 'posts-custom-columns.php';
+	require_once HFC_DIR_INC . 'class-auhfc-meta-box.php';
+	require_once HFC_DIR_INC . 'auhfc-category-meta-box.php';
 } else {
-	require_once WPAU_HEAD_FOOTER_CODE_INC . 'front.php';
+	require_once HFC_DIR_INC . 'front.php';
 }
 
-register_activation_hook( WPAU_HEAD_FOOTER_CODE_FILE, 'auhfc_activate' );
+register_activation_hook( HFC_FILE, 'auhfc_activate' );
 /**
  * Plugin Activation hook function to check for Minimum PHP and WordPress versions
  */
@@ -37,7 +37,7 @@ function auhfc_activate() {
 		return;
 	}
 	$version = 'PHP' === $flag ? $php_req : $wp_req;
-	deactivate_plugins( WPAU_HEAD_FOOTER_CODE_FILE );
+	deactivate_plugins( HFC_FILE );
 
 	wp_die(
 		'<p>' . sprintf(
@@ -65,11 +65,11 @@ add_action( 'plugins_loaded', 'auhfc_maybe_update' );
  */
 function auhfc_maybe_update() {
 	// Bail if this plugin data doesn't need updating.
-	if ( get_option( 'auhfc_db_ver' ) >= WPAU_HEAD_FOOTER_CODE_DB_VER ) {
+	if ( get_option( 'auhfc_db_ver' ) >= HFC_VER_DB ) {
 		return;
 	}
 	// Require update script.
-	require_once( dirname( __FILE__ ) . '/update.php' );
+	require_once( HFC_DIR_INC . '/update.php' );
 	// Trigger update function.
 	auhfc_update();
 } // END function auhfc_maybe_update()
@@ -81,18 +81,30 @@ add_action( 'admin_enqueue_scripts', 'auhfc_admin_enqueue_scripts' );
  * @param  string $hook Current page hook.
  */
 function auhfc_admin_enqueue_scripts( $hook ) {
+
 	// Admin Stylesheet.
-	if ( in_array( $hook, array( 'edit.php', 'tools_page_head_footer_code' ), true ) ) {
+	if ( in_array( $hook, array( 'post.php', 'edit.php', 'tools_page_' . HFC_PLUGIN_SLUG ), true ) ) {
 		wp_enqueue_style(
 			'head-footer-code-admin',
-			plugin_dir_url( __FILE__ ) . '../assets/css/admin.min.css',
+			HFC_URL . '/assets/css/admin.min.css',
 			array(),
-			WPAU_HEAD_FOOTER_CODE_VER
+			HFC_VER
 		);
+		
 	}
 	// Codemirror Assets.
-	if ( 'tools_page_head_footer_code' === $hook ) {
-		$cm_settings['codeEditor'] = wp_enqueue_code_editor( array( 'type' => 'text/html' ) );
+	if ( 'tools_page_' . HFC_PLUGIN_SLUG === $hook || 'post.php' === $hook ) {
+		$cm_settings['codeEditor'] = wp_enqueue_code_editor(
+			array(
+				'type' => 'text/html',
+				'codemirror' => array(
+					'autoRefresh' => true, // Deal with metaboxes rendering
+					'extraKeys' => array(
+						'Tab' => 'indentMore', // Enable TAB indent
+					),
+				),
+			)
+		);
 		wp_localize_script( 'code-editor', 'cm_settings', $cm_settings );
 		wp_enqueue_style( 'wp-codemirror' );
 		wp_enqueue_script( 'wp-codemirror' );
@@ -124,6 +136,7 @@ function auhfc_settings() {
 			'body'     => '',
 			'footer'   => '',
 			'behavior' => 'append',
+			'paged'    => 'yes',
 		),
 		'article'  => array(
 			'post_types' => array(),
@@ -272,6 +285,26 @@ function auhfc_is_homepage_blog_posts() {
 } // END function auhfc_is_homepage_blog_posts()
 
 /**
+ * Function to check if code should be added on paged homepage in Blog mode
+ *
+ * @param bool  $is_homepage_blog_posts If current page is blog homepage
+ * @param array $auhfc_settings         Plugin general settings
+ *
+ * @return bool
+ */
+function auhfc_add_to_homepage_paged($is_homepage_blog_posts, $auhfc_settings) {
+	if (
+		true === $is_homepage_blog_posts
+		&& !empty($auhfc_settings['homepage']['paged'])
+		&& 'no' === $auhfc_settings['homepage']['paged']
+		&& is_paged()
+	) {
+		return false;
+	}
+	return true;
+} // END function auhfc_add_to_homepage_paged()
+
+/**
  * Function to print note for head section
  */
 function auhfc_head_note() {
@@ -358,4 +391,38 @@ function auhfc_print_sitewide(
 	}
 
 	return false;
+}
+
+/**
+ * Sanitizes an HTML classnames to ensure it only contains valid characters.
+ *
+ * Strips the string down to A-Z,a-z,0-9,_,-, . If this results in an empty
+ * string then it will return the alternative value supplied.
+ *
+ * @param string $classes    The classnames to be sanitized (multiple classnames separated by space)
+ * @param string $fallback   Optional. The value to return if the sanitization ends up as an empty string.
+ *                           Defaults to an empty string.
+ *
+ * @return string            The sanitized value
+ */
+if ( ! function_exists( 'sanitize_html_classes' ) ) {
+	function sanitize_html_classes( $classes, $fallback = '' ) {
+		// Strip out any %-encoded octets.
+		$sanitized = preg_replace( '|%[a-fA-F0-9][a-fA-F0-9]|', '', $classes );
+
+		// Limit to A-Z, a-z, 0-9, '_', '-' and ' ' (for multiple classes).
+		$sanitized = trim( preg_replace( '/[^A-Za-z0-9\_\ \-]/', '', $sanitized ) );
+
+		if ( '' === $sanitized && $fallback ) {
+			return sanitize_html_classes( $fallback );
+		}
+		/**
+		 * Filters a sanitized HTML class string.
+		 *
+		 * @param string $sanitized The sanitized HTML class.
+		 * @param string $classse   HTML class before sanitization.
+		 * @param string $fallback  The fallback string.
+		 */
+		return apply_filters( 'sanitize_html_classes', $sanitized, $classes, $fallback );
+	}
 }
