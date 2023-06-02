@@ -34,18 +34,30 @@ function auhfc_category_form_fields( $term_object ) {
 	<h2><?php esc_html_e( 'Head & Footer Code', 'head-footer-code' ); ?></h2>
 	<p>
 	<?php
+	if ( ! current_user_can( 'manage_options' ) ) {
+		$allowed_managers = is_multisite() ? esc_html__( 'Super Admin' ) . ' ' . esc_html__( 'and' ) . ' ' . esc_html__( 'Administrator' ) : esc_html__( 'Administrator' );
 	printf(
-		/* translators: 1: </head>, 2: <body>, 3 </body>, 4: link to Head & Footer Code Settings page */
-		esc_html__( 'Here you can insert category specific code for Head (before the %1$s), Body (after the %2$s) and Footer (before the %3$s) sections. They work in exactly the same way as site-wide code, which you can configure under %5$s. Please note, if you leave empty any of category-specific fields and choose replace behavior, site-wide code will not be removed until you add empty space or empty HTML comment %4$s here.', 'head-footer-code' ),
+			/* translators: 1: </head>, 2: <body>, 3: </body>, 4: Plugin Settings page, 5: Allowed user roles */
+			esc_html__( 'Here you can insert category specific code for Head (before the %1$s), Body (after the %2$s) and Footer (before the %3$s) sections. They work in exactly the same way as site-wide code, which %6$s can configure under %5$s. Please note, if you leave empty any of category-specific fields and choose replace behavior, site-wide code will not be removed until you add empty space or empty HTML comment %4$s here.', 'head-footer-code' ),
 		'<code>&lt;/head&gt;</code>',
 		'<code>&lt;body&gt;</code>',
 		'<code>&lt;/body&gt;</code>',
 		'<code>&lt;!-- --&gt;</code>',
-		sprintf(
-			'<a href="tools.php?page=head_footer_code">%s</a>',
-			esc_html__( 'Tools / Head &amp; Footer Code', 'head-footer-code' )
-		)
-	);
+			esc_html__( 'Tools' ) . ' > ' . esc_html__( 'Head &amp; Footer Code', 'head-footer-code' ),
+			$allowed_managers
+		);
+
+	} else {
+		printf(
+			/* translators: 1: </head>, 2: <body>, 3 </body>, 4: link to Head & Footer Code Settings page */
+			esc_html__( 'Here you can insert category specific code for Head (before the %1$s), Body (after the %2$s) and Footer (before the %3$s) sections. They work in exactly the same way as site-wide code, which you can configure under %5$s. Please note, if you leave empty any of category-specific fields and choose replace behavior, site-wide code will not be removed until you add empty space or empty HTML comment %4$s here.', 'head-footer-code' ),
+			'<code>&lt;/head&gt;</code>',
+			'<code>&lt;body&gt;</code>',
+			'<code>&lt;/body&gt;</code>',
+			'<code>&lt;!-- --&gt;</code>',
+			'<a href="tools.php?page=' . HFC_PLUGIN_SLUG . '">' . esc_html__( 'Tools / Head &amp; Footer Code', 'head-footer-code' ) . '</a>'
+		);
+	}
 	?>
 	</p>
 
@@ -78,7 +90,7 @@ function auhfc_category_form_fields( $term_object ) {
 				</th>
 				<td>
 					<textarea name="auhfc[body]" id="auhfc_body" class="widefat code" rows="5"><?php echo ! empty( $auhfc['body'] ) ? $auhfc['body'] : ''; ?></textarea>
-					<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/body-start.js" type="text/css" media="all"&gt;&lt;/script&gt;</code></p>
+					<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;script src="<?php echo get_stylesheet_directory_uri(); ?>/body-start.js" type="text/javascript"&gt;&lt;/script&gt;</code></p>
 				</td>
 			</tr>
 			<tr class="form-field term-auhfc-footer">
@@ -87,12 +99,22 @@ function auhfc_category_form_fields( $term_object ) {
 				</th>
 				<td>
 					<textarea name="auhfc[footer]" id="auhfc_footer" class="widefat code" rows="5"><?php echo ! empty( $auhfc['footer'] ) ? $auhfc['footer'] : ''; ?></textarea>
-					<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/script.js"&gt;&lt;/script&gt;</code></p>
+					<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;script src="<?php echo get_stylesheet_directory_uri(); ?>/script.js" type="text/javascript"&gt;&lt;/script&gt;</code></p>
 				</td>
 			</tr>
 		</tbody>
 	</table>
-
+	<script type="text/javascript">
+		(function(){
+			'use strict';
+			var auhfc_cm_head = wp.codeEditor.initialize(document.getElementById('auhfc_head'), cm_settings);
+			auhfc_cm_head.codemirror.on('change', function(el) { el.save(); });
+			var auhfc_cm_body = wp.codeEditor.initialize(document.getElementById('auhfc_body'), cm_settings);
+			auhfc_cm_body.codemirror.on('change', function(el) { el.save(); });
+			var auhfc_cm_footer = wp.codeEditor.initialize(document.getElementById('auhfc_footer'), cm_settings);
+			auhfc_cm_footer.codemirror.on('change', function(el) { el.save(); });
+		})();
+		</script>
 	<?php
 }
 

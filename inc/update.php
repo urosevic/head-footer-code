@@ -56,6 +56,9 @@ function auhfc_update_1() {
 
 	// Get options from DB.
 	$defaults = get_option( 'auhfc_settings' );
+	if ( ! is_array( $defaults ) ) {
+		return;
+	}
 
 	// Split priority to priority_h and priority_f.
 	if ( isset( $defaults['priority'] ) ) {
@@ -81,6 +84,9 @@ function auhfc_update_2() {
 
 	// Get options from DB.
 	$defaults = get_option( 'auhfc_settings' );
+	if ( ! is_array( $defaults ) ) {
+		return;
+	}
 
 	// Add new plugin option.
 	if ( ! isset( $defaults['do_shortcode'] ) ) {
@@ -98,6 +104,9 @@ function auhfc_update_3() {
 
 	// Get options from DB.
 	$defaults = get_option( 'auhfc_settings' );
+	if ( ! is_array( $defaults ) ) {
+		return;
+	}
 
 	// Add empty body field to options.
 	if ( ! isset( $defaults['body'] ) ) {
@@ -120,6 +129,9 @@ function auhfc_update_4() {
 
 	// Get options from DB.
 	$defaults = get_option( 'auhfc_settings' );
+	if ( ! is_array( $defaults ) ) {
+		return;
+	}
 
 	// Add empty homepage_head field to options.
 	if ( ! isset( $defaults['homepage_head'] ) ) {
@@ -150,6 +162,9 @@ function auhfc_update_5() {
 
 	// Get options from DB.
 	$defaults = get_option( 'auhfc_settings' );
+	if ( ! is_array( $defaults ) ) {
+		return;
+	}
 
 	$sitewide = array(
 		'head'         => ! empty( $defaults['head'] ) ? $defaults['head'] : '',
@@ -182,6 +197,10 @@ function auhfc_update_5() {
  */
 function auhfc_update_6() {
 	$article = get_option( 'auhfc_settings_article' );
+	if ( ! is_array( $article ) ) {
+		return;
+	}
+
 	if ( is_null( $article['post_types'] ) ) {
 		$article['post_types'] = array();
 		update_option( 'auhfc_settings_article', $article );
@@ -194,6 +213,9 @@ function auhfc_update_6() {
 function auhfc_update_7() {
 	// Get options from DB.
 	$sitewide = get_option( 'auhfc_settings_sitewide' );
+	if ( ! is_array( $sitewide ) ) {
+		return;
+	}
 
 	if ( ! empty( $sitewide['do_shortcode'] ) ) {
 		$sitewide['do_shortcode_h'] = 'n';
@@ -214,6 +236,9 @@ function auhfc_update_7() {
 function auhfc_update_8() {
 	// Get options from DB.
 	$homepage = get_option( 'auhfc_settings_homepage' );
+	if ( ! is_array( $homepage ) ) {
+		return;
+	}
 
 	if ( empty( $homepage['paged'] ) ) {
 		$homepage['paged'] = 'yes';

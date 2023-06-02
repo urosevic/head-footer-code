@@ -5,12 +5,13 @@ Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: head, header, footer, body, scripts, wp_head, wp_footer, wp_body_open, head footer code, custom script
 Requires at least: 4.9
 Tested up to: 6.2
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 Easy add site-wide, category and article specific custom code before the closing &lt;/head&gt; and &lt;/body&gt;, or after opening &lt;body&gt; tag.
+
 
 ## Description
 
@@ -34,6 +35,7 @@ Various code snippets are supported, including but not limited to:
 * Google Analytics
 * Google Tag Manager
 * Google Ads Conversion
+* Lite Analytics
 * Facebook Pixel
 * Hotjar
 * FullStory
@@ -42,11 +44,13 @@ Various code snippets are supported, including but not limited to:
 * Yandex site verification
 * Alexa site verification
 
+
 ### Works or broken?
 
 If **Head &amp; Footer Code** does not work on your WordPress project, please let us know by [raising a new support ticket](https://wordpress.org/support/plugin/head-footer-code/#new-topic-0) in the [Community Forum](https://wordpress.org/support/plugin/head-footer-code/) and describe what does not works and how to reproduce the issue. We will make sure to resolve the issue as soon as possible.
 
 If you find **Head &amp; Footer Code** useful for your project, please [review plugin](https://wordpress.org/support/plugin/head-footer-code/reviews/#new-post).
+
 
 ### Features
 
@@ -66,16 +70,31 @@ If you find **Head &amp; Footer Code** useful for your project, please [review p
 * Site-wide section located under **Tools** > **Head & Footer Code**
 * If you have set WP_DEBUG constant in `wp-config.php` to `true`, you'll see site-wide and article specific entries in page source code wrapped to comments.
 * **Multisite** is supported.
-* **PHP 8.2** ready!
+* **PHP 8.2** compatible!
+
+### Data stored in database
 
 General settings (HEAD, BODY, FOOTER global code and priority, Homepage code and behaviour) saves in WordPress option `auhfc_settings`.
 Each post/page/custom post type specific HEAD, BODY and FOOTER code and behaviour saves to post meta `_auhfc`.
 Each category specific HEAD, BODY and FOOTER code and behaviour saves to taxonomy meta `_auhfc`.
-This data deletes from the database on uninstall.
+
+During the Uninstall process all these data has been deleted from the database.
+In case you wish to reinstall plugin, **DO NOT UNINSTALL IT** although **Deactivate**, then delete the directory `/wp-content/plugins-head-footer-code` and then reinstall plugin.
+
+
+### Permissions on Multisite WordPress
+
+| Feature           | Super Admin | Administrator | Editor | Author | Contributor | Subscriber |
+|-------------------|-------------|---------------|--------|--------|-------------|------------|
+| Global            |      Y      |       Y       |    N   |    N   |      N      |      N     |
+| Article specific  |      Y      |       Y       |    Y   |    Y   |      N      |      N     |
+| Category specific |      Y      |       Y       |    N   |    N   |      N      |      N     |
+
 
 ## Installation
 
 Installation of the **Head &amp; Footer Code** is easy as any other WordPress plugin.
+
 
 ### Standard procedure
 
@@ -86,6 +105,7 @@ Installation of the **Head &amp; Footer Code** is easy as any other WordPress pl
 1. Click **Settings** link for **Head &amp; Footer Code** or visit the **Tools** &rarr; **Head &amp; Footer Code**.
 1. Add the desired code to the target section.
 
+
 ### FTP procedure
 
 1. Click on the **Download** button to get **Head &amp; Footer Code** installation package.
@@ -95,7 +115,14 @@ Installation of the **Head &amp; Footer Code** is easy as any other WordPress pl
 1. Click **Settings** link for **Head &amp; Footer Code** or visit the **Tools** &rarr; **Head &amp; Footer Code**.
 1. Add the desired code to the target section.
 
+
 ## Frequently Asked Questions
+
+### On Network WordPress an Administrator/Editor/Author user getting code validation hint error `Tag <tag> is not allowed.`
+
+It's not a bug, it's a security measure by WordPress Core.
+
+If you wish to remove hinting errors for Administrator role, make sure you allow `unfiltered_html` capability for that role (Google is your friend).
 
 ### Is supported PHP code in code snippets?
 
@@ -115,6 +142,7 @@ if ( function_exists( 'wp_body_open' ) ) {
 }
 ```
 
+
 ## Screenshots
 
 1. Head &amp; Footer Code box in Plugin search results
@@ -127,13 +155,20 @@ if ( function_exists( 'wp_body_open' ) ) {
 8. Example of custom code inserted to BODY and FOOTER section (site-wide with appended category specific)
 9. Example of **Head &amp; Footer Code** column on Pages listing, to identify which pages have set custom code, which one and what mode is selected
 
+
 ## Upgrade Notice
 
 ### 1.0.0
 
 Initial release of new plugin developed by Aleksandar Urosevic.
 
+
 ## Changelog
+
+### 1.3.2 (2023-06-02)
+* Tested: on PHP 8.2.6 and WordPress 6.2.2 with Twenty Twenty-Three theme (Single and Multisite)
+* Fixed: Deprecated and Warning notices in update.php on PHP 8.2.6
+* Improve: Multisite support CodeMirror on Article and Category
 
 ### 1.3.1 (2023-03-18)
 * Tested: on PHP 8.1.14/8.2.1 and WordPress 6.2-RC2 with Twenty Twenty-Three theme (Single and Multisite)

@@ -76,15 +76,29 @@ abstract class AUHfc_Meta_Box {
 		wp_nonce_field( '_head_footer_code_nonce', 'head_footer_code_nonce' ); ?>
 		<p>
 		<?php
+		if ( ! current_user_can( 'manage_options' ) ) {
+			$allowed_managers = is_multisite() ? esc_html__( 'Super Admin' ) . ' ' . esc_html__( 'and' ) . ' ' . esc_html__( 'Administrator' ) : esc_html__( 'Administrator' );
 		printf(
-			/* translators: 1: </head>, 2: <body>, 3: </body>, 4 link to Head & Footer Code Settings page */
-			esc_html__( 'Here you can insert article specific code for Head (before the %1$s), Body (after the %2$s) and Footer (before the %3$s) sections. They work in exactly the same way as site-wide code, which you can configure under %5$s. Please note, if you leave empty any of article-specific fields and choose replace behavior, site-wide code will not be removed until you add empty space or empty HTML comment %4$s here.', 'head-footer-code' ),
+				/* translators: 1: </head>, 2: <body>, 3: </body>, 4: Plugin Settings page, 5: Allowed user roles */
+				esc_html__( 'Here you can insert article specific code for Head (before the %1$s), Body (after the %2$s) and Footer (before the %3$s) sections. They work in exactly the same way as site-wide code, which %6$s can configure under %5$s. Please note, if you leave empty any of article-specific fields and choose replace behavior, site-wide code will not be removed until you add empty space or empty HTML comment %4$s here.', 'head-footer-code' ),
 			'<code>&lt;/head&gt;</code>',
 			'<code>&lt;body&gt;</code>',
 			'<code>&lt;/body&gt;</code>',
 			'<code>&lt;!-- --&gt;</code>',
-			'<a href="tools.php?page=' . HFC_PLUGIN_SLUG . '">' . esc_html__( 'Tools / Head &amp; Footer Code', 'head-footer-code' ) . '</a>'
-		);
+				esc_html__( 'Tools' ) . ' > ' . esc_html__( 'Head &amp; Footer Code', 'head-footer-code' ),
+				$allowed_managers
+			);
+		} else {
+			printf(
+				/* translators: 1: </head>, 2: <body>, 3: </body>, 4 link to Head & Footer Code Settings page */
+				esc_html__( 'Here you can insert article specific code for Head (before the %1$s), Body (after the %2$s) and Footer (before the %3$s) sections. They work in exactly the same way as site-wide code, which you can configure under %5$s. Please note, if you leave empty any of article-specific fields and choose replace behavior, site-wide code will not be removed until you add empty space or empty HTML comment %4$s here.', 'head-footer-code' ),
+				'<code>&lt;/head&gt;</code>',
+				'<code>&lt;body&gt;</code>',
+				'<code>&lt;/body&gt;</code>',
+				'<code>&lt;!-- --&gt;</code>',
+				'<a href="tools.php?page=' . HFC_PLUGIN_SLUG . '">' . esc_html__( 'Tools / Head &amp; Footer Code', 'head-footer-code' ) . '</a>'
+			);
+		}
 		?>
 		</p>
 		<label><?php esc_html_e( 'Behavior', 'head-footer-code' ); ?></label><br />
@@ -99,11 +113,11 @@ abstract class AUHfc_Meta_Box {
 		<br />
 		<label for="auhfc_body"><?php esc_html_e( 'Body Code', 'head-footer-code' ); ?></label><br />
 		<textarea name="auhfc[body]" id="auhfc_body" class="widefat code" rows="5"><?php echo esc_textarea( auhfc_get_meta( 'body' ) ); ?></textarea>
-		<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/body-start.js" type="text/css" media="all"&gt;&lt;/script&gt;</code></p>
+		<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;script src="<?php echo get_stylesheet_directory_uri(); ?>/body-start.js" type="text/javascript"&gt;&lt;/script&gt;</code></p>
 		<br />
 		<label for="auhfc_footer"><?php esc_html_e( 'Footer Code', 'head-footer-code' ); ?></label><br />
 		<textarea name="auhfc[footer]" id="auhfc_footer" class="widefat code" rows="5"><?php echo esc_textarea( auhfc_get_meta( 'footer' ) ); ?></textarea>
-		<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/script.js"&gt;&lt;/script&gt;</code></p>
+		<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;script src="<?php echo get_stylesheet_directory_uri(); ?>/script.js" type="text/javascript"&gt;&lt;/script&gt;</code></p>
 		<script type="text/javascript">
 		(function(){
 			'use strict';

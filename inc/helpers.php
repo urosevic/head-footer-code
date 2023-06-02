@@ -10,16 +10,6 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-// Include back-end/front-end resources.
-if ( is_admin() ) {
-	require_once HFC_DIR_INC . 'settings.php';
-	require_once HFC_DIR_INC . 'posts-custom-columns.php';
-	require_once HFC_DIR_INC . 'class-auhfc-meta-box.php';
-	require_once HFC_DIR_INC . 'auhfc-category-meta-box.php';
-} else {
-	require_once HFC_DIR_INC . 'front.php';
-}
-
 register_activation_hook( HFC_FILE, 'auhfc_activate' );
 /**
  * Plugin Activation hook function to check for Minimum PHP and WordPress versions
@@ -55,15 +45,32 @@ function auhfc_activate() {
 	);
 
 	// Trigger updater function.
-	auhfc_maybe_update();
+	auhfc_plugins_loaded();
 } // END function auhfc_activate()
 
-// Regular update trigger.
-add_action( 'plugins_loaded', 'auhfc_maybe_update' );
+// Include back-end/front-end resources and maybe update settings.
+add_action( 'plugins_loaded', 'auhfc_plugins_loaded' );
 /**
  * Function to check and run if update has to be done
  */
-function auhfc_maybe_update() {
+function auhfc_plugins_loaded() {
+	// Include back-end/front-end resources based on capabilities.
+	// https://wordpress.org/documentation/article/roles-and-capabilities/
+	if ( is_admin() ) {
+		if ( current_user_can( 'publish_posts' ) ) {
+			if ( current_user_can( 'manage_options' ) ) {
+				require_once HFC_DIR_INC . 'settings.php';
+			}
+			require_once HFC_DIR_INC . 'posts-custom-columns.php';
+			require_once HFC_DIR_INC . 'class-auhfc-meta-box.php';
+			if ( current_user_can( 'manage_categories' ) ) {
+				require_once HFC_DIR_INC . 'auhfc-category-meta-box.php';
+			}
+		}
+	} else {
+		require_once HFC_DIR_INC . 'front.php';
+	}
+
 	// Bail if this plugin data doesn't need updating.
 	if ( get_option( 'auhfc_db_ver' ) >= HFC_VER_DB ) {
 		return;
@@ -72,7 +79,7 @@ function auhfc_maybe_update() {
 	require_once( HFC_DIR_INC . '/update.php' );
 	// Trigger update function.
 	auhfc_update();
-} // END function auhfc_maybe_update()
+} // END function auhfc_plugins_loaded()
 
 add_action( 'admin_enqueue_scripts', 'auhfc_admin_enqueue_scripts' );
 /**
@@ -93,7 +100,7 @@ function auhfc_admin_enqueue_scripts( $hook ) {
 		
 	}
 	// Codemirror Assets.
-	if ( 'tools_page_' . HFC_PLUGIN_SLUG === $hook || 'post.php' === $hook ) {
+	if ( 'tools_page_' . HFC_PLUGIN_SLUG === $hook || 'post.php' === $hook || ('term.php' === $hook && !empty($_GET['taxonomy']) && 'category' === $_GET['taxonomy']) ) {
 		$cm_settings['codeEditor'] = wp_enqueue_code_editor(
 			array(
 				'type' => 'text/html',
