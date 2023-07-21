@@ -78,13 +78,13 @@ abstract class AUHfc_Meta_Box {
 		<?php
 		if ( ! current_user_can( 'manage_options' ) ) {
 			$allowed_managers = is_multisite() ? esc_html__( 'Super Admin' ) . ' ' . esc_html__( 'and' ) . ' ' . esc_html__( 'Administrator' ) : esc_html__( 'Administrator' );
-		printf(
+			printf(
 				/* translators: 1: </head>, 2: <body>, 3: </body>, 4: Plugin Settings page, 5: Allowed user roles */
 				esc_html__( 'Here you can insert article specific code for Head (before the %1$s), Body (after the %2$s) and Footer (before the %3$s) sections. They work in exactly the same way as site-wide code, which %6$s can configure under %5$s. Please note, if you leave empty any of article-specific fields and choose replace behavior, site-wide code will not be removed until you add empty space or empty HTML comment %4$s here.', 'head-footer-code' ),
-			'<code>&lt;/head&gt;</code>',
-			'<code>&lt;body&gt;</code>',
-			'<code>&lt;/body&gt;</code>',
-			'<code>&lt;!-- --&gt;</code>',
+				'<code>&lt;/head&gt;</code>',
+				'<code>&lt;body&gt;</code>',
+				'<code>&lt;/body&gt;</code>',
+				'<code>&lt;!-- --&gt;</code>',
 				esc_html__( 'Tools' ) . ' > ' . esc_html__( 'Head &amp; Footer Code', 'head-footer-code' ),
 				$allowed_managers
 			);
