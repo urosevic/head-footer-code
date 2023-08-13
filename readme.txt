@@ -19,24 +19,19 @@ Easy add site-wide, category and article specific custom code before the closing
 
 Go to **Tools** &rarr; **Head &amp; Footer Code** in WordPress Dashboard. Insert custom code to HEAD, BODY or FOOTER section (depending on what you have to do).
 
-If your WordPress shows the latest blog posts on the homepage, you can also add specific code only for the homepage on **Tools** &rarr; **Head &amp; Footer Code** (there will be section **Head, body and footer code on Homepage in Blog Posts mode**)
+All magic is done by hooking to WordPress hooks `wp_head`, `wp_footer` and `wp_body_open`.
 
-To insert custom code specific for individual article (post, page or custom post type), use article-specific Metabox while editing post/page/custom post type (check out [Screenshots](https://wordpress.org/plugins/head-footer-code/#screenshots)). There choose if that specific code appends to site-wide code defined on **Tools** &rarr; **Head &amp; Footer Code**, or to replace it.
 
-Since version 1.2.5 you can also define Category specific code on each individual category.
-Other taxonomies (tag and custom taxonomy) do not have their specific code. Global code uses instead for them.
+> 💡 Trial Head &amp; Footer Code plugin on a free dummy website before you add it on your project: [Test It Now!](https://tastewp.com/new/?pre-installed-plugin-slug=head-footer-code)
 
-This magic is done by hooking to WordPress hooks `wp_head`, `wp_footer` and `wp_body_open`.
-
-https://www.youtube.com/watch?v=Gd41Dv09UC4
 
 Various code snippets are supported, including but not limited to:
 
-* Google Analytics
+* Google Analytics 4
 * Google Tag Manager
 * Google Ads Conversion
 * Lite Analytics
-* Facebook Pixel
+* Facebook/Meta Pixel
 * Hotjar
 * FullStory
 * Google site verification
@@ -45,32 +40,57 @@ Various code snippets are supported, including but not limited to:
 * Alexa site verification
 
 
-### Works or broken?
+### Homepage in Blog Posts mode
 
-If **Head &amp; Footer Code** does not work on your WordPress project, please let us know by [raising a new support ticket](https://wordpress.org/support/plugin/head-footer-code/#new-topic-0) in the [Community Forum](https://wordpress.org/support/plugin/head-footer-code/) and describe what does not works and how to reproduce the issue. We will make sure to resolve the issue as soon as possible.
+If your WordPress shows the latest blog posts on the homepage, you can also add specific code only for the homepage on **Tools** &rarr; **Head &amp; Footer Code** (there will be section **Head, body and footer code on Homepage in Blog Posts mode**)
+
+
+### Article specific code
+
+To insert custom code specific for individual article (post, page or custom post type), use article-specific Metabox while editing post/page/custom post type (check out [Screenshots](https://wordpress.org/plugins/head-footer-code/#screenshots)). There choose if that specific code appends to site-wide code defined on **Tools** &rarr; **Head &amp; Footer Code**, or to replace it.
+
+
+### Category specific code
+
+You can also define a Category specific code on each individual category.
+
+Other taxonomies (tag and custom taxonomy) do not have available their specific code, but for them a Global code is used instead.
+
+
+### Video guide
+
+https://www.youtube.com/watch?v=Gd41Dv09UC4
+
+
+### Do you need our support?
+
+If **Head &amp; Footer Code** does not work on your project, please let us know by [raising a new support ticket](https://wordpress.org/support/plugin/head-footer-code/#new-topic-0) in the [Community Forum](https://wordpress.org/support/plugin/head-footer-code/) and describe what does not works and how to reproduce the issue. We will make sure to resolve the issue as soon as possible.
 
 If you find **Head &amp; Footer Code** useful for your project, please [review plugin](https://wordpress.org/support/plugin/head-footer-code/reviews/#new-post).
 
 
 ### Features
 
-* Set site-wide custom content for head page section (before the `</head>`)
-* Set site-wide custom content for body section (after the `<body>`) - **Requires WordPress 5.2!**
-* Set site-wide custom content for footer page section (before the `</body>`)
-* **[NEW in 1.2]** Set homepage specific custom code for head, body and/or footer if Homepage mode is se to Blog Posts
-* **[NEW in 1.3.1]** Toggle homepage specific custom code on paged Homepage in Blog Posts mode (page 2, 3, a nd so on)
-* Set article specific custom code for head page section (before the `</head>`)
-* Set article specific custom code for body section (after the `<body>`) - **Requires WordPress 5.2!**
-* Set article specific custom content for footer page section (before the `</body>`)
-* **[NEW in 1.3.0]** Set category specific custom code for head, body and/or footer of the page
+* **Multisite** and **PHP 8.2** compatible!
+* Set site-wide custom content for:
+  * head page section (before the `</head>`)
+  * body section (after the `<body>`) - **Requires WordPress 5.2!**
+  * footer page section (before the `</body>`)
+* Homepage in Blog Posts mode:
+  * set homepage specific custom code for head, body and/or footer
+  * toggle homepage specific custom code on paged Homepage (page 2, 3, a nd so on)
+* Set article specific custom code for:
+  * head page section (before the `</head>`)
+  * body section (after the `<body>`) - **Requires WordPress 5.2!**
+  * footer page section (before the `</body>`)
+* Set category specific custom code for head, body and/or footer of the page
 * Choose priority of printed custom code to head/body/footer sections (lower number mean far from `</head>` and `</body>` and closer to `<body>`, higher number means closer to `</head>` and `</body>` and farther to `<body>`)
 * Choose which post types will have enabled article specific head/body/footer fields
 * Choose should article specific head/body/footer code be appended to site-wide code, or will replace site-wide code
-* **[NEW in 1.2.1]** View on Posts/Pages/Custom Post Types listing if article has defined any article specific custom code
-* Site-wide section located under **Tools** > **Head & Footer Code**
+* View on Posts/Pages/Custom Post Types listing if article has defined any article specific custom code
+* Site-wide section is located under **Tools** > **Head & Footer Code**
 * If you have set WP_DEBUG constant in `wp-config.php` to `true`, you'll see site-wide and article specific entries in page source code wrapped to comments.
-* **Multisite** is supported.
-* **PHP 8.2** compatible!
+
 
 ### Data stored in database
 
@@ -84,11 +104,9 @@ In case you wish to reinstall plugin, **DO NOT UNINSTALL IT** although **Deactiv
 
 ### Permissions on Multisite WordPress
 
-| Feature           | Super Admin | Administrator | Editor | Author | Contributor | Subscriber |
-|-------------------|-------------|---------------|--------|--------|-------------|------------|
-| Global            |      Y      |       Y       |    N   |    N   |      N      |      N     |
-| Article specific  |      Y      |       Y       |    Y   |    Y   |      N      |      N     |
-| Category specific |      Y      |       Y       |    N   |    N   |      N      |      N     |
+1. Access to **Global**: only Super Admin and Administrator
+1. Access to **Article specific**: Super Admin, Administrator, Editor and Author
+1. Access to **Category specific**: only Super Admin and Administrator
 
 
 ## Installation
@@ -136,11 +154,15 @@ This feature is implemented since WordPress version 5.2 and requires theme compa
 
 To make sure if theme you use supports [wp_body_open](https://developer.wordpress.org/reference/hooks/wp_body_open/) hook, open in code editor `header.php` file from theme you use, and check if right after opening `<BODY>` tag there is following code (if it does not exists, add it or ask some developer to do that for you):
 
-```
+`
 if ( function_exists( 'wp_body_open' ) ) {
     wp_body_open();
 }
-```
+`
+
+### Where do I report security bugs found in this plugin?
+
+Please report security bugs found in the source code of the Head & Footer Code plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/head-footer-code). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
 
 
 ## Screenshots
@@ -190,113 +212,3 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 * Improve: Important notes on settings page.
 * Improve: README converted to MarkDown.
 * Improve: Remove PayPal logo and load minified admin stylesheet.
-
-### 1.2.4 (2021-10-15)
-
-* Tested: on WordPress 5.8.1 and PHP 8.0.9 and 8.0.11
-* Improve: clarify within article metabox on how replace behaviour for article-specific code works
-* (2021-08-23) Improve: along to FOOTER, enable processing of shortcodes in HEAD and BODY (you has to enable this opetion per location)
-
-### 1.2.3 (2021-07-19)
-
-* Tested: on WordPress 5.8-RC4 and PHP 8.0.8
-* (2021-05-04) Fix: Notice errors Trying to get property 'post_type' of non-object in inc/front.php (thanks to @tekgirlymama)
-* Improve: DRY for getting post type.
-
-### 1.2.2 (2021-04-24)
-
-* Tested: on WordPress 5.7.1
-* (2021-02-01) Fix: Noice errors in update script (thanks to @swinggraphics)
-* Improve: wording on post/page listing
-
-### 1.2.1
-
-* Add: Head & Footer Code column to post/page/custom post type listing to show if/what article specific custom code is defined
-* Fix: in_array() expects parameter 2 to be array, null given in head-footer-code/inc/front.php on line 46, 111, and 176
-
-### 1.2
-
-* Add: custom head, body and footer code for Homepage in Blog Posts mode.
-* Fix: Code Editor broken in WordPress 5.5 release.
-* Fix: Invalid requests while saving settings https://github.com/urosevic/head-footer-code/issues/1
-* Improve: DRY for front-end conditions.
-* Improve: translators tips for complex strings.
-* Improve: all strings available to localize.
-
-### 1.1.1
-
-* Tested: on WordPress 5.4.1, 5.5-RC2-48768 with PHP 7.4.1
-* Add: Video tutorial on how to install, configure and use Head & Footer Code plugin
-
-### 1.1.0
-
-* Tested: on WordPress 5.1.4, 5.3.2 and 5.4-beta3 with PHP 7.2.15 and 7.3.7
-* Fix: Backslashes are removed on post/page update in article specific HEAD/BODY/FOOTER code reported by @asherber (`update_post_meta` pass key and value to `update_metadata` which expect them slashed key and value)
-* Add: Support for `wp_body_open` Body hook introduced in WordPress 5.2
-* Add: Backward compatibility for `wp_body_open` for older WordPress installations
-* Add: FAQ Instructions on how to implement support for `wp_body_open` to any theme
-* Update: Links and wording on plugin settings page
-* Update: Screenshots
-
-### 1.0.9.1
-
-* Fix: Fatal Error on Multisite WP's (thanks @kunzemarketing for reporting)
-* Improve: DRI for front-end debugging
-
-### 1.0.9
-
-* Add: Descriptive post types and descriptions for article specific sections
-* Add: Option to process shortcodes in FOOTER section (global setting for site-wide and article specific)
-* Change: Separate priority for HEAD and FOOT so admin can choose different priorities for header and footer
-* Add: CodeMirror code editor for HEAD and FOOTER code in plugin settings
-* Add: Plugin activation hook to prevent fatal errors in case of legacy WP and/or PHP
-* Improve: Loading security
-
-### 1.0.8
-
-* Test compatibility with WordPress 5.1.1 and PHP 7.2.15
-* Change: Meta boxes layout and type of behavior selector
-* Change: Convert Post metaboxes to OOP
-* Change: GNU GPL license to v3
-* Add: Bundle GNU GPLv3 license to plugin codebase
-* Update: Screenshots
-
-### 1.0.7
-* Compatibility check: Tested for WordPress 4.7.1
-* UX: Add right hand sidebar on global settings page with links to donate, FAQ, Community support and plugin Reviews page.
-* UX: Set monospaced font for textareas on global settings and article pages
-
-### 1.0.6
-
-* Fix: `PHP Notice:  Trying to get property of non-object in \wp-content\plugins\head-footer-code\inc\front.php on line 41`.
-* Fix: Overwrite footer content for post/page if post/page template after content have another WP Loop query (like recent posts WP Widget in RHS sidebar).
-* Optimize: Avoid reading post meta if not singular or post type not enabled
-* Tested in Multisite environment (main and other network websites) on WordPress v4.5-alpha-36504 and theme Twenty Sixteen v1.2-alpha.
-
-### 1.0.5
-
-* Enhance: Add uninstall routine to make some housekeeping on plugin removal.
-* Enhance: Add post type in debug comments.
-* Readme: Test on WordPress v4.4-beta1 and updated compatibility.
-
-### 1.0.4
-
-* Fix: PHP Warning:  in_array() expects parameter 2 to be array, string given (introduced in v1.0.3)
-
-### 1.0.3
-
-* Change: Make even default WP post types `post` and `page` optional for page specific head/footer code
-
-### 1.0.2
-
-* Change: Replace PayPal donation links to prevent account limitations if plugin is used on website that violates PayPal's Acceptable Use Policy
-
-### 1.0.1
-
-* Fix: PHP Notice Trying to get property of non-object
-* Optimize: Remove `attachment` post type from available to select as no reason to have custom head/footer code on attachments
-* Optimize: Settings code cleanup
-
-### 1.0.0
-
-* Initial release.
