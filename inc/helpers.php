@@ -16,37 +16,32 @@ register_activation_hook( HFC_FILE, 'auhfc_activate' );
  */
 function auhfc_activate() {
 	global $wp_version;
-	$php_req = '5.6'; // Minimum version of PHP required for this plugin.
-	$wp_req  = '4.9'; // Minimum version of WordPress required for this plugin.
 
-	if ( version_compare( PHP_VERSION, $php_req, '<' ) ) {
-		$flag = 'PHP';
-	} elseif ( version_compare( $wp_version, $wp_req, '<' ) ) {
-		$flag = 'WordPress';
+	// Compare PHP and WordPress required and current versions
+	if ( version_compare( PHP_VERSION, HFC_PHP_VER, '<' ) ) {
+		$scope   = 'PHP';
+		$version = HFC_PHP_VER;
+	} elseif ( version_compare( $wp_version, HFC_WP_VER, '<' ) ) {
+		$scope   = 'WordPress';
+		$version = HFC_WP_VER;
 	} else {
-		return;
+		return '';
 	}
-	$version = 'PHP' === $flag ? $php_req : $wp_req;
+
+	// First deactivate plutin...
 	deactivate_plugins( HFC_FILE );
 
+	// ... then inform user why plugin cannot be activated
 	wp_die(
 		'<p>' . sprintf(
-			/* translators: 1: Head & Footer Code, 2: PHP or WordPress, 3: min version of PHP or WordPress */
-			esc_html__( 'The %1$s plugin requires %2$s version %3$s or greater.', 'head-footer-code' ),
+			/* translators: 1: Plugin name, 2: PHP or WordPress, 3: min version of PHP or WordPress */
+			esc_html__( 'The %1$s plugin cannot run on %2$s version older than %3$s. Please contact your host and ask them to upgrade.', 'head-footer-code' ),
 			sprintf( '<strong>%s</strong>', esc_html__( 'Head & Footer Code', 'head-footer-code' ) ),
-			$flag,
+			$scope,
 			$version
-		) . '</p>',
-		esc_html__( 'Plugin Activation Error', 'head-footer-code' ),
-		array(
-			'response'  => 200,
-			'back_link' => true,
-		)
+		) . '</p>'
 	);
-
-	// Trigger updater function.
-	auhfc_plugins_loaded();
-} // END function auhfc_activate()
+}
 
 // Include back-end/front-end resources and maybe update settings.
 add_action( 'plugins_loaded', 'auhfc_plugins_loaded' );
@@ -76,7 +71,7 @@ function auhfc_plugins_loaded() {
 		return;
 	}
 	// Require update script.
-	require_once( HFC_DIR_INC . '/update.php' );
+	require_once HFC_DIR_INC . '/update.php';
 	// Trigger update function.
 	auhfc_update();
 } // END function auhfc_plugins_loaded()
@@ -84,11 +79,10 @@ function auhfc_plugins_loaded() {
 add_action( 'admin_enqueue_scripts', 'auhfc_admin_enqueue_scripts' );
 /**
  * Enqueue admin styles and scripts to enable code editor in plugin settings and custom column on article listing
- * 
+ *
  * @param  string $hook Current page hook.
  */
 function auhfc_admin_enqueue_scripts( $hook ) {
-
 	// Admin Stylesheet.
 	if ( in_array( $hook, array( 'post.php', 'edit.php', 'tools_page_' . HFC_PLUGIN_SLUG ), true ) ) {
 		wp_enqueue_style(
@@ -97,16 +91,23 @@ function auhfc_admin_enqueue_scripts( $hook ) {
 			array(),
 			HFC_VER
 		);
-		
 	}
 	// Codemirror Assets.
-	if ( 'tools_page_' . HFC_PLUGIN_SLUG === $hook || 'post.php' === $hook || ('term.php' === $hook && !empty($_GET['taxonomy']) && 'category' === $_GET['taxonomy']) ) {
+	if (
+		'tools_page_' . HFC_PLUGIN_SLUG === $hook ||
+		'post.php' === $hook ||
+		(
+			'term.php' === $hook &&
+			! empty( $_GET['taxonomy'] ) &&
+			'category' === $_GET['taxonomy']
+			)
+		) {
 		$cm_settings['codeEditor'] = wp_enqueue_code_editor(
 			array(
-				'type' => 'text/html',
+				'type'       => 'text/html',
 				'codemirror' => array(
 					'autoRefresh' => true, // Deal with metaboxes rendering
-					'extraKeys' => array(
+					'extraKeys'   => array(
 						'Tab' => 'indentMore', // Enable TAB indent
 					),
 				),
@@ -125,7 +126,6 @@ function auhfc_admin_enqueue_scripts( $hook ) {
  * @return array Arary of defined global values.
  */
 function auhfc_settings() {
-
 	$defaults                = array(
 		'sitewide' => array(
 			'head'           => '',
@@ -167,7 +167,6 @@ function auhfc_settings() {
  * @return string             Post meta field value.
  */
 function auhfc_get_meta( $field_name = '', $post_id = null ) {
-
 	if ( empty( $field_name ) ) {
 		return false;
 	}
@@ -211,7 +210,7 @@ function auhfc_get_meta( $field_name = '', $post_id = null ) {
 
 /**
  * Return debugging string if WP_DEBUG constant is true.
- * 
+ *
  * @param  string $scope    Scope of output (s - SITE WIDE, a - ARTICLE SPECIFIC, h - HOMEPAGE).
  * @param  string $location Location of output (h - HEAD, b - BODY, f - FOOTER).
  * @param  string $message  Output message.
@@ -299,10 +298,10 @@ function auhfc_is_homepage_blog_posts() {
  *
  * @return bool
  */
-function auhfc_add_to_homepage_paged($is_homepage_blog_posts, $auhfc_settings) {
+function auhfc_add_to_homepage_paged( $is_homepage_blog_posts, $auhfc_settings ) {
 	if (
 		true === $is_homepage_blog_posts
-		&& !empty($auhfc_settings['homepage']['paged'])
+		&& ! empty( $auhfc_settings['homepage']['paged'] )
 		&& 'no' === $auhfc_settings['homepage']['paged']
 		&& is_paged()
 	) {
@@ -372,27 +371,25 @@ function auhfc_print_sitewide(
 		if (
 			'replace' !== $behavior ||
 			( 'replace' === $behavior && empty( $code ) )
-		) { return true; }
-	}
-	// On category page print site wide if...
-	else if ( $is_category ) {
+		) {
+			return true;
+		}
+	} elseif ( $is_category ) { // On category page print site wide if...
 		// ... behavior is not replace, or...
 		// ... behavior is replace but category content is empty.
-		if ( 
+		if (
 			'replace' !== $behavior ||
 			( 'replace' === $behavior && empty( $code ) )
 		) {
 			return true;
 		}
-	}
-	// On Blog Post or Custom Post Type ...
-	else if (
+	} elseif ( // On Blog Post or Custom Post Type ...
 		// ... article behavior is not replace, or...
 		// ... article behavior is replace but current Post Type is not in allowed Post Types, or...
 		// ... article behavior is replace and current Post Type is in allowed Post Types but article code is empty.
 		'replace' !== $behavior ||
-		( 'replace' === $behavior && ! in_array( $post_type, $post_types ) ) ||
-		( 'replace' === $behavior && in_array( $post_type, $post_types ) && empty( $code ) )
+		( 'replace' === $behavior && ! in_array( $post_type, $post_types, true ) ) ||
+		( 'replace' === $behavior && in_array( $post_type, $post_types, true ) && empty( $code ) )
 	) {
 		return true;
 	}

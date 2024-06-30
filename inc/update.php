@@ -46,14 +46,12 @@ function auhfc_update() {
 		// so that this process can always pick up where it left off.
 		update_option( 'auhfc_db_ver', $current_db_ver );
 	}
-
 } // END function auhfc_update()
 
 /**
  * Initialize updater
  */
 function auhfc_update_1() {
-
 	// Get options from DB.
 	$defaults = get_option( 'auhfc_settings' );
 	if ( ! is_array( $defaults ) ) {
@@ -74,14 +72,12 @@ function auhfc_update_1() {
 		// Save settings to DB.
 		update_option( 'auhfc_settings', $defaults );
 	}
-
 } // END function auhfc_update_1()
 
 /**
  * Add shortcode processor option
  */
 function auhfc_update_2() {
-
 	// Get options from DB.
 	$defaults = get_option( 'auhfc_settings' );
 	if ( ! is_array( $defaults ) ) {
@@ -94,14 +90,12 @@ function auhfc_update_2() {
 	}
 	// Save settings to DB.
 	update_option( 'auhfc_settings', $defaults );
-
 } // END function auhfc_update_2()
 
 /**
  * Initialize updater
  */
 function auhfc_update_3() {
-
 	// Get options from DB.
 	$defaults = get_option( 'auhfc_settings' );
 	if ( ! is_array( $defaults ) ) {
@@ -119,14 +113,12 @@ function auhfc_update_3() {
 
 	// Save settings to DB.
 	update_option( 'auhfc_settings', $defaults );
-
 } // END function auhfc_update_3()
 
 /**
  * Add homepage blog posts code defaults
  */
 function auhfc_update_4() {
-
 	// Get options from DB.
 	$defaults = get_option( 'auhfc_settings' );
 	if ( ! is_array( $defaults ) ) {
@@ -152,14 +144,12 @@ function auhfc_update_4() {
 
 	// Save settings to DB.
 	update_option( 'auhfc_settings', $defaults );
-
 } // END function auhfc_update_4()
 
 /**
  * Split settings to 3 options (v1.2)
  */
 function auhfc_update_5() {
-
 	// Get options from DB.
 	$defaults = get_option( 'auhfc_settings' );
 	if ( ! is_array( $defaults ) ) {
@@ -189,7 +179,6 @@ function auhfc_update_5() {
 
 	// Now delete old single option.
 	delete_option( 'auhfc_settings' );
-
 } // END function auhfc_update_5()
 
 /**

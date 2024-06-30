@@ -33,7 +33,6 @@ add_action( 'wp_footer', 'auhfc_wp_footer', $auhfc_settings['sitewide']['priorit
  * Inject site-wide and Homepage or Article specific head code before </head>
  */
 function auhfc_wp_head() {
-
 	// Get variables to test.
 	$auhfc_settings         = auhfc_settings();
 	$auhfc_post_type        = auhfc_get_post_type();
@@ -96,14 +95,12 @@ function auhfc_wp_head() {
 
 	// Print prepared code.
 	echo ( 'y' === $auhfc_settings['sitewide']['do_shortcode_h'] ) ? do_shortcode( $out ) : $out;
-
 } // END function auhfc_wp_head()
 
 /**
  * Inject site-wide and Article specific body code right after opening <body>
  */
 function auhfc_wp_body() {
-
 	// Get variables to test.
 	$auhfc_settings         = auhfc_settings();
 	$auhfc_post_type        = auhfc_get_post_type();
@@ -166,14 +163,12 @@ function auhfc_wp_body() {
 
 	// Print prepared code.
 	echo ( 'y' === $auhfc_settings['sitewide']['do_shortcode_b'] ) ? do_shortcode( $out ) : $out;
-
 } // END function auhfc_wp_body()
 
 /**
  * Inject site-wide and Article specific footer code before the </body>
  */
 function auhfc_wp_footer() {
-
 	// Get variables to test.
 	$auhfc_settings         = auhfc_settings();
 	$auhfc_post_type        = auhfc_get_post_type();
@@ -236,7 +231,6 @@ function auhfc_wp_footer() {
 
 	// Print prepared code.
 	echo ( 'y' === $auhfc_settings['sitewide']['do_shortcode_f'] ) ? do_shortcode( $out ) : $out;
-
 } // END function auhfc_wp_footer()
 
 /**

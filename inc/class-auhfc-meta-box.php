@@ -14,12 +14,10 @@ if ( ! defined( 'WPINC' ) ) {
  * Class to compose Head & Footer article metabox
  */
 abstract class AUHfc_Meta_Box {
-
 	/**
 	 * This function adds a meta box with a callback function of my_metabox_callback()
 	 */
 	public static function add() {
-
 		$auhfc_settings = auhfc_settings();
 
 		if ( empty( $auhfc_settings['article']['post_types'] ) ) {
@@ -35,7 +33,6 @@ abstract class AUHfc_Meta_Box {
 				'low'
 			);
 		}
-
 	} // END public static function add()
 
 	/**
@@ -66,7 +63,6 @@ abstract class AUHfc_Meta_Box {
 				update_post_meta( $post_id, '_auhfc', wp_slash( $auhfc ) );
 			}
 		}
-
 	} // END fpublic static function save( $post_id )
 
 	/**
@@ -131,7 +127,6 @@ abstract class AUHfc_Meta_Box {
 		</script>
 		<?php
 	} // END public static function html()
-
 } // END class AUHfc_Meta_Box
 
 /**

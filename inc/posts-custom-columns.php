@@ -111,5 +111,4 @@ function auhfc_posts_custom_columns( $column, $post_id ) {
 			'<div class="badges">' . implode( '', $sections ) . '</div>' // 5
 		);
 	}
-
 } // END function auhfc_posts_custom_columns( $column, $post_id )

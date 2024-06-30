@@ -4,4 +4,3 @@
  *
  * @package Head_Footer_Code
  */
-

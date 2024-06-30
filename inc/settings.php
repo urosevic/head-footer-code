@@ -26,7 +26,6 @@ add_filter( 'plugin_row_meta', 'auhfc_add_plugin_meta_links', 10, 2 );
  * Add submenu for Head & Footer code to Tools.
  */
 function auhfc_add_admin_menu() {
-
 	add_submenu_page(
 		'tools.php',         // Parent Slug.
 		HFC_PLUGIN_NAME,     // Page Title.
@@ -35,7 +34,6 @@ function auhfc_add_admin_menu() {
 		HFC_PLUGIN_SLUG,  // Menu Slug.
 		'auhfc_options_page' // Position.
 	);
-
 }
 
 /**
@@ -43,7 +41,6 @@ function auhfc_add_admin_menu() {
  * define section and settings fields
  */
 function auhfc_settings_init() {
-
 	/**
 	 * Get settings from options table
 	 */
@@ -466,7 +463,6 @@ function auhfc_settings_init() {
 		'head_footer_code_settings', // Option group.
 		'auhfc_settings_article'     // Option name.
 	);
-
 } // END function auhfc_settings_init()
 
 /**
@@ -514,7 +510,6 @@ function auhfc_number_field_render( $args ) {
  * @param array $args Array of arguments (items, value, field, class, description).
  */
 function auhfc_checkbox_group_field_render( $args ) {
-
 	if ( empty( $args ) ) {
 		return;
 	}
@@ -547,7 +542,6 @@ function auhfc_checkbox_group_field_render( $args ) {
 	}
 
 	echo '</fieldset>';
-
 } // END function auhfc_checkbox_group_field_render( $args )
 
 /**
@@ -620,7 +614,7 @@ function auhfc_options_page() {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'head-footer-code' ) );
 	}
 	// Render the settings template.
-	include( HFC_DIR . '/templates/settings.php' );
+	include HFC_DIR . '/templates/settings.php';
 } // END function auhfc_options_page()
 
 /**
@@ -646,12 +640,10 @@ function auhfc_plugin_settings_link( $links ) {
  * @return array       Array of default plugin meta links with appended link for Support community forum
  */
 function auhfc_add_plugin_meta_links( $links, $file ) {
-
 	if ( plugin_basename( HFC_PLUGIN_FILE ) === $file ) {
 		$links[] = '<a href="https://wordpress.org/support/plugin/head-footer-code/" target="_blank">' . esc_html__( 'Support' ) . '</a>';
 	}
 
 	// Return updated array of links
 	return $links;
-
 } // END function auhfc_add_plugin_meta_links( $links, $file )
