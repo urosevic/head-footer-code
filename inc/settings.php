@@ -625,10 +625,9 @@ function auhfc_options_page() {
  * @return array        Array of plugin links with appended link for Settings page
  */
 function auhfc_plugin_settings_link( $links ) {
-	$links[] = '<a href="' . esc_url( admin_url( 'tools.php?page=' . HFC_PLUGIN_SLUG ) ) . '">' . esc_html__( 'Settings' ) . '</a>';
-
-	// Return updated array of links
-	return $links;
+	$settings_link = '<a href="' . esc_url( admin_url( 'tools.php?page=' . HFC_PLUGIN_SLUG ) ) . '">' . esc_html__( 'Settings' ) . '</a>';
+	array_unshift( $links, $settings_link );
+	return $links; // Return updated array of links
 } // END function auhfc_plugin_settings_link( $links )
 
 /**

@@ -4,8 +4,8 @@ Contributors: urkekg, techwebux
 Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: head, header, footer, body, scripts, wp_head, wp_footer, wp_body_open, head footer code, custom script
 Requires at least: 4.9
-Tested up to: 6.5.5
-Stable tag: 1.3.4
+Tested up to: 6.6
+Stable tag: 1.3.5
 Requires PHP: 5.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -186,6 +186,10 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 
 
 ## Changelog
+
+### 1.3.5 (2024-07-06)
+* Tested: PHP 8.3.7 and WordPress 6.6 with Twenty Twenty-Four theme 1.1 (Single and Multisite)
+* Change: Move the `Settings` link on plugins listing to 1st position
 
 ### 1.3.4 (2024-06-30)
 * Tested: PHP 8.3.7 and WordPress 6.5.5 with Twenty Twenty-Four theme 1.1 (Single and Multisite)
