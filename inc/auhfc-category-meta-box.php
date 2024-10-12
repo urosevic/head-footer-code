@@ -31,33 +31,44 @@ function auhfc_category_form_fields( $term_object ) {
 		);
 	}
 	?>
-	<h2><?php esc_html_e( 'Head & Footer Code', 'head-footer-code' ); ?></h2>
+	<h2><?php echo esc_html( HFC_PLUGIN_NAME ); ?></h2>
 	<p>
 	<?php
+	printf(
+		/* translators: 1: translated 'category specific', 2: </head>, 3: <body>, 4: </body> */
+		esc_html__( 'Here you can insert %1$s code for HEAD (before the %2$s), BODY (after the %3$s) and FOOTER (before the %4$s) sections.', 'head-footer-code' ),
+		__( 'category specific', 'head-footer-code' ),
+		'<code>&lt;/head&gt;</code>',
+		'<code>&lt;body&gt;</code>',
+		'<code>&lt;/body&gt;</code>'
+	);
+
+	echo '<br>';
+	// One who can manage options and modify category settings
 	if ( ! current_user_can( 'manage_options' ) ) {
-		$allowed_managers = is_multisite() ? esc_html__( 'Super Admin' ) . ' ' . esc_html__( 'and' ) . ' ' . esc_html__( 'Administrator' ) : esc_html__( 'Administrator' );
+		$allowed_managers  = is_multisite() ? __( 'Super Admin', 'head-footer-code' ) . ' ' . __( 'and', 'head-footer-code' ) : '';
+		$allowed_managers .= __( 'Administrator', 'head-footer-code' );
 		printf(
-			/* translators: 1: </head>, 2: <body>, 3: </body>, 4: Plugin Settings page, 5: Allowed user roles */
-			esc_html__( 'Here you can insert category specific code for Head (before the %1$s), Body (after the %2$s) and Footer (before the %3$s) sections. They work in exactly the same way as site-wide code, which %6$s can configure under %5$s. Please note, if you leave empty any of category-specific fields and choose replace behavior, site-wide code will not be removed until you add empty space or empty HTML comment %4$s here.', 'head-footer-code' ),
-			'<code>&lt;/head&gt;</code>',
-			'<code>&lt;body&gt;</code>',
-			'<code>&lt;/body&gt;</code>',
-			'<code>&lt;!-- --&gt;</code>',
-			esc_html__( 'Tools' ) . ' > ' . esc_html__( 'Head &amp; Footer Code', 'head-footer-code' ),
+			/* translators: 1: User role(s) that can manage options (Super Admin and/or Administrator), 2: Path/Name of Plugin Settings page */
+			esc_html__( 'They work in exactly the same way as site-wide code, which %1$s can configure under %2$s.', 'head-footer-code' ),
+			__( 'Tools', 'head-footer-code' ) . ' > ' . HFC_PLUGIN_NAME,
 			$allowed_managers
 		);
-
 	} else {
 		printf(
-			/* translators: 1: </head>, 2: <body>, 3 </body>, 4: link to Head & Footer Code Settings page */
-			esc_html__( 'Here you can insert category specific code for Head (before the %1$s), Body (after the %2$s) and Footer (before the %3$s) sections. They work in exactly the same way as site-wide code, which you can configure under %5$s. Please note, if you leave empty any of category-specific fields and choose replace behavior, site-wide code will not be removed until you add empty space or empty HTML comment %4$s here.', 'head-footer-code' ),
-			'<code>&lt;/head&gt;</code>',
-			'<code>&lt;body&gt;</code>',
-			'<code>&lt;/body&gt;</code>',
-			'<code>&lt;!-- --&gt;</code>',
-			'<a href="tools.php?page=' . HFC_PLUGIN_SLUG . '">' . esc_html__( 'Tools / Head &amp; Footer Code', 'head-footer-code' ) . '</a>'
+			/* translators: Link to Plugin Settings page */
+			esc_html__( 'They work in exactly the same way as site-wide code, which you can configure under %s.', 'head-footer-code' ),
+			'<a href="tools.php?page=' . HFC_PLUGIN_SLUG . '">' . __( 'Tools', 'head-footer-code' ) . ' > ' . HFC_PLUGIN_NAME . '</a>'
 		);
 	}
+
+	echo '<br>';
+	printf(
+		/* translators: 1: translated 'category specific', HTML comment code */
+		esc_html__( 'Please note, if you leave empty any of %1$s fields and choose replace behavior, site-wide code will not be removed until you add empty space or empty HTML comment %2$s here.', 'head-footer-code' ),
+		__( 'category specific', 'head-footer-code' ),
+		'<code>&lt;!-- --&gt;</code>'
+	);
 	?>
 	</p>
 
@@ -77,7 +88,7 @@ function auhfc_category_form_fields( $term_object ) {
 
 			<tr class="form-field term-auhfc-head">
 				<th scope="row">
-					<label for="auhfc_head"><?php esc_html_e( 'Head Code', 'head-footer-code' ); ?></label>
+					<label for="auhfc_head"><?php esc_html_e( 'HEAD Code', 'head-footer-code' ); ?></label>
 				</th>
 				<td>
 					<textarea name="auhfc[head]" id="auhfc_head" class="widefat code" rows="5"><?php echo ! empty( $auhfc['head'] ) ? $auhfc['head'] : ''; ?></textarea>
@@ -86,7 +97,7 @@ function auhfc_category_form_fields( $term_object ) {
 			</tr>
 			<tr class="form-field term-auhfc-body">
 				<th scope="row">
-					<label for="auhfc_body"><?php esc_html_e( 'Body Code', 'head-footer-code' ); ?></label>
+					<label for="auhfc_body"><?php esc_html_e( 'BODY Code', 'head-footer-code' ); ?></label>
 				</th>
 				<td>
 					<textarea name="auhfc[body]" id="auhfc_body" class="widefat code" rows="5"><?php echo ! empty( $auhfc['body'] ) ? $auhfc['body'] : ''; ?></textarea>
@@ -95,7 +106,7 @@ function auhfc_category_form_fields( $term_object ) {
 			</tr>
 			<tr class="form-field term-auhfc-footer">
 				<th scope="row">
-					<label for="auhfc_footer"><?php esc_html_e( 'Footer Code', 'head-footer-code' ); ?></label>
+					<label for="auhfc_footer"><?php esc_html_e( 'FOOTER Code', 'head-footer-code' ); ?></label>
 				</th>
 				<td>
 					<textarea name="auhfc[footer]" id="auhfc_footer" class="widefat code" rows="5"><?php echo ! empty( $auhfc['footer'] ) ? $auhfc['footer'] : ''; ?></textarea>

@@ -36,7 +36,7 @@ function auhfc_activate() {
 		'<p>' . sprintf(
 			/* translators: 1: Plugin name, 2: PHP or WordPress, 3: min version of PHP or WordPress */
 			esc_html__( 'The %1$s plugin cannot run on %2$s version older than %3$s. Please contact your host and ask them to upgrade.', 'head-footer-code' ),
-			sprintf( '<strong>%s</strong>', esc_html__( 'Head & Footer Code', 'head-footer-code' ) ),
+			sprintf( '<strong>%s</strong>', HFC_PLUGIN_NAME ),
 			$scope,
 			$version
 		) . '</p>'
@@ -255,12 +255,13 @@ function auhfc_out( $scope = null, $location = null, $message = null, $code = nu
 			break;
 	}
 	return sprintf(
-		'<!-- Head & Footer Code: %1$s %2$s section start (%3$s) -->%5$s %4$s%5$s<!-- Head & Footer Code: %1$s %2$s section end (%3$s) -->%5$s',
-		$scope,            // 1
-		$location,         // 2
-		trim( $message ),  // 3
-		trim( $code ),     // 4
-		"\n"               // 5
+		'<!-- %1$s: %2$s %3$s section start (%4$s) -->%6$s %5$s%6$s<!-- %1$s: %2$s %3$s section end (%4$s) -->%6$s',
+		HFC_PLUGIN_NAME,  // 1
+		$scope,           // 2
+		$location,        // 3
+		trim( $message ), // 4
+		trim( $code ),    // 5
+		"\n"              // 6
 	);
 } // END function auhfc_out( $scope = null, $location = null, $message = null, $code = null )
 

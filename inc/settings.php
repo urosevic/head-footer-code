@@ -424,7 +424,7 @@ function auhfc_settings_init() {
 		'head_footer_code_settings_article',                           // Id.
 		esc_html__( 'Article specific settings', 'head-footer-code' ), // Title.
 		'auhfc_article_settings_section_description',                  // Callback.
-		HFC_PLUGIN_SLUG                                             // Page.
+		HFC_PLUGIN_SLUG                                                // Page.
 	);
 
 	// Prepare clean list of post types w/o attachment.
@@ -441,14 +441,16 @@ function auhfc_settings_init() {
 		'auhfc_post_types',                     // Id.
 		esc_html__( 'Post Types', 'head-footer-code' ), // Title.
 		'auhfc_checkbox_group_field_render',    // Vallback.
-		HFC_PLUGIN_SLUG,                     // Page.
+		HFC_PLUGIN_SLUG,                        // Page.
 		'head_footer_code_settings_article',    // Section.
 		array(                                  // Arguments.
 			'field'       => 'auhfc_settings_article[post_types]',
 			'label_for'   => 'auhfc_settings_article[post_types]',
 			'items'       => $clean_post_types,
 			'value'       => $auhfc_settings['article']['post_types'],
-			'description' => esc_html__( 'Select which post types will have Article specific section. Please note, even if you have Head/Footer Code set per article and then you disable that post type, article specific code will not be printed but only site-wide code.', 'head-footer-code' ),
+			'description' => esc_html__( 'Choose the post types that will have an article specific section.', 'head-footer-code' )
+							. ' '
+							. esc_html__( 'Note that if you add head, body, and footer code for individual articles and then disable that post type, the article-specific code will no longer be output and only the site-wide code will be used.', 'head-footer-code' ),
 			'class'       => 'checkbox',
 		)
 	);
@@ -625,7 +627,7 @@ function auhfc_options_page() {
  * @return array        Array of plugin links with appended link for Settings page
  */
 function auhfc_plugin_settings_link( $links ) {
-	$settings_link = '<a href="' . esc_url( admin_url( 'tools.php?page=' . HFC_PLUGIN_SLUG ) ) . '">' . esc_html__( 'Settings' ) . '</a>';
+	$settings_link = '<a href="' . esc_url( admin_url( 'tools.php?page=' . HFC_PLUGIN_SLUG ) ) . '">' . esc_html__( 'Settings', 'head-footer-code' ) . '</a>';
 	array_unshift( $links, $settings_link );
 	return $links; // Return updated array of links
 } // END function auhfc_plugin_settings_link( $links )
@@ -640,7 +642,7 @@ function auhfc_plugin_settings_link( $links ) {
  */
 function auhfc_add_plugin_meta_links( $links, $file ) {
 	if ( plugin_basename( HFC_PLUGIN_FILE ) === $file ) {
-		$links[] = '<a href="https://wordpress.org/support/plugin/head-footer-code/" target="_blank">' . esc_html__( 'Support' ) . '</a>';
+		$links[] = '<a href="https://wordpress.org/support/plugin/head-footer-code/" target="_blank">' . esc_html__( 'Support', 'head-footer-code' ) . '</a>';
 	}
 
 	// Return updated array of links

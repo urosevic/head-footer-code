@@ -34,7 +34,7 @@ if ( isset( $auhfc_settings['article']['post_types'] ) ) {
  * @param array $columns Array of existing columns for table.
  */
 function auhfc_posts_columns( $columns ) {
-	$columns['hfc'] = esc_html__( 'Head & Footer Code', 'head-footer-code' );
+	$columns['hfc'] = esc_html( HFC_PLUGIN_NAME );
 	return $columns;
 } // END function auhfc_posts_columns( $columns )
 

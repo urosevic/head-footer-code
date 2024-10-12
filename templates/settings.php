@@ -16,7 +16,13 @@ if ( ! defined( 'WPINC' ) ) {
 ?>
 <div class="wrap" id="head_footer_code_settings">
 	<h2>
-		<?php echo esc_html( HFC_PLUGIN_NAME . ' ' . __( 'Settings' ) ); ?>
+		<?php
+		printf(
+			/* translators: Plugin name */
+			esc_html__( '%s Settings', 'head-footer-code' ),
+			HFC_PLUGIN_NAME
+		);
+		?>
 		<span class="ver">v. <?php echo esc_html( HFC_VER ); ?></span>
 	</h2>
 	<div class="head_footer_code_wrapper">
