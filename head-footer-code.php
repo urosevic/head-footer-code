@@ -9,7 +9,7 @@
  * Plugin Name: Head & Footer Code
  * Plugin URI:  https://urosevic.net/wordpress/plugins/head-footer-code/
  * Description: Easy add site-wide, category or article specific custom code before the closing <strong>&lt;/head&gt;</strong> and <strong>&lt;/body&gt;</strong> or after opening <strong>&lt;body&gt;</strong> HTML tag.
- * Version:     1.3.6
+ * Version:     1.3.7
  * Author:      Aleksandar Urošević
  * Author URI:  https://urosevic.net/
  * License:     GPLv3
@@ -17,7 +17,7 @@
  * Text Domain: head-footer-code
  * Domain Path: /languages
  * Requires at least: 4.9
- * Tested up to: 6.6.2
+ * Tested up to: 6.7
  * Requires PHP: 5.5
  */
 
@@ -25,17 +25,13 @@
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
-if ( ! function_exists( 'get_plugin_data' ) ) {
-	require_once ABSPATH . 'wp-admin/includes/plugin.php';
-}
-$plugin_data = get_plugin_data( __FILE__ );
 
 define( 'HFC_PHP_VER', '5.5' ); // Minimum version of PHP required for this plugin.
 define( 'HFC_WP_VER', '4.9' ); // Minimum version of WordPress required for this plugin.
 define( 'HFC_VER_DB', '8' );
-define( 'HFC_VER', $plugin_data['Version'] );
+define( 'HFC_VER', '1.3.7' );
 define( 'HFC_PLUGIN_FILE', plugin_basename( __FILE__ ) );
-define( 'HFC_PLUGIN_NAME', $plugin_data['Name'] );
+define( 'HFC_PLUGIN_NAME', 'Head & Footer Code' );
 define( 'HFC_PLUGIN_SLUG', 'head-footer-code' );
 define( 'HFC_FILE', __FILE__ );
 define( 'HFC_DIR', __DIR__ );

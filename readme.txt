@@ -4,8 +4,8 @@ Contributors: urkekg, techwebux
 Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: head, body, footer, code, script
 Requires at least: 4.9
-Tested up to: 6.6.2
-Stable tag: 1.3.6
+Tested up to: 6.7
+Stable tag: 1.3.7
 Requires PHP: 5.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -186,6 +186,9 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 
 
 ## Changelog
+
+### 1.3.7 (2024-11-18)
+* Fix: Compatibility with WordPress 6.7
 
 ### 1.3.6 (2024-10-12)
 * Improve: Optimize strings for easier translation
