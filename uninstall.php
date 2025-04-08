@@ -3,6 +3,7 @@
  * Routine to fully uninstall Head & Footer Code plugin.
  *
  * @link        https://urosevic.net
+ * @link        https://www.techwebux.com
  * @since       1.0.5
  * @package     Head_Footer_Code
  */
@@ -43,5 +44,5 @@ $auhfc_category_ids = get_terms(
 	)
 );
 foreach ( $auhfc_category_ids as $category_id ) {
-	$ret = delete_term_meta( $category_id, $category_meta_key );
+	delete_term_meta( $category_id, $category_meta_key );
 }

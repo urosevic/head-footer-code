@@ -46,7 +46,7 @@ function auhfc_update() {
 		// so that this process can always pick up where it left off.
 		update_option( 'auhfc_db_ver', $current_db_ver );
 	}
-} // END function auhfc_update()
+} // END function auhfc_update
 
 /**
  * Initialize updater
@@ -72,7 +72,7 @@ function auhfc_update_1() {
 		// Save settings to DB.
 		update_option( 'auhfc_settings', $defaults );
 	}
-} // END function auhfc_update_1()
+} // END function auhfc_update_1
 
 /**
  * Add shortcode processor option
@@ -90,7 +90,7 @@ function auhfc_update_2() {
 	}
 	// Save settings to DB.
 	update_option( 'auhfc_settings', $defaults );
-} // END function auhfc_update_2()
+} // END function auhfc_update_2
 
 /**
  * Initialize updater
@@ -113,7 +113,7 @@ function auhfc_update_3() {
 
 	// Save settings to DB.
 	update_option( 'auhfc_settings', $defaults );
-} // END function auhfc_update_3()
+} // END function auhfc_update_3
 
 /**
  * Add homepage blog posts code defaults
@@ -144,7 +144,7 @@ function auhfc_update_4() {
 
 	// Save settings to DB.
 	update_option( 'auhfc_settings', $defaults );
-} // END function auhfc_update_4()
+} // END function auhfc_update_4
 
 /**
  * Split settings to 3 options (v1.2)
@@ -179,7 +179,7 @@ function auhfc_update_5() {
 
 	// Now delete old single option.
 	delete_option( 'auhfc_settings' );
-} // END function auhfc_update_5()
+} // END function auhfc_update_5
 
 /**
  * Fix PHP Warning:  in_array() expects parameter 2 to be array, null given in head-footer-code/inc/front.php on line 46, 111, and 176
@@ -194,7 +194,7 @@ function auhfc_update_6() {
 		$article['post_types'] = array();
 		update_option( 'auhfc_settings_article', $article );
 	}
-} // END function auhfc_update_6()
+} // END function auhfc_update_6
 
 /**
  * Do Shortcode per location
@@ -217,7 +217,7 @@ function auhfc_update_7() {
 	}
 	unset( $sitewide['do_shortcode'] );
 	update_option( 'auhfc_settings_sitewide', $sitewide );
-} // END function auhfc_update_7()
+} // END function auhfc_update_7
 
 /**
  * Add or not homepage in Blog Post mode on paged pages
@@ -233,4 +233,17 @@ function auhfc_update_8() {
 		$homepage['paged'] = 'yes';
 	}
 	update_option( 'auhfc_settings_homepage', $homepage );
-} // END function auhfc_update_8()
+} // END function auhfc_update_8
+
+/**
+ * Add option to allow unpriviledged user roles to manage article-specific HFC
+ */
+function auhfc_update_9() {
+	// Get options from DB.
+	$homepage = get_option( 'auhfc_settings_homepage' );
+
+	if ( empty( $homepage['allowed_roles'] ) ) {
+		$homepage['allowed_roles'] = array();
+	}
+	update_option( 'auhfc_settings_homepage', $homepage );
+} // END function auhfc_update_9
