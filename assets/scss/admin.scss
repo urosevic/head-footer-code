@@ -1,41 +1,22 @@
 $badge-border-radius: 30%;
 
 #head_footer_code_settings {
-    .ver {
-        font-size: 0.8rem;
-        line-height: 2rem;
-    }
-    .head_footer_code_wrapper {
-        display: table;
-        width: 100%;
-
-        .content_cell {
-            display: table-cell;
+    .wp-heading-inline {
+        .ver {
+            font-size: 0.8rem;
+            line-height: 2rem;
         }
-
-        .sidebar_container {
-            display: table-cell;
-            padding: 0 0 0 20px;
-            width: 25%;
-
-            .auhfc-button {
-                display: block;
-                background: #fff;
-                border-radius: 7px;
-                border: 1px solid rgba(0,0,0,0.1);
-                box-shadow: 0 0 0 5px rgba(0,0,0,0.1);
-                padding: 11px 15px;
-                white-space: nowrap;
-                line-height: 18px;
-                color: #bdbdbd;
-                text-shadow: 1px 1px #fff;
-                text-decoration: none;
-                position: relative;
-                min-width: 120px;
-
-                &:hover {
-                    color: #6796a9;
-                    background-color: #c2edff;
+        .actions {
+            display: inline;
+        }
+    }
+    .form-table {
+        .warn {
+            color: #d63638;
+            i {
+                font-style: normal;
+                &::before {
+                    content: "⚠️ ";
                 }
             }
         }
@@ -78,6 +59,16 @@ $badge-border-radius: 30%;
 
 // HFC Metabox
 #auhfc-head-footer-code {
+    .form-table {
+        tr {
+            display: flex;
+            flex-direction: column;
+            margin-top: 1rem;
+            th, td {
+                padding: 0;
+            }
+        }
+    }
     .CodeMirror {
         height: 150px;
     }
