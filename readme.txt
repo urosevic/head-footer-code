@@ -4,8 +4,8 @@ Contributors: urkekg, techwebux
 Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: head, body, footer, code, script
 Requires at least: 4.9
-Tested up to: 6.7
-Stable tag: 1.3.7
+Tested up to: 6.8
+Stable tag: 1.4.0
 Requires PHP: 5.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -90,7 +90,7 @@ If you find **Head &amp; Footer Code** useful for your project, please [review p
 * View on Posts/Pages/Custom Post Types listing if article has defined any article specific custom code
 * Site-wide section is located under **Tools** > **Head & Footer Code**
 * If you have set WP_DEBUG constant in `wp-config.php` to `true`, you'll see site-wide and article specific entries in page source code wrapped to comments.
-
+* [NEW] allow unpriviledged user roles Editor and Author to manage article-specific code on single site and multisite (disabled by default)
 
 ### Data stored in database
 
@@ -105,7 +105,7 @@ In case you wish to reinstall plugin, **DO NOT UNINSTALL IT** although **Deactiv
 ### Permissions on Multisite WordPress
 
 1. Access to **Global**: only Super Admin and Administrator
-1. Access to **Article specific**: Super Admin, Administrator, Editor and Author
+1. Access to **Article specific**: Super Admin, Administrator; **optional**: Editor and Author
 1. Access to **Category specific**: only Super Admin and Administrator
 
 
@@ -186,6 +186,26 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 
 
 ## Changelog
+
+### 1.4.0 (2025-04-08)
+* Test: WordPress 6.8.0, Twenty Twenty-Five 1.1, Astra 4.9.2 and PHP 8.3.17
+* Test: WordPress 4.9.26, Twenty Seventeen 1.7 and PHP 5.5.38
+* Unclutter Settings page
+* Improve: Security
+* Improve: Refactor and reorganise codebase
+  * auhfc_settings() -> Techwebux\Hfc\Main::settings()
+  * auhfc_is_homepage_blog_posts() -> Techwebux\Hfc\Common::is_homepage_blog_posts()
+  * auhfc_add_to_homepage_paged() -> Techwebux\Hfc\Common::add_to_homepage_paged()
+  * sanitize_html_classes() -> Techwebux\Hfc\Common::sanitize_html_classes()
+  * auhfc_allowed_code() -> Techwebux\Hfc\Common::allowed_html()
+  * auhfc_form_allowed_code() -> Techwebux\Hfc\Common::form_allowed_html()
+  * auhfc_html2code -> Techwebux\Hfc\Common::html2code()
+  * auhfc_get_meta() -> Techwebux\Hfc\Common::get_meta()
+  * auhfc_get_post_type() -> Techwebux\Hfc\Common::get_post_type()
+  * auhfc_print_sitewide() -> Techwebux\Hfc\Common::print_sitewide()
+  * auhfc_out() -> Techwebux\Hfc\Common::out()
+  * auhfc_head_note() -> Techwebux\Hfc\Settings::head_note()
+  * auhfc_body_note() -> Techwebux\Hfc\Settings::body_note()
 
 ### 1.3.7 (2024-11-18)
 * Fix: Compatibility with WordPress 6.7
