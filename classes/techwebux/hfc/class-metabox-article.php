@@ -23,11 +23,15 @@ class Metabox_Article {
 	private $settings;
 
 	public function __construct() {
-		$this->settings = Main::settings();
-		if ( is_admin() ) {
-			add_action( 'load-post.php', array( $this, 'init_metaboxes' ) );
-			add_action( 'load-post-new.php', array( $this, 'init_metaboxes' ) );
+		// Check if the current user's role has permission to edit HFC
+		if ( ! Common::user_has_allowed_role() ) {
+			return;
 		}
+
+		$this->settings = Main::settings();
+
+		add_action( 'load-post.php', array( $this, 'init_metaboxes' ) );
+		add_action( 'load-post-new.php', array( $this, 'init_metaboxes' ) );
 	} // END public function __construct
 
 	/**
@@ -44,11 +48,6 @@ class Metabox_Article {
 	public function add() {
 
 		if ( empty( $this->settings['article']['post_types'] ) ) {
-			return;
-		}
-
-		// Check if the current user has permission to edit
-		if ( ! Common::user_has_allowed_role() ) {
 			return;
 		}
 
@@ -95,11 +94,6 @@ class Metabox_Article {
 			return;
 		}
 
-		// Check if the current user has permission to edit
-		if ( ! Common::user_has_allowed_role() ) {
-			return;
-		}
-
 		// Allow safe HTML, JS, and CSS.
 		$allowed_html = Common::allowed_html();
 
@@ -119,6 +113,8 @@ class Metabox_Article {
 	public function html() {
 		/** @var string $form_scope Used in ../templates/hfc-form.php */
 		$form_scope = esc_html__( 'article specific', 'head-footer-code' );
+
+		$security_risk_notice = Common::security_risk_notice();
 
 		// Get article specific postmeta.
 		/** @var array $auhfc_form_data Used in ../templates/hfc-form.php */

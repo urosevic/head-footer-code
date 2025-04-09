@@ -60,23 +60,26 @@ class Main {
 	} // END public function activate
 
 	/**
-	 * Function to check and run if update has to be done
+	 * Function to load subclasses, check and update if it has to be done
 	 */
 	public function plugins_loaded() {
 		// Include back-end/front-end resources based on capabilities.
 		// https://wordpress.org/documentation/article/roles-and-capabilities/
-		if ( is_admin() ) {
-			if ( current_user_can( 'publish_posts' ) ) {
-				if ( current_user_can( 'manage_options' ) ) {
-					new Settings();
-				}
-				new Grid();
-				new Metabox_Article();
-				if ( current_user_can( 'manage_categories' ) ) {
-					new Metabox_Category();
-				}
+		if ( is_admin() && current_user_can( 'publish_posts' ) && Common::user_has_allowed_role() ) {
+			// Load Settings if the current user can manage options
+			if ( current_user_can( 'manage_options' ) ) {
+				new Settings();
 			}
-		} else {
+			// Always load the Grid and Metabox classes for allowed roles.
+			new Grid();
+			new Metabox_Article();
+
+			// If the user can manage categories, load the Metabox_Category class.
+			if ( current_user_can( 'manage_categories' ) ) {
+				new Metabox_Category();
+			}
+		} elseif ( ! is_admin() ) {
+			// Load front-end magic.
 			new Front();
 		}
 
@@ -84,9 +87,9 @@ class Main {
 		if ( get_option( 'auhfc_db_ver' ) >= HFC_VER_DB ) {
 			return;
 		}
-		// Require update script.
+
+		// Require update script and trigger update function.
 		require_once HFC_DIR . '/update.php';
-		// Trigger update function.
 		auhfc_update();
 	} // END public function plugins_loaded
 
@@ -133,6 +136,12 @@ class Main {
 			wp_localize_script( 'code-editor', 'cm_settings', $cm_settings );
 			wp_enqueue_style( 'wp-codemirror' );
 			wp_enqueue_script( 'wp-codemirror' );
+			wp_enqueue_style(
+				'head-footer-code-edit',
+				HFC_URL . 'assets/css/edit.min.css',
+				array(),
+				HFC_VER
+			);
 		}
 		return;
 	} // END public function admin_enqueue_scripts

@@ -20,6 +20,7 @@ class Settings {
 	private $settings;
 	public $allowed_html;
 	public $form_allowed_html;
+	public $security_risk_notice;
 
 	public function __construct() {
 		$this->settings          = Main::settings();
@@ -62,10 +63,11 @@ class Settings {
 		/**
 		 * Get settings from options table
 		 */
-		$auhfc_homepage_blog_posts = 'posts' === get_option( 'show_on_front', false ) ? true : false;
-		$wp52note                  = version_compare( get_bloginfo( 'version' ), '5.2', '<' ) ? ' ' . esc_html__( 'Requires WordPress 5.2 or later.', 'head-footer-code' ) : '';
-		$head_note                 = $this->head_note();
-		$body_note                 = $this->body_note();
+		$auhfc_homepage_blog_posts  = 'posts' === get_option( 'show_on_front', false ) ? true : false;
+		$wp52note                   = version_compare( get_bloginfo( 'version' ), '5.2', '<' ) ? ' ' . esc_html__( 'Requires WordPress 5.2 or later.', 'head-footer-code' ) : '';
+		$head_note                  = $this->head_note();
+		$body_note                  = $this->body_note();
+		$this->security_risk_notice = Common::security_risk_notice();
 
 		/**
 		 * Settings Sections are the groups of settings you see on WordPress settings pages
@@ -98,11 +100,11 @@ class Settings {
 				'label_for'   => 'auhfc_settings_sitewide[head]',
 				'label'       => __( 'HEAD Code', 'head-footer-code' ),
 				'value'       => $this->settings['sitewide']['head'],
-				'description' => $head_note . sprintf(
+				'description' => $head_note . '<p>' . sprintf(
 					/* translators: %s will be replaced with preformatted HTML tag </head> */
 					__( 'Code to enqueue in HEAD section (before the %s).', 'head-footer-code' ),
 					Common::html2code( '</head>' )
-				),
+				) . '</p>',
 				'field_class' => 'widefat code codeEditor',
 				'rows'        => 7,
 			)
@@ -161,11 +163,11 @@ class Settings {
 				'label_for'   => 'auhfc_settings_sitewide[body]',
 				'label'       => esc_html__( 'BODY Code', 'head-footer-code' ),
 				'value'       => $this->settings['sitewide']['body'],
-				'description' => $body_note . sprintf(
+				'description' => $body_note . '<p>' . sprintf(
 					/* translators: %s will be replaced with preformatted HTML tag <body> */
 					esc_html__( 'Code to enqueue in BODY section (after the %s).', 'head-footer-code' ),
 					Common::html2code( '<body>' )
-				) . $wp52note,
+				) . ' ' . $wp52note . '</p>',
 				'field_class' => 'widefat code codeEditor',
 				'rows'        => 7,
 			)
@@ -186,11 +188,11 @@ class Settings {
 					esc_html__(
 						'Priority for enqueued BODY code. Default is %1$d. Smaller number inject code closer to %2$s.',
 						'head-footer-code'
-					) . $wp52note,
+					),
 					10,
-					Common::html2code( '<body>' ),
-					$wp52note
-				),
+					Common::html2code( '<body>' )
+				)
+				. $wp52note,
 				'class'       => 'num',
 				'min'         => 1,
 				'max'         => 1000,
@@ -228,11 +230,11 @@ class Settings {
 				'label_for'   => 'auhfc_settings_sitewide[footer]',
 				'label'       => esc_html__( 'FOOTER Code', 'head-footer-code' ),
 				'value'       => $this->settings['sitewide']['footer'],
-				'description' => sprintf(
+				'description' => '<p>' . sprintf(
 					/* translators: %s will be replaced with preformatted HTML tag </body> */
 					esc_html__( 'Code to enqueue in footer section (before the %s).', 'head-footer-code' ),
 					Common::html2code( '</body>' )
-				),
+				) . '</p>',
 				'field_class' => 'widefat code codeEditor',
 				'rows'        => 7,
 			)
@@ -326,11 +328,11 @@ class Settings {
 					'label_for'   => 'auhfc_settings_homepage[head]',
 					'label'       => esc_html__( 'Homepage HEAD Code', 'head-footer-code' ),
 					'value'       => $this->settings['homepage']['head'],
-					'description' => $head_note . sprintf(
+					'description' => $head_note . '<p>' . sprintf(
 						/* translators: %s will be replaced with preformatted HTML tag </head> */
 						esc_html__( 'Code to enqueue in HEAD section (before the %s) on Homepage.', 'head-footer-code' ),
 						Common::html2code( '</head>' )
-					),
+					) . '</p>',
 					'field_class' => 'widefat code codeEditor',
 					'rows'        => 5,
 				)
@@ -347,11 +349,12 @@ class Settings {
 					'label_for'   => 'auhfc_settings_homepage[body]',
 					'label'       => esc_html__( 'Homepage BODY Code', 'head-footer-code' ),
 					'value'       => $this->settings['homepage']['body'],
-					'description' => $body_note . sprintf(
+					'description' => $body_note . '<p>' . sprintf(
 						/* translators: %s: preformatted HTML tag <body> */
 						esc_html__( 'Code to enqueue in BODY section (after the %s) on Homepage.', 'head-footer-code' ),
 						Common::html2code( '<body>' )
-					) . $wp52note,
+					) . '</p>'
+					. $wp52note,
 					'field_class' => 'widefat code codeEditor',
 					'rows'        => 5,
 				)
@@ -368,11 +371,11 @@ class Settings {
 					'label_for'   => 'auhfc_settings_homepage[footer]',
 					'label'       => esc_html__( 'Homepage FOOTER Code', 'head-footer-code' ),
 					'value'       => $this->settings['homepage']['footer'],
-					'description' => sprintf(
+					'description' => '<p>' . sprintf(
 						/* translators: %s will be replaced with preformatted HTML tag </body> */
 						esc_html__( 'Code to enqueue in footer section (before the %s) on Homepage.', 'head-footer-code' ),
 						Common::html2code( '</body>' )
-					),
+					) . '</p>',
 					'field_class' => 'widefat code codeEditor',
 					'rows'        => 5,
 				)
@@ -484,12 +487,12 @@ class Settings {
 					'author' => __( 'Author' ),
 				),
 				'value'       => $this->settings['article']['allowed_roles'],
-				'description' => esc_html__( 'Choose which unpriviledged user roles can manage article-specific code.', 'head-footer-code' )
+				'description' => esc_html__( 'Choose which unpriviledged user roles can manage article-specific and category-specific code.', 'head-footer-code' )
 								. '<br>'
 								. '<span class="warn"><strong>'
 								. esc_html__( 'Security Notice', 'head-footer-code' )
 								. '</strong><br>'
-								. '<i></i>' . esc_html__( 'Granting access to non-administrator roles (e.g., Editors) allows users to inject raw HTML, CSS, and JavaScript into individual posts and pages!', 'head-footer-code' )
+								. '<i></i>' . esc_html__( 'Granting access to non-administrator roles (e.g., Editors) allows users to inject raw HTML, CSS, and JavaScript into individual posts and pages, and categories!', 'head-footer-code' )
 								. '<br><i></i>' . esc_html__( 'This may pose a security risk if those users are not fully trusted!', 'head-footer-code' )
 								. '<br><i></i>' . esc_html__( 'Only allow for roles you trust to handle code responsibly!', 'head-footer-code' )
 								. '</span>',
@@ -527,7 +530,8 @@ class Settings {
 		$value       = isset( $args['value'] ) ? esc_textarea( $args['value'] ) : '';
 
 		// Compose input HTML.
-		$html = sprintf(
+		$html  = '<div class="description">' . $this->security_risk_notice . '</div>';
+		$html .= sprintf(
 			'<textarea name="%1$s" id="%2$s" rows="%3$s" class="%4$s" title="%5$s">%6$s</textarea>',
 			$field,       // 1
 			$field_id,    // 2
@@ -539,7 +543,7 @@ class Settings {
 
 		// Append description if exists.
 		if ( ! empty( $args['description'] ) ) {
-			$html .= sprintf( '<p class="description">%s</p>', wp_kses_post( $args['description'] ) );
+			$html .= sprintf( '<div class="description">%s</div>', $args['description'] );
 		}
 
 		// Filter allowed HTML tags and attributes.
@@ -577,7 +581,7 @@ class Settings {
 
 		// Append description if exists.
 		if ( ! empty( $args['description'] ) ) {
-			$html .= sprintf( '<p class="description">%s</p>', wp_kses_post( $args['description'] ) );
+			$html .= sprintf( '<p class="description">%s</p>', $args['description'] );
 		}
 
 		// Filter allowed HTML tags and attributes.
@@ -618,7 +622,7 @@ class Settings {
 
 		// Append description if exists.
 		if ( ! empty( $args['description'] ) ) {
-			$html .= sprintf( '<p class="description">%s</p>', wp_kses_post( $args['description'] ) );
+			$html .= sprintf( '<p class="description">%s</p>', $args['description'] );
 		}
 
 		$html .= '</fieldset>';
@@ -666,7 +670,7 @@ class Settings {
 
 		// Append description if exists.
 		if ( ! empty( $args['description'] ) ) {
-			$html .= sprintf( '<p class="description">%s</p>', wp_kses_post( $args['description'] ) );
+			$html .= sprintf( '<p class="description">%s</p>', $args['description'] );
 		}
 
 		// Filter allowed HTML tags and attributes.
@@ -739,9 +743,9 @@ class Settings {
 	 * Function to print note for head section
 	 */
 	public function head_note() {
-		return '<p class="notice"><strong>' . esc_html__( 'IMPORTANT!', 'head-footer-code' ) . '</strong> ' . sprintf(
+		return '<p class="notice">' . sprintf(
 			/* translators: 1: italicized 'unseen elements', 2: <script>, 3: <style>, 4: italicized sentence 'could break layouts or lead to unexpected situations' */
-			esc_html__( 'Usage of this hook should be reserved for output of %1$s like %2$s and %3$s tags or additional metadata. It should not be used to add arbitrary HTML content to a page that %4$s.', 'head-footer-code' ),
+			esc_html__( 'Usage of this field should be reserved for output of %1$s like %2$s and %3$s tags or additional metadata. It should not be used to add arbitrary HTML content to a page that %4$s.', 'head-footer-code' ),
 			'<em>' . esc_html__( 'unseen elements', 'head-footer-code' ) . '</em>',
 			Common::html2code( '<script>' ),
 			Common::html2code( '<style>' ),
@@ -753,7 +757,7 @@ class Settings {
 	 * Function to print note for body section
 	 */
 	public function body_note() {
-		return '<p class="notice"><strong>' . esc_html__( 'IMPORTANT!', 'head-footer-code' ) . '</strong> ' . sprintf(
+		return '<p class="notice">' . sprintf(
 			/* translators: %s will be replaced with a link to wp_body_open page on WordPress.org */
 			esc_html__( 'Make sure that your active theme support %s hook.', 'head-footer-code' ),
 			'<a href="https://developer.wordpress.org/reference/hooks/wp_body_open/" target="_hook">wp_body_open</a>'

@@ -33,38 +33,26 @@ class Common {
 	 * @return bool
 	 */
 	public static function user_has_allowed_role() {
+		// Always allow Super Admin (Multisite)
+		$current_user = wp_get_current_user();
+		if ( is_super_admin( $current_user->ID ) ) {
+			return true;
+		}
+
+		// Get current user roles
+		$user_roles = (array) $current_user->roles;
+
 		// Initialize settings if not already initialized
 		self::init_settings();
 
-		// Get the allowed roles from settings
-		$allowed_roles = self::$settings['article']['allowed_roles'];
+		// Merge fixed always-allowed and configurable allowed roles
+		$allowed_roles = array_merge(
+			array( 'administrator', 'shop_manager' ),
+			self::$settings['article']['allowed_roles']
+		);
 
-		// Get current user roles
-		$current_user = wp_get_current_user();
-		$user_roles   = (array) $current_user->roles;
-
-		/**
-		 * Allow permissions if the user is an:
-		 * * Super Admin (Multisite)
-		 * * Administrator
-		 * * Shop Manager (WooCommerce)
-		 */
-		if (
-			in_array( 'administrator', $user_roles, true )
-			|| is_super_admin( $current_user->ID )
-			|| in_array( 'shop_manager', $user_roles, true )
-		) {
-			return true; // Admins, Super Admins, and Shop Managers always have permission
-		}
-
-		// Check if the current user has any of the allowed roles
-		foreach ( $user_roles as $role ) {
-			if ( in_array( $role, $allowed_roles, true ) ) {
-				return true; // User has permission
-			}
-		}
-
-		return false; // User does not have permission
+		// Check if any of user's roles are in the allowed list
+		return (bool) array_intersect( $user_roles, $allowed_roles );
 	}
 
 	/**
@@ -208,6 +196,9 @@ class Common {
 				'class' => array(),
 				'title' => array(),
 				'style' => array(),
+			),
+			'div'      => array(
+				'class' => true,
 			),
 			'p'        => array(
 				'class' => true,
@@ -417,4 +408,16 @@ class Common {
 
 		return false;
 	} // END public static function print_sitewide
+
+	/**
+	 * Format security risk notice for appending to each code textarea description
+	 *
+	 * @return string
+	 */
+	public static function security_risk_notice() {
+		return '<p class="notice notice-warning">'
+			. '<strong>' . esc_html__( 'WARNING!', 'head-footer-code' ) . '</strong> '
+			. esc_html__( 'Enter only safe, secure, and code from a trusted source. Unsafe or invalid code may break your site or pose security risks.', 'head-footer-code' )
+			. '</p>';
+	}
 }

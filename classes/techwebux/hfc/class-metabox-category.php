@@ -17,6 +17,11 @@ use Techwebux\Hfc\Common;
 
 class Metabox_Category {
 	public function __construct() {
+		// Check if the current user's role has permission to edit HFC
+		if ( ! Common::user_has_allowed_role() ) {
+			return;
+		}
+
 		// Inject Head & Footer Code to Category Edit form.
 		add_action( 'category_edit_form', array( $this, 'form' ), 10, 1 );
 
@@ -32,6 +37,8 @@ class Metabox_Category {
 	public function form( $term_object ) {
 		/** @var string $form_scope Used in templates/hfc-form.php */
 		$form_scope = esc_html__( 'category specific', 'head-footer-code' );
+
+		$security_risk_notice = Common::security_risk_notice();
 
 		// Get existing HFC meta for known Category or use defaults.
 		/** @var array $auhfc_form_data Used in templates/hfc-form.php */

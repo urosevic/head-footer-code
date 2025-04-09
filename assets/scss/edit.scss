@@ -1,0 +1,13 @@
+.form-field {
+    &.auhfc-head,
+    &.auhfc-body,
+    &.auhfc-footer {
+        div.description {
+            p.notice {
+                padding-block: 0.5em;
+                margin: 0.25em 0;
+                max-width: 99%;
+            }
+        }
+    }
+}
