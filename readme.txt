@@ -90,7 +90,7 @@ If you find **Head &amp; Footer Code** useful for your project, please [review p
 * View on Posts/Pages/Custom Post Types listing if article has defined any article specific custom code
 * Site-wide section is located under **Tools** > **Head & Footer Code**
 * If you have set WP_DEBUG constant in `wp-config.php` to `true`, you'll see site-wide and article specific entries in page source code wrapped to comments.
-* [NEW] allow unpriviledged user roles Editor and Author to manage article-specific code on single site and multisite (disabled by default)
+* [NEW] allow unprivileged user roles Editor and Author to manage article-specific code on single site and multisite (disabled by default)
 
 ### Data stored in database
 
@@ -184,11 +184,14 @@ Please report security bugs found in the source code of the Head & Footer Code p
 
 Initial release of new plugin developed by Aleksandar Urosevic.
 
+### 1.4.0
+
+Introduced restriction for non-privileged roles (eg. Editor and Author) to access HFC on pages, posts and custom CPTs. If you wish to allow them manage article-specific HFC, make sure you enable that at the bottom of the global plugin settings page.
 
 ## Changelog
 
-### 1.4.0 (2025-04-08)
-* Test: WordPress 6.8.0, Twenty Twenty-Five 1.1, Astra 4.9.2 and PHP 8.3.17
+### 1.4.0 (2025-04-12)
+* Test: WordPress 6.8-RC3, Twenty Twenty-Five 1.1, Twenty Twenty-Three 1.6, Astra 4.9.2 and PHP 8.3.17
 * Test: WordPress 4.9.26, Twenty Seventeen 1.7 and PHP 5.5.38
 * Unclutter Settings page
 * Improve: Security

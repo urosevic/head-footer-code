@@ -487,7 +487,7 @@ class Settings {
 					'author' => __( 'Author' ),
 				),
 				'value'       => $this->settings['article']['allowed_roles'],
-				'description' => esc_html__( 'Choose which unpriviledged user roles can manage article-specific and category-specific code.', 'head-footer-code' )
+				'description' => esc_html__( 'Choose which unprivileged user roles can manage article-specific and category-specific code.', 'head-footer-code' )
 								. '<br>'
 								. '<span class="warn"><strong>'
 								. esc_html__( 'Security Notice', 'head-footer-code' )

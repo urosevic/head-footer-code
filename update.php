@@ -236,7 +236,7 @@ function auhfc_update_8() {
 } // END function auhfc_update_8
 
 /**
- * Add option to allow unpriviledged user roles to manage article-specific HFC
+ * Add option to allow unprivileged user roles to manage article-specific HFC
  */
 function auhfc_update_9() {
 	// Get options from DB.
