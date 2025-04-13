@@ -129,30 +129,42 @@ class Common {
 		// Allow safe HTML, JS, and CSS.
 		return array_merge(
 			wp_kses_allowed_html( 'post' ), // Allow safe HTML for posts.
-			self::form_allowed_html(),
 			array(
-				'script' => array(
+				'noscript' => true,
+				// Allow <script> tags.
+				'script'   => array(
 					'type'        => true,
 					'async'       => true,
 					'defer'       => true,
 					'src'         => true, // remote
 					'crossorigin' => true, // security
 					'nonce'       => true, // security
-				), // Allow <script> tags.
-				'style'  => array(
-					'nonce' => true,
-				),        // Allow <style> tags.
-				'link'   => array(          // Allow <link> tags for CSS and preloading.
-					'rel'           => true,
+				),
+				// Allow <style> tags.
+				'style'    => array(
+					'media'  => true,
+					'type'   => true,
+					'scoped' => true,
+					'nonce'  => true,
+				),
+				// Allow <link> tags for CSS and preloading.
+				'link'     => array(
 					'href'          => true,
-					'type'          => true,
+					'rel'           => true,
 					'media'         => true,
+					'hreflang'      => true,
+					'type'          => true,
+					'sizes'         => true,
+					'title'         => true,
 					'fetchpriority' => true, // preload
 					'as'            => true, // preload
 				),
-				'meta'   => array(
-					'name'   => true,
-					'conent' => true,
+				// Allow <meta> tags.
+				'meta'     => array(
+					'name'       => true,
+					'http-equiv' => true,
+					'conent'     => true,
+					'charset'    => true,
 				),
 			)
 		);
@@ -170,15 +182,19 @@ class Common {
 				'for' => array(),
 			),
 			'input'    => array(
-				'type'    => array(),
-				'name'    => array(),
-				'id'      => array(),
-				'value'   => array(),
-				'class'   => array(),
-				'min'     => array(), // number
-				'max'     => array(), // number
-				'step'    => array(), // number
-				'checked' => array(), // checkbox
+				'type'      => array(),
+				'name'      => array(),
+				'id'        => array(),
+				'value'     => array(),
+				'class'     => array(),
+				'min'       => array(), // number
+				'max'       => array(), // number
+				'step'      => array(), // number
+				'checked'   => array(), // checkbox
+				'required'  => true,
+				'minlength' => true,
+				'maxlength' => true,
+				'size'      => true,
 			),
 			'select'   => array(
 				'id'    => array(),
@@ -197,9 +213,11 @@ class Common {
 				'title' => array(),
 				'style' => array(),
 			),
+			/*
 			'div'      => array(
 				'class' => true,
 			),
+			*/
 			'p'        => array(
 				'class' => true,
 			),

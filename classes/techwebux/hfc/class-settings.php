@@ -547,7 +547,7 @@ class Settings {
 		}
 
 		// Filter allowed HTML tags and attributes.
-		echo wp_kses( $html, $this->form_allowed_html );
+		echo wp_kses( $html, $this->allowed_html );
 	} // END public function textarea_field_render
 
 	/**
@@ -674,7 +674,7 @@ class Settings {
 		}
 
 		// Filter allowed HTML tags and attributes.
-		echo wp_kses( $html, $this->allowed_html );
+		echo wp_kses( $html, $this->form_allowed_html );
 	} // END public function select_field_render
 
 	/**
