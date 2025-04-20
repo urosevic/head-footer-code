@@ -139,6 +139,7 @@ class Common {
 					'src'         => true, // remote
 					'crossorigin' => true, // security
 					'nonce'       => true, // security
+					'charset'     => true,
 				),
 				// Allow <style> tags.
 				'style'    => array(
@@ -163,8 +164,11 @@ class Common {
 				'meta'     => array(
 					'name'       => true,
 					'http-equiv' => true,
-					'conent'     => true,
+					'content'    => true,
 					'charset'    => true,
+					'itemprop'   => true,
+					'media'      => true,
+					'property'   => true,
 				),
 			)
 		);
