@@ -94,16 +94,14 @@ class Metabox_Article {
 			return;
 		}
 
-		// Allow safe HTML, JS, and CSS.
-		$allowed_html = Common::allowed_html();
-
 		// Sanitize each field separately.
 		$data = array(
 			'behavior' => isset( $_POST['auhfc']['behavior'] ) ? sanitize_key( $_POST['auhfc']['behavior'] ) : '',
-			'head'     => isset( $_POST['auhfc']['head'] ) ? wp_kses( $_POST['auhfc']['head'], $allowed_html ) : '',
-			'body'     => isset( $_POST['auhfc']['body'] ) ? wp_kses( $_POST['auhfc']['body'], $allowed_html ) : '',
-			'footer'   => isset( $_POST['auhfc']['footer'] ) ? wp_kses( $_POST['auhfc']['footer'], $allowed_html ) : '',
+			'head'     => isset( $_POST['auhfc']['head'] ) ? Common::sanitize_html_with_scripts( $_POST['auhfc']['head'] ) : '',
+			'body'     => isset( $_POST['auhfc']['body'] ) ? Common::sanitize_html_with_scripts( $_POST['auhfc']['body'] ) : '',
+			'footer'   => isset( $_POST['auhfc']['footer'] ) ? Common::sanitize_html_with_scripts( $_POST['auhfc']['footer'] ) : '',
 		);
+
 		update_post_meta( $post_id, '_auhfc', wp_slash( $data ) );
 	} // END public function save
 
