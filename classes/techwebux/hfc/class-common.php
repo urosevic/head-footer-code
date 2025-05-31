@@ -150,15 +150,22 @@ class Common {
 				),
 				// Allow <link> tags for CSS and preloading.
 				'link'     => array(
-					'href'          => true,
-					'rel'           => true,
-					'media'         => true,
-					'hreflang'      => true,
-					'type'          => true,
-					'sizes'         => true,
-					'title'         => true,
-					'fetchpriority' => true, // preload
-					'as'            => true, // preload
+					'href'           => true,
+					'rel'            => true,
+					'media'          => true,
+					'hreflang'       => true,
+					'type'           => true,
+					'sizes'          => true,
+					'title'          => true,
+					'fetchpriority'  => true, // preload
+					'as'             => true, // preload
+					'imagesrcset'    => true, // preload for images https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/imageSrcset
+					'imagesizes'     => true, // preload for images https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/imageSizes
+					'crossorigin'    => true, // security
+					'nonce'          => true, // security
+					'itemprop'       => true, // for structured data
+					'referrerpolicy' => true, // security
+					'integrity'      => true, // security
 				),
 				// Allow <meta> tags.
 				'meta'     => array(

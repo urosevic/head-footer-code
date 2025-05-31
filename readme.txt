@@ -5,7 +5,7 @@ Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: head, body, footer, code, script
 Requires at least: 4.9
 Tested up to: 6.8
-Stable tag: 1.4.3
+Stable tag: 1.4.4
 Requires PHP: 5.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -189,6 +189,9 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 Introduced restriction for non-privileged roles (eg. Editor and Author) to access HFC on pages, posts and custom CPTs. If you wish to allow them manage article-specific HFC, make sure you enable that at the bottom of the global plugin settings page.
 
 ## Changelog
+
+### 1.4.4 (2025-05-31)
+* Fix: Relaxed filtering to allow <link> preloadans security/privacy attributes.
 
 ### 1.4.3 (2025-04-30)
 * Fix: Relaxed filtering to allow <script> blocks with `<`, `>`, `=>` characters and `type="application/ld+json"` for structured data (rich snippets), following stricter sanitization introduced in 1.4.0.
