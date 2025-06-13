@@ -195,6 +195,8 @@ Introduced restriction for non-privileged roles (eg. Editor and Author) to acces
 * Fix: Automatic conversion of false to array is deprecated in update.php
 * Test: WordPress 6.8.1, Twenty Twenty-Five 1.2, Jetpack 14.7
 
+https://youtu.be/CXCWqNUQSF4
+
 ### 1.4.4 (2025-05-31)
 * Fix: Relaxed filtering to allow <link> preloadans security/privacy attributes.
 
