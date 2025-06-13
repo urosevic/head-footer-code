@@ -546,8 +546,17 @@ class Settings {
 			$html .= sprintf( '<div class="description">%s</div>', $args['description'] );
 		}
 
+		// Remove Jetpack filter that may interfere with wp_kses.
+		remove_filter( 'pre_kses', array( 'Filter_Embedded_HTML_Objects', 'maybe_create_links' ), 100 );
+
 		// Filter allowed HTML tags and attributes.
 		echo wp_kses( $html, $this->allowed_html );
+
+		// Re-add the Jetpack filter if it exists.
+		// This is to ensure compatibility with Jetpack and other plugins that may use this filter.
+		if ( is_callable( array( 'Filter_Embedded_HTML_Objects', 'maybe_create_links' ) ) ) {
+			add_filter( 'pre_kses', array( 'Filter_Embedded_HTML_Objects', 'maybe_create_links' ), 100 );
+		}
 	} // END public function textarea_field_render
 
 	/**

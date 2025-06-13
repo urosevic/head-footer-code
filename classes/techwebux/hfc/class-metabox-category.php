@@ -92,6 +92,10 @@ class Metabox_Category {
 
 		// Sanitize the `auhfc` data.
 		if ( is_array( $_POST['auhfc'] ) ) {
+			// Remove Jetpack filter that may interfere with wp_kses.
+			remove_filter( 'pre_kses', array( 'Filter_Embedded_HTML_Objects', 'maybe_create_links' ), 100 );
+
+			// Prepare data for saving.
 			$data = array(
 				'behavior' => ! empty( $_POST['auhfc']['behavior'] ) ? sanitize_key( $_POST['auhfc']['behavior'] ) : '',
 				// Use wp_kses to preserve allowed tags and attributes.
@@ -99,6 +103,12 @@ class Metabox_Category {
 				'body'     => ! empty( $_POST['auhfc']['body'] ) ? wp_kses( $_POST['auhfc']['body'], $allowed_html ) : '',
 				'footer'   => ! empty( $_POST['auhfc']['footer'] ) ? wp_kses( $_POST['auhfc']['footer'], $allowed_html ) : '',
 			);
+
+			// Re-add Jetpack filter if it exists.
+			// This is to ensure compatibility with Jetpack and other plugins that may use this filter.
+			if ( is_callable( array( 'Filter_Embedded_HTML_Objects', 'maybe_create_links' ) ) ) {
+				add_filter( 'pre_kses', array( 'Filter_Embedded_HTML_Objects', 'maybe_create_links' ), 100 );
+			}
 		}
 
 		/**
