@@ -242,6 +242,10 @@ function auhfc_update_9() {
 	// Get options from DB.
 	$homepage = get_option( 'auhfc_settings_homepage' );
 
+	if ( ! is_array( $homepage ) ) {
+		return;
+	}
+
 	if ( empty( $homepage['allowed_roles'] ) ) {
 		$homepage['allowed_roles'] = array();
 	}
