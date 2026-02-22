@@ -177,6 +177,15 @@ class Common {
 					'media'      => true,
 					'property'   => true,
 				),
+				// Allow <noscript> and <iframe> for GTag
+				'noscript' => true,
+				'iframe'   => array(
+					'src'     => true,
+					'height'  => true,
+					'width'   => true,
+					'style'   => true,
+					'loading' => true,
+				),
 			)
 		);
 	} // END public static function allowed_html
@@ -251,45 +260,88 @@ class Common {
 	} // END public static function form_allowed_html
 
 	/**
-	 * Sanitize HTML code by temporarily removing
-	 * <script>...</script> and <style>...</style>
-	 * before filtering allowed HTML through wp_kses
+	 * Sanitize HTML code by temporarily removing content within the
+	 * <script>...</script> and <style>...</style> before filtering
+	 * allowed HTML through wp_kses
 	 *
 	 * @param string $content
 	 * @return string Sanitized content (code inside SCRIPT and STYLE is untouched)
 	 */
 	public static function sanitize_html_with_scripts( $content ) {
 		$allowed_html = self::allowed_html();
-
+		file_put_contents( __DIR__ . '/allowed_html.txt', print_r( $allowed_html, true ) );
 		$placeholders = array();
 
-		// Match <script>...</script>
-		if ( preg_match_all( '#<script\b[^>]*>.*?</script>#is', $content, $matches ) ) {
-			foreach ( $matches[0] as $i => $match ) {
-				$placeholder                  = "__TWU_SCRIPT_PLACEHOLDER_{$i}__";
-				$placeholders[ $placeholder ] = $match;
-				$content                      = str_replace( $match, $placeholder, $content );
-			}
-		}
+		$regex = '#<(script|style)\b[^>]*>.*?</\1>#is';
 
-		// Match <style>...</style>
-		if ( preg_match_all( '#<style\b[^>]*>.*?</style>#is', $content, $matches ) ) {
-			foreach ( $matches[0] as $i => $match ) {
-				$placeholder                  = "__TWU_STYLE_PLACEHOLDER_{$i}__";
-				$placeholders[ $placeholder ] = $match;
-				$content                      = str_replace( $match, $placeholder, $content );
-			}
-		}
+		$content = preg_replace_callback(
+			$regex,
+			function ( $matches ) use ( &$placeholders, $allowed_html ) {
+				$full_tag = $matches[0];
+				$tag_name = strtolower( $matches[1] ); // script or style
+
+				// Extract opening tag for improved security, eg. <script onload="…">
+				if ( preg_match( '/^<' . $tag_name . '[^>]*>/i', $full_tag, $tag_match ) ) {
+					$opening_tag           = $tag_match[0];
+					$sanitized_opening_tag = wp_kses( $opening_tag, array( $tag_name => $allowed_html[ $tag_name ] ) );
+					if ( ! empty( $sanitized_opening_tag ) ) {
+						$full_tag = str_replace( $opening_tag, $sanitized_opening_tag, $full_tag );
+					}
+				}
+
+				$placeholder                  = '__TWU_' . strtoupper( $tag_name ) . '_PLACEHOLDER_' . count( $placeholders ) . '__';
+				$placeholders[ $placeholder ] = $full_tag;
+
+				return $placeholder;
+			},
+			$content
+		);
 
 		// Sanitize rest of content (outside scripts/styles)
 		$content = wp_kses( $content, $allowed_html );
 
-		// Restore script/style blocks
-		foreach ( $placeholders as $placeholder => $original ) {
-			$content = str_replace( $placeholder, $original, $content );
+		if ( ! empty( $placeholders ) ) {
+			$content = str_replace( array_keys( $placeholders ), array_values( $placeholders ), $content );
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Sanitize the whole HFC data array (for posts, terms, settings)
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array $input The raw $_POST['auhfc'] data.
+	 * @return array Sanitized data.
+	 */
+	public static function sanitize_hfc_data( $input ) {
+		if ( ! is_array( $input ) ) {
+			return array();
+		}
+
+		// Temporarily remove Jetpack filter that may interfere with wp_kses.
+		$jetpack_filter = array( 'Filter_Embedded_HTML_Objects', 'maybe_create_links' );
+		$has_jetpack    = is_callable( $jetpack_filter );
+
+		if ( $has_jetpack ) {
+			remove_filter( 'pre_kses', $jetpack_filter, 100 );
+		}
+
+		// Build anitized data array
+		$sanitized = array(
+			'behavior' => isset( $input['behavior'] ) ? sanitize_key( $input['behavior'] ) : 'append',
+			'head'     => isset( $input['head'] ) ? self::sanitize_html_with_scripts( $input['head'] ) : '',
+			'body'     => isset( $input['body'] ) ? self::sanitize_html_with_scripts( $input['body'] ) : '',
+			'footer'   => isset( $input['footer'] ) ? self::sanitize_html_with_scripts( $input['footer'] ) : '',
+		);
+
+		// Reinstate Jetpack filter
+		if ( $has_jetpack ) {
+			add_filter( 'pre_kses', $jetpack_filter, 100 );
+		}
+
+		return $sanitized;
 	}
 
 	/**

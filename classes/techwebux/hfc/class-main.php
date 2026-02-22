@@ -100,7 +100,7 @@ class Main {
 	 */
 	public function admin_enqueue_scripts( $hook ) {
 		// Admin Stylesheet.
-		if ( in_array( $hook, array( 'post.php', 'edit.php', 'tools_page_' . HFC_PLUGIN_SLUG ), true ) ) {
+		if ( in_array( $hook, array( 'post.php', 'post-new.php', 'edit.php', 'tools_page_' . HFC_PLUGIN_SLUG ), true ) ) {
 			wp_enqueue_style(
 				'head-footer-code-admin',
 				HFC_URL . 'assets/css/admin.min.css',
@@ -114,6 +114,7 @@ class Main {
 		if (
 			'tools_page_' . HFC_PLUGIN_SLUG === $hook ||
 			'post.php' === $hook ||
+			'post-new.php' === $hook ||
 			(
 				'term.php' === $hook
 				&& 'edit-category' === $screen->id

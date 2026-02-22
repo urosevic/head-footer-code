@@ -18,12 +18,10 @@ if ( ! defined( 'WPINC' ) ) {
 <div class="wrap" id="head_footer_code_settings">
 	<h1 class="wp-heading-inline">
 		<?php
-		echo esc_html(
-			sprintf(
-				/* translators: Plugin name */
-				__( '%s Settings', 'head-footer-code' ),
-				HFC_PLUGIN_NAME
-			)
+		printf(
+			/* translators: Plugin name */
+			esc_html__( '%s Settings', 'head-footer-code' ),
+			esc_html( HFC_PLUGIN_NAME )
 		);
 		?>
 		<span class="ver">v. <?php echo esc_html( HFC_VER ); ?></span>
@@ -32,12 +30,10 @@ if ( ! defined( 'WPINC' ) ) {
 			<a href="https://wordpress.org/support/plugin/head-footer-code/" class="page-title-action" target="_blank"><?php esc_html_e( 'Community Support', 'head-footer-code' ); ?></a>
 			<a href="https://wordpress.org/support/plugin/head-footer-code/reviews/#new-post" class="page-title-action" target="_blank">
 				<?php
-				echo esc_html(
-					sprintf(
-						/* translators: %s will be replaced with plugin name Head & Footer Code */
-						__( 'Review %s', 'head-footer-code' ),
-						HFC_PLUGIN_NAME
-					)
+				printf(
+					/* translators: %s will be replaced with plugin name Head & Footer Code */
+					esc_html__( 'Review %s', 'head-footer-code' ),
+					esc_html( HFC_PLUGIN_NAME )
 				);
 				?>
 			</a>

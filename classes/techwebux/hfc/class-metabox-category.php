@@ -70,46 +70,15 @@ class Metabox_Category {
 			empty( $nonce )
 			|| ! wp_verify_nonce( $nonce, 'auhfc_category_save_action' )
 			|| ! current_user_can( 'manage_categories' )
+			|| empty( $_POST['tag_ID'] )
+			|| ! isset( $_POST['auhfc'] )
 		) {
 			return;
 		}
 
-		// Escape if our value is ot present in $_POST array.
-		if ( empty( $_POST['auhfc'] ) ) {
-			return null;
-		}
-
-		// Ensure the necessary data is present.
-		if ( empty( $_POST['tag_ID'] ) || ! isset( $_POST['auhfc'] ) ) {
-			return;
-		}
-
-		// Sanitize the term_id of Category which is provided in $_POST key `tag_ID`
+		// Sanitize the term_id of the Category and data
 		$term_id = absint( $_POST['tag_ID'] );
-
-		// Allow safe HTML, JS, and CSS.
-		$allowed_html = Common::allowed_html();
-
-		// Sanitize the `auhfc` data.
-		if ( is_array( $_POST['auhfc'] ) ) {
-			// Remove Jetpack filter that may interfere with wp_kses.
-			remove_filter( 'pre_kses', array( 'Filter_Embedded_HTML_Objects', 'maybe_create_links' ), 100 );
-
-			// Prepare data for saving.
-			$data = array(
-				'behavior' => ! empty( $_POST['auhfc']['behavior'] ) ? sanitize_key( $_POST['auhfc']['behavior'] ) : '',
-				// Use wp_kses to preserve allowed tags and attributes.
-				'head'     => ! empty( $_POST['auhfc']['head'] ) ? wp_kses( $_POST['auhfc']['head'], $allowed_html ) : '',
-				'body'     => ! empty( $_POST['auhfc']['body'] ) ? wp_kses( $_POST['auhfc']['body'], $allowed_html ) : '',
-				'footer'   => ! empty( $_POST['auhfc']['footer'] ) ? wp_kses( $_POST['auhfc']['footer'], $allowed_html ) : '',
-			);
-
-			// Re-add Jetpack filter if it exists.
-			// This is to ensure compatibility with Jetpack and other plugins that may use this filter.
-			if ( is_callable( array( 'Filter_Embedded_HTML_Objects', 'maybe_create_links' ) ) ) {
-				add_filter( 'pre_kses', array( 'Filter_Embedded_HTML_Objects', 'maybe_create_links' ), 100 );
-			}
-		}
+		$data    = Common::sanitize_hfc_data( $_POST['auhfc'] );
 
 		/**
 		 * Save category metabox form values using update_term_meta()
@@ -117,6 +86,6 @@ class Metabox_Category {
 		 *
 		 * The term_id of Category is provided in $_POST key `tag_ID`
 		 */
-		update_term_meta( $term_id, '_auhfc', $data );
+		update_term_meta( $term_id, '_auhfc', wp_slash( $data ) );
 	} // END public function save
 } // END class Metabox_Category

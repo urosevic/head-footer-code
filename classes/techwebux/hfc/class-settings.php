@@ -89,20 +89,15 @@ class Settings {
 		 * wp-admin settings pages by registering your settings and using a few
 		 * callbacks to control the output.
 		 */
-		add_settings_field(
-			'auhfc_head_code',                       // Id.
-			__( 'HEAD Code', 'head-footer-code' ),   // Title.
-			array( $this, 'textarea_field_render' ), // Callback.
-			HFC_PLUGIN_SLUG,                         // Page.
-			'head_footer_code_settings_sitewide',    // Section.
-			array(                                   // Arguments.
-				'field'       => 'auhfc_settings_sitewide[head]',
-				'label_for'   => 'auhfc_settings_sitewide[head]',
-				'label'       => __( 'HEAD Code', 'head-footer-code' ),
-				'value'       => $this->settings['sitewide']['head'],
+		$this->add_field(
+			'head',                                // Id.
+			esc_html__( 'HEAD Code', 'head-footer-code' ), // Title.
+			'textarea_field_render',               // Callback method name.
+			'sitewide',                            // Section.
+			array(                                 // Arguments.
 				'description' => $head_note . '<p>' . sprintf(
 					/* translators: %s will be replaced with preformatted HTML tag </head> */
-					__( 'Code to enqueue in HEAD section (before the %s).', 'head-footer-code' ),
+					esc_html__( 'Code to enqueue in HEAD section (before the %s).', 'head-footer-code' ),
 					Common::html2code( '</head>' )
 				) . '</p>',
 				'field_class' => 'widefat code codeEditor',
@@ -110,16 +105,12 @@ class Settings {
 			)
 		);
 
-		add_settings_field(
-			'auhfc_priority_h',
+		$this->add_field(
+			'priority_h',
 			esc_html__( 'HEAD Priority', 'head-footer-code' ),
-			array( $this, 'number_field_render' ),
-			HFC_PLUGIN_SLUG,
-			'head_footer_code_settings_sitewide',
+			'number_field_render',
+			'sitewide',
 			array(
-				'field'       => 'auhfc_settings_sitewide[priority_h]',
-				'label_for'   => 'auhfc_settings_sitewide[priority_h]',
-				'value'       => $this->settings['sitewide']['priority_h'],
 				'description' => sprintf(
 					/* translators: 1: default HEAD priority, 2: preformatted HTML tag </head> */
 					esc_html__( 'Priority for enqueued HEAD code. Default is %1$d. Larger number inject code closer to %2$s.', 'head-footer-code' ),
@@ -133,36 +124,27 @@ class Settings {
 			)
 		);
 
-		add_settings_field(
-			'auhfc_do_shortcode_h',
+		$this->add_field(
+			'do_shortcode_h',
 			esc_html__( 'Process HEAD Shortcodes', 'head-footer-code' ),
-			array( $this, 'select_field_render' ),
-			HFC_PLUGIN_SLUG,
-			'head_footer_code_settings_sitewide',
+			'select_field_render',
+			'sitewide',
 			array(
-				'field'       => 'auhfc_settings_sitewide[do_shortcode_h]',
-				'label_for'   => 'auhfc_settings_sitewide[do_shortcode_h]',
 				'items'       => array(
-					'y' => esc_html__( 'Enable', 'head-footer-code' ),
-					'n' => esc_html__( 'Disable', 'head-footer-code' ),
+					'y' => __( 'Enable', 'head-footer-code' ),
+					'n' => __( 'Disable', 'head-footer-code' ),
 				),
-				'value'       => $this->settings['sitewide']['do_shortcode_h'],
 				'description' => esc_html__( 'If you wish to process shortcodes in the HEAD section, enable this option. Please note, shortcodes with malformed output in the HEAD section can break the rendering of your website!', 'head-footer-code' ),
 				'class'       => 'regular-text',
 			)
 		);
 
-		add_settings_field(
-			'auhfc_body_code',
+		$this->add_field(
+			'body',
 			esc_html__( 'BODY Code', 'head-footer-code' ),
-			array( $this, 'textarea_field_render' ),
-			HFC_PLUGIN_SLUG,
-			'head_footer_code_settings_sitewide',
+			'textarea_field_render',
+			'sitewide',
 			array(
-				'field'       => 'auhfc_settings_sitewide[body]',
-				'label_for'   => 'auhfc_settings_sitewide[body]',
-				'label'       => esc_html__( 'BODY Code', 'head-footer-code' ),
-				'value'       => $this->settings['sitewide']['body'],
 				'description' => $body_note . '<p>' . sprintf(
 					/* translators: %s will be replaced with preformatted HTML tag <body> */
 					esc_html__( 'Code to enqueue in BODY section (after the %s).', 'head-footer-code' ),
@@ -173,16 +155,12 @@ class Settings {
 			)
 		);
 
-		add_settings_field(
-			'auhfc_priority_b',
+		$this->add_field(
+			'priority_b',
 			esc_html__( 'BODY Priority', 'head-footer-code' ),
-			array( $this, 'number_field_render' ),
-			HFC_PLUGIN_SLUG,
-			'head_footer_code_settings_sitewide',
+			'number_field_render',
+			'sitewide',
 			array(
-				'field'       => 'auhfc_settings_sitewide[priority_b]',
-				'label_for'   => 'auhfc_settings_sitewide[priority_b]',
-				'value'       => $this->settings['sitewide']['priority_b'],
 				'description' => sprintf(
 					/* translators: 1: default BODY priority, 2: preformatted HTML tag <body> */
 					esc_html__(
@@ -200,36 +178,27 @@ class Settings {
 			)
 		);
 
-		add_settings_field(
-			'auhfc_do_shortcode_b',
+		$this->add_field(
+			'do_shortcode_b',
 			esc_html__( 'Process BODY Shortcodes', 'head-footer-code' ),
-			array( $this, 'select_field_render' ),
-			HFC_PLUGIN_SLUG,
-			'head_footer_code_settings_sitewide',
+			'select_field_render',
+			'sitewide',
 			array(
-				'field'       => 'auhfc_settings_sitewide[do_shortcode_b]',
-				'label_for'   => 'auhfc_settings_sitewide[do_shortcode_b]',
 				'items'       => array(
-					'y' => esc_html__( 'Enable', 'head-footer-code' ),
-					'n' => esc_html__( 'Disable', 'head-footer-code' ),
+					'y' => __( 'Enable', 'head-footer-code' ),
+					'n' => __( 'Disable', 'head-footer-code' ),
 				),
-				'value'       => $this->settings['sitewide']['do_shortcode_b'],
 				'description' => esc_html__( 'If you wish to process shortcodes in the BODY section, enable this option.', 'head-footer-code' ),
 				'class'       => 'regular-text',
 			)
 		);
 
-		add_settings_field(
-			'auhfc_footer_code',
+		$this->add_field(
+			'footer',
 			esc_html__( 'FOOTER Code', 'head-footer-code' ),
-			array( $this, 'textarea_field_render' ),
-			HFC_PLUGIN_SLUG,
-			'head_footer_code_settings_sitewide',
+			'textarea_field_render',
+			'sitewide',
 			array(
-				'field'       => 'auhfc_settings_sitewide[footer]',
-				'label_for'   => 'auhfc_settings_sitewide[footer]',
-				'label'       => esc_html__( 'FOOTER Code', 'head-footer-code' ),
-				'value'       => $this->settings['sitewide']['footer'],
 				'description' => '<p>' . sprintf(
 					/* translators: %s will be replaced with preformatted HTML tag </body> */
 					esc_html__( 'Code to enqueue in footer section (before the %s).', 'head-footer-code' ),
@@ -240,16 +209,12 @@ class Settings {
 			)
 		);
 
-		add_settings_field(
-			'auhfc_priority_f',
+		$this->add_field(
+			'priority_f',
 			esc_html__( 'FOOTER Priority', 'head-footer-code' ),
-			array( $this, 'number_field_render' ),
-			HFC_PLUGIN_SLUG,
-			'head_footer_code_settings_sitewide',
+			'number_field_render',
+			'sitewide',
 			array(
-				'field'       => 'auhfc_settings_sitewide[priority_f]',
-				'label_for'   => 'auhfc_settings_sitewide[priority_f]',
-				'value'       => $this->settings['sitewide']['priority_f'],
 				'description' => sprintf(
 					/* translators: 1: default FOOTER priority, 2: preformatted HTML tag </body> */
 					esc_html__( 'Priority for enqueued FOOTER code. Default is %1$d. Larger number inject code closer to %2$s.', 'head-footer-code' ),
@@ -263,20 +228,16 @@ class Settings {
 			)
 		);
 
-		add_settings_field(
-			'auhfc_do_shortcode_f',
+		$this->add_field(
+			'do_shortcode_f',
 			esc_html__( 'Process FOOTER Shortcodes', 'head-footer-code' ),
-			array( $this, 'select_field_render' ),
-			HFC_PLUGIN_SLUG,
-			'head_footer_code_settings_sitewide',
+			'select_field_render',
+			'sitewide',
 			array(
-				'field'       => 'auhfc_settings_sitewide[do_shortcode_f]',
-				'label_for'   => 'auhfc_settings_sitewide[do_shortcode_f]',
 				'items'       => array(
-					'y' => esc_html__( 'Enable', 'head-footer-code' ),
-					'n' => esc_html__( 'Disable', 'head-footer-code' ),
+					'y' => __( 'Enable', 'head-footer-code' ),
+					'n' => __( 'Disable', 'head-footer-code' ),
 				),
-				'value'       => $this->settings['sitewide']['do_shortcode_f'],
 				'description' => esc_html__( 'If you wish to process shortcodes in the FOOTER section, enable this option.', 'head-footer-code' ),
 				'class'       => 'regular-text',
 			)
@@ -290,7 +251,10 @@ class Settings {
 		 */
 		register_setting(
 			'head_footer_code_settings', // Option group.
-			'auhfc_settings_sitewide'    // Option name.
+			'auhfc_settings_sitewide',   // Option name.
+			array(
+				'sanitize_callback' => array( $this, 'sanitize_sitewide' ),
+			)
 		);
 
 		/**
@@ -317,17 +281,13 @@ class Settings {
 			 * wp-admin settings pages by registering your settings and using a few
 			 * callbacks to control the output.
 			 */
-			add_settings_field(
-				'auhfc_homepage_head_code',                             // Id.
+			$this->add_field(
+				'head',                             // Id.
 				esc_html__( 'Homepage HEAD Code', 'head-footer-code' ), // Title.
-				array( $this, 'textarea_field_render' ),                // Callback.
-				HFC_PLUGIN_SLUG,                                        // Page.
-				'head_footer_code_settings_homepage',                   // Section.
+				'textarea_field_render',                                // Callback name.
+				'homepage',                   // Section.
 				array(                                                  // Arguments.
-					'field'       => 'auhfc_settings_homepage[head]',
-					'label_for'   => 'auhfc_settings_homepage[head]',
-					'label'       => esc_html__( 'Homepage HEAD Code', 'head-footer-code' ),
-					'value'       => $this->settings['homepage']['head'],
+					'label'       => __( 'Homepage HEAD Code', 'head-footer-code' ),
 					'description' => $head_note . '<p>' . sprintf(
 						/* translators: %s will be replaced with preformatted HTML tag </head> */
 						esc_html__( 'Code to enqueue in HEAD section (before the %s) on Homepage.', 'head-footer-code' ),
@@ -338,17 +298,13 @@ class Settings {
 				)
 			);
 
-			add_settings_field(
-				'auhfc_homepage_body_code',
+			$this->add_field(
+				'body',
 				esc_html__( 'Homepage BODY Code', 'head-footer-code' ),
-				array( $this, 'textarea_field_render' ),
-				HFC_PLUGIN_SLUG,
-				'head_footer_code_settings_homepage',
+				'textarea_field_render',
+				'homepage',
 				array(
-					'field'       => 'auhfc_settings_homepage[body]',
-					'label_for'   => 'auhfc_settings_homepage[body]',
-					'label'       => esc_html__( 'Homepage BODY Code', 'head-footer-code' ),
-					'value'       => $this->settings['homepage']['body'],
+					'label'       => __( 'Homepage BODY Code', 'head-footer-code' ),
 					'description' => $body_note . '<p>' . sprintf(
 						/* translators: %s: preformatted HTML tag <body> */
 						esc_html__( 'Code to enqueue in BODY section (after the %s) on Homepage.', 'head-footer-code' ),
@@ -360,17 +316,13 @@ class Settings {
 				)
 			);
 
-			add_settings_field(
-				'auhfc_homepage_footer_code',
+			$this->add_field(
+				'footer',
 				esc_html__( 'Homepage FOOTER Code', 'head-footer-code' ),
-				array( $this, 'textarea_field_render' ),
-				HFC_PLUGIN_SLUG,
-				'head_footer_code_settings_homepage',
+				'textarea_field_render',
+				'homepage',
 				array(
-					'field'       => 'auhfc_settings_homepage[footer]',
-					'label_for'   => 'auhfc_settings_homepage[footer]',
-					'label'       => esc_html__( 'Homepage FOOTER Code', 'head-footer-code' ),
-					'value'       => $this->settings['homepage']['footer'],
+					'label'       => __( 'Homepage FOOTER Code', 'head-footer-code' ),
 					'description' => '<p>' . sprintf(
 						/* translators: %s will be replaced with preformatted HTML tag </body> */
 						esc_html__( 'Code to enqueue in footer section (before the %s) on Homepage.', 'head-footer-code' ),
@@ -381,39 +333,31 @@ class Settings {
 				)
 			);
 
-			add_settings_field(
-				'auhfc_homepage_behavior',
+			$this->add_field(
+				'behavior',
 				esc_html__( 'Behavior', 'head-footer-code' ),
-				array( $this, 'select_field_render' ),
-				HFC_PLUGIN_SLUG,
-				'head_footer_code_settings_homepage',
+				'select_field_render',
+				'homepage',
 				array(
-					'field'       => 'auhfc_settings_homepage[behavior]',
-					'label_for'   => 'auhfc_settings_homepage[behavior]',
 					'items'       => array(
-						'append'  => esc_html__( 'Append to the site-wide code', 'head-footer-code' ),
-						'replace' => esc_html__( 'Replace the site-wide code', 'head-footer-code' ),
+						'append'  => __( 'Append to the site-wide code', 'head-footer-code' ),
+						'replace' => __( 'Replace the site-wide code', 'head-footer-code' ),
 					),
-					'value'       => $this->settings['homepage']['behavior'],
 					'description' => esc_html__( 'Chose how the Homepage specific code will be enqueued in relation to site-wide code.', 'head-footer-code' ),
 					'class'       => 'regular-text',
 				)
 			);
 
-			add_settings_field(
-				'auhfc_homepage_onpaged',
+			$this->add_field(
+				'paged',
 				esc_html__( 'On paged homepage', 'head-footer-code' ),
-				array( $this, 'select_field_render' ),
-				HFC_PLUGIN_SLUG,
-				'head_footer_code_settings_homepage',
+				'select_field_render',
+				'homepage',
 				array(
-					'field'       => 'auhfc_settings_homepage[paged]',
-					'label_for'   => 'auhfc_settings_homepage[paged]',
 					'items'       => array(
-						'yes' => esc_html__( 'Add on paged homepage', 'head-footer-code' ),
-						'no'  => esc_html__( 'Do not add on paged homepage', 'head-footer-code' ),
+						'yes' => __( 'Add on paged homepage', 'head-footer-code' ),
+						'no'  => __( 'Do not add on paged homepage', 'head-footer-code' ),
 					),
-					'value'       => $this->settings['homepage']['paged'],
 					'description' => esc_html__( 'Chose if the Homepage specific code will be enqueued on paged pages 2, 3, and so on.', 'head-footer-code' ),
 					'class'       => 'regular-text',
 				)
@@ -427,7 +371,10 @@ class Settings {
 			 */
 			register_setting(
 				'head_footer_code_settings', // Option group.
-				'auhfc_settings_homepage'    // Option name.
+				'auhfc_settings_homepage',    // Option name.
+				array(
+					'sanitize_callback' => array( $this, 'sanitize_homepage' ),
+				)
 			);
 		} // END condition: $auhfc_homepage_blog_posts
 
@@ -455,17 +402,14 @@ class Settings {
 			$clean_post_types[ $public_post_type ] = esc_html( $public_post_object->label ) . ' (' . esc_attr( $public_post_type ) . ')';
 		}
 
-		add_settings_field(
-			'auhfc_post_types',                             // Id.
+		$this->add_field(
+			'post_types',                                   // Field key.
 			esc_html__( 'Post Types', 'head-footer-code' ), // Title.
-			array( $this, 'checkbox_group_field_render' ),  // Callback.
-			HFC_PLUGIN_SLUG,                                // Page.
-			'head_footer_code_settings_article',            // Section.
+			'checkbox_group_field_render',                  // Callback method name.
+			'article',                                      // Section.
 			array(                                          // Arguments.
-				'field'       => 'auhfc_settings_article[post_types]',
-				'label_for'   => 'auhfc_settings_article[post_types]',
+				'label_for'   => false,
 				'items'       => $clean_post_types,
-				'value'       => $this->settings['article']['post_types'],
 				'description' => esc_html__( 'Choose the post types that will have an article specific section.', 'head-footer-code' )
 								. '<br>'
 								. esc_html__( 'Note that if you add head, body, and footer code for individual articles and then disable that post type, the article-specific code will no longer be output and only the site-wide code will be used.', 'head-footer-code' ),
@@ -473,20 +417,17 @@ class Settings {
 			)
 		);
 
-		add_settings_field(
-			'auhfc_post_allowed_roles',                               // Id.
+		$this->add_field(
+			'allowed_roles',                                          // Field key.
 			esc_html__( 'Allow for User Roles', 'head-footer-code' ), // Title.
-			array( $this, 'checkbox_group_field_render' ),            // Callback.
-			HFC_PLUGIN_SLUG,                                          // Page.
-			'head_footer_code_settings_article',                      // Section.
+			'checkbox_group_field_render',                            // Callback method name.
+			'article',                                                // Section.
 			array(                                                    // Arguments.
-				'field'       => 'auhfc_settings_article[allowed_roles]',
-				'label_for'   => 'auhfc_settings_article[allowed_roles]',
+				'label_for'   => false,
 				'items'       => array(
 					'editor' => __( 'Editor' ),
 					'author' => __( 'Author' ),
 				),
-				'value'       => $this->settings['article']['allowed_roles'],
 				'description' => esc_html__( 'Choose which unprivileged user roles can manage article-specific and category-specific code.', 'head-footer-code' )
 								. '<br>'
 								. '<span class="warn"><strong>'
@@ -508,9 +449,74 @@ class Settings {
 		 */
 		register_setting(
 			'head_footer_code_settings', // Option group.
-			'auhfc_settings_article'     // Option name.
+			'auhfc_settings_article',    // Option name.
+			array(
+				'sanitize_callback' => array( $this, 'sanitize_article' ),
+			)
 		);
 	} // END public function settings_init
+
+	/**
+	 * Wrapper for add_settings_field
+	 *
+	 * @param string   $key           Field key to identify the field.
+	 * @param string   $title         Formatted title of the field. Shown as the label for the field during output.
+	 * @param string   $callback_name Name of the function that fills the field with the desired form inputs.
+	 * @param string   $section       Key of the section of the settings page in which to show the box.
+	 * @param array    $args {
+	 *     Optional. Extra arguments that get passed to add_settingd_field $args
+	 *
+	 *     @type bool $label_for      If `false` the setting title will not be wrapped in a `<label>` element
+	 *     @type string $class        CSS Class to be added to the `<tr>` element when the field is output.
+	 * }
+	 */
+	private function add_field(
+		$key,
+		$title,
+		$callback_name,
+		$section,
+		$args = array()
+	) {
+		// Compose field name from args
+		$full_field_name = "auhfc_settings_{$section}[{$key}]";
+		$args['field']   = $full_field_name;
+
+		// Generate clean_id
+		$clean_id = $this->generate_clean_id( $full_field_name );
+
+		// Append label_for to args if missing
+		if ( ! isset( $args['label_for'] ) ) {
+			$args['label_for'] = $clean_id;
+		}
+
+		// Extract value from the settings array
+		$args['value'] = isset( $this->settings[ $section ][ $key ] ) ? $this->settings[ $section ][ $key ] : '';
+
+		// Call WordPress Core metod
+		add_settings_field(
+			'auhfc_' . $key,
+			$title,
+			array( $this, $callback_name ),
+			HFC_PLUGIN_SLUG,
+			'head_footer_code_settings_' . $section,
+			$args
+		);
+	}
+
+	/**
+	 * Generate valid HTML ID from the field name.
+	 *
+	 * @param string $field  Field name (eg. 'prefix[settings][key]').
+	 * @param string $suffix Optional suffix (eg. 'editor' or 'post').
+	 *
+	 * @return string        Clean ID ready for HTML.
+	 */
+	public function generate_clean_id( $field, $suffix = '' ) {
+		$id = $field . ( $suffix ? '_' . $suffix : '' );
+		$id = rtrim( str_replace( array( '[', ']', '__' ), '_', $id ), '_' );
+
+		return sanitize_key( $id );
+	}
 
 	/**
 	 * This function provides textarea for settings fields
@@ -522,23 +528,23 @@ class Settings {
 			return;
 		}
 		// Set defaults and sanitize values.
-		$field       = isset( $args['field'] ) ? esc_attr( $args['field'] ) : '';
-		$field_id    = str_replace( '[', '_', str_replace( ']', '', $field ) ); // ID (sanitize field name for use in ID)
-		$rows        = isset( $args['rows'] ) ? intval( $args['rows'] ) : 7;
-		$field_class = isset( $args['field_class'] ) ? esc_attr( $args['field_class'] ) : '';
-		$label       = isset( $args['label'] ) ? esc_html( $args['label'] ) : '';
-		$value       = isset( $args['value'] ) ? esc_textarea( $args['value'] ) : '';
+		$field       = isset( $args['field'] ) ? $args['field'] : '';
+		$field_id    = isset( $args['label_for'] ) ? $args['label_for'] : $field;
+		$field_class = isset( $args['field_class'] ) ? $args['field_class'] : '';
+		$label       = isset( $args['label'] ) ? $args['label'] : '';
+		$value       = isset( $args['value'] ) ? $args['value'] : '';
+		$rows        = isset( $args['rows'] ) ? $args['rows'] : 7;
 
 		// Compose input HTML.
 		$html  = '<div class="description">' . $this->security_risk_notice . '</div>';
 		$html .= sprintf(
 			'<textarea name="%1$s" id="%2$s" rows="%3$s" class="%4$s" title="%5$s">%6$s</textarea>',
-			$field,       // 1
-			$field_id,    // 2
-			$rows,        // 3
-			$field_class, // 4
-			$label,       // 5
-			$value        // 6
+			esc_attr( $field ),       // 1
+			esc_attr( $field_id ),    // 2
+			intval( $rows ),          // 3
+			esc_attr( $field_class ), // 4
+			esc_html( $label ),       // 5
+			esc_textarea( $value )    // 6
 		);
 
 		// Append description if exists.
@@ -570,22 +576,24 @@ class Settings {
 		}
 
 		// Set defaults and sanitize values.
-		$field       = isset( $args['field'] ) ? esc_attr( $args['field'] ) : '';
-		$value       = isset( $args['value'] ) ? intval( $args['value'] ) : 0;
-		$field_class = isset( $args['class'] ) ? esc_attr( $args['class'] ) : '';
-		$min         = isset( $args['min'] ) ? intval( $args['min'] ) : 0;
-		$max         = isset( $args['max'] ) ? intval( $args['max'] ) : 100;
-		$step        = isset( $args['step'] ) ? intval( $args['step'] ) : 1;
+		$field       = isset( $args['field'] ) ? $args['field'] : '';
+		$field_id    = isset( $args['label_for'] ) ? $args['label_for'] : $field;
+		$field_class = isset( $args['class'] ) ? $args['class'] : '';
+		$value       = isset( $args['value'] ) ? $args['value'] : 0;
+		$min         = isset( $args['min'] ) ? $args['min'] : 0;
+		$max         = isset( $args['max'] ) ? $args['max'] : 100;
+		$step        = isset( $args['step'] ) ? $args['step'] : 1;
 
 		// Compose input HTML.
 		$html = sprintf(
-			'<input type="number" name="%1$s" id="%1$s" value="%2$s" class="%3$s" min="%4$s" max="%5$s" step="%6$s" />',
-			$field,       // 1 name/id
-			$value,       // 2
-			$field_class, // 3
-			$min,         // 4
-			$max,         // 5
-			$step         // 6
+			'<input type="number" name="%1$s" id="%2$s" value="%3$s" class="%4$s" min="%5$s" max="%6$s" step="%7$s" />',
+			esc_attr( $field ),       // 1
+			esc_attr( $field_id ),    // 2
+			intval( $value ),         // 3
+			esc_attr( $field_class ), // 4
+			intval( $min ),           // 5
+			intval( $max ),           // 6
+			intval( $step )           // 7
 		);
 
 		// Append description if exists.
@@ -603,29 +611,31 @@ class Settings {
 	 * @param array $args Array of arguments (items, value, field, class, description).
 	 */
 	public function checkbox_group_field_render( $args ) {
-		if ( empty( $args ) ) {
+		if ( empty( $args ) || ! isset( $args['items'] ) ) {
 			return;
 		}
+
+		// Set defaults and sanitize values.
+		$field       = isset( $args['field'] ) ? $args['field'] : '';
+		$field_class = isset( $args['class'] ) ? $args['class'] : '';
+		$values      = isset( $args['value'] ) ? (array) $args['value'] : array();
 
 		// Checkbox items.
 		$html = '<fieldset>';
 
 		foreach ( $args['items'] as $key => $label ) {
-			// Determine if checkbox is checked or not.
-			$checked = ! empty( $args['value'] ) && in_array( $key, $args['value'], true ) ? 'checked="checked"' : '';
-
-			// Set defaults and sanitize values.
-			$field       = isset( $args['field'] ) ? esc_attr( $args['field'] ) : '';
-			$field_class = isset( $args['class'] ) ? esc_attr( $args['class'] ) : '';
+			$item_id = $this->generate_clean_id( $field, $key );
+			$checked = checked( in_array( $key, $values, true ), true, false );
 
 			// Output filtered checkbox field.
 			$html .= sprintf(
-				'<label for="%1$s_%2$s"><input type="checkbox" name="%1$s[]" id="%1$s_%2$s" value="%2$s" class="%3$s" %4$s />%5$s</label><br>',
-				$field,            // 1 Name and 1st part of the ID
-				esc_attr( $key ),  // 2 Value and 2nd part of the ID
-				$field_class,      // 3
-				$checked,          // 4
-				esc_html( $label ) // 5
+				'<label for="%1$s"><input type="checkbox" name="%2$s[]" id="%1$s" value="%3$s" class="%4$s" %5$s />%6$s</label><br>',
+				esc_attr( $item_id ),     // 1
+				esc_attr( $field ),       // 2
+				esc_attr( $key ),         // 3
+				esc_attr( $field_class ), // 4
+				$checked,                 // 5
+				esc_html( $label )        // 6
 			);
 		}
 
@@ -651,26 +661,29 @@ class Settings {
 		}
 
 		// Set defaults and sanitize values.
-		$field_class = isset( $args['class'] ) ? esc_attr( $args['class'] ) : 'regular-text';
 		$field       = isset( $args['field'] ) ? esc_attr( $args['field'] ) : '';
+		$field_id    = isset( $args['label_for'] ) ? esc_attr( $args['label_for'] ) : $field;
+		$field_class = isset( $args['class'] ) ? esc_attr( $args['class'] ) : 'regular-text';
+		$current_val = isset( $args['value'] ) ? $args['value'] : '';
 
 		// Open SELECT tag.
 		$html = sprintf(
-			'<select id="%1$s" name="%1$s" class="%2$s">',
-			$field,      // 1 ID and Name
-			$field_class // 2
+			'<select id="%1$s" name="%2$s" class="%3$s">',
+			$field_id,   // 1
+			$field,      // 2
+			$field_class // 3
 		);
 
 		// Append OPTIONS.
 		foreach ( $args['items'] as $key => $val ) {
-			// Determine if dropdown option is selected not.
-			$selected = ! empty( $args['value'] ) && $key === $args['value'] ? 'selected="selected"' : '';
+			// Determine if this dropdown option is selected or not.
+			$selected = selected( $current_val, $key, false );
 
 			$html .= sprintf(
 				'<option %1$s value="%2$s">%3$s</option>',
 				$selected,        // 1
 				esc_attr( $key ), // 2
-				esc_attr( $val )  // 3
+				esc_html( $val )  // 3
 			);
 		}
 
@@ -772,4 +785,83 @@ class Settings {
 			'<a href="https://developer.wordpress.org/reference/hooks/wp_body_open/" target="_hook">wp_body_open</a>'
 		) . '</p>';
 	} // END public function body_note
+
+	/**
+	 * Sanitize SiteWide settings
+	 *
+	 * @param array $options
+	 * @return array $sanitized
+	 */
+	public function sanitize_sitewide( $options ) {
+		// Sanitize SiteWide HEAD/BODY/FOOTER code and behavior
+		$sanitized = Common::sanitize_hfc_data( $options );
+
+		// Sanitize SiteWide Priority
+		$sanitized['priority_h'] = isset( $options['priority_h'] ) ? absint( $options['priority_h'] ) : 10;
+		$sanitized['priority_b'] = isset( $options['priority_b'] ) ? absint( $options['priority_b'] ) : 10;
+		$sanitized['priority_f'] = isset( $options['priority_f'] ) ? absint( $options['priority_f'] ) : 10;
+
+		// Sanitize SiteWide shortcodes
+		$allowed_do_shortcode        = array( 'y', 'n' );
+		$sanitized['do_shortcode_h'] = ( isset( $options['do_shortcode_h'] ) && in_array( $options['do_shortcode_h'], $allowed_do_shortcode, true ) ) ? $options['do_shortcode_h'] : 'n';
+		$sanitized['do_shortcode_b'] = ( isset( $options['do_shortcode_b'] ) && in_array( $options['do_shortcode_b'], $allowed_do_shortcode, true ) ) ? $options['do_shortcode_b'] : 'n';
+		$sanitized['do_shortcode_f'] = ( isset( $options['do_shortcode_f'] ) && in_array( $options['do_shortcode_f'], $allowed_do_shortcode, true ) ) ? $options['do_shortcode_f'] : 'n';
+
+		return $sanitized;
+	}
+
+	/**
+	 * Sanitize Homepage settings
+	 *
+	 * @param array $options
+	 * @return array $sanitized
+	 */
+	public function sanitize_homepage( $options ) {
+		// Sanitize SiteWide HFC code
+		$sanitized = Common::sanitize_hfc_data( $options );
+		// Sanitize Homepage Paged
+		$allowed_paged      = array( 'yes', 'no' );
+		$sanitized['paged'] = ( isset( $options['paged'] ) && in_array( $options['paged'], $allowed_paged, true ) ) ? $options['paged'] : 'yes';
+
+		return $sanitized;
+	}
+
+	/**
+	 * Sanitize Article settings
+	 *
+	 * @param array $options
+	 * @return array $sanitized
+	 */
+	public function sanitize_article( $options ) {
+		$sanitized = array(
+			'post_types'    => array(),
+			'allowed_roles' => array(),
+		);
+
+		// Sanitize Article Post Types (allow only registered public post types)
+		if ( ! empty( $options['post_types'] ) && is_array( $options['post_types'] ) ) {
+			$registered_post_types = get_post_types( array( 'public' => true ) );
+
+			foreach ( $options['post_types'] as $post_type ) {
+				$post_type = sanitize_key( $post_type );
+				if ( isset( $registered_post_types[ $post_type ] ) ) {
+					$sanitized['post_types'][] = $post_type;
+				}
+			}
+		}
+
+		// Sanitize Article Allowed Roles (allow only existing WP roles on this site)
+		if ( ! empty( $options['allowed_roles'] ) && is_array( $options['allowed_roles'] ) ) {
+			$wp_roles = wp_roles()->get_names();
+
+			foreach ( $options['allowed_roles'] as $role ) {
+				$role = sanitize_key( $role );
+				if ( isset( $wp_roles[ $role ] ) ) {
+					$sanitized['allowed_roles'][] = $role;
+				}
+			}
+		}
+
+		return $sanitized;
+	}
 } // END class Settings

@@ -73,6 +73,13 @@ $badge-border-radius: 30%;
             th, td {
                 padding: 0;
             }
+            .notice-warning {
+                max-width: 100%;
+                margin-inline: 0;
+            }
+            textarea {
+                width: 100%;
+            }
         }
     }
     .CodeMirror {

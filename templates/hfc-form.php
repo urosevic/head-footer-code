@@ -54,9 +54,10 @@ printf(
 				<label for="auhfc_behavior"><?php esc_html_e( 'Behavior', 'head-footer-code' ); ?></label>
 			</th>
 			<td>
+				<?php $current_behavior = isset( $auhfc_form_data['behavior'] ) ? $auhfc_form_data['behavior'] : 'append'; ?>
 				<select name="auhfc[behavior]" id="auhfc_behavior">
-					<option value="append" <?php echo ( ! empty( $auhfc_form_data['behavior'] ) && 'append' === $auhfc_form_data['behavior'] ) ? 'selected' : ''; ?>><?php esc_html_e( 'Append to the site-wide code', 'head-footer-code' ); ?></option>
-					<option value="replace" <?php echo ( ! empty( $auhfc_form_data['behavior'] ) && 'replace' === $auhfc_form_data['behavior'] ) ? 'selected' : ''; ?>><?php esc_html_e( 'Replace the site-wide code', 'head-footer-code' ); ?></option>
+					<option value="append" <?php selected( $current_behavior, 'append' ); ?>><?php esc_html_e( 'Append to the site-wide code', 'head-footer-code' ); ?></option>
+					<option value="replace" <?php selected( $current_behavior, 'replace' ); ?>><?php esc_html_e( 'Replace the site-wide code', 'head-footer-code' ); ?></option>
 				</select>
 			</td>
 		</tr>
@@ -67,7 +68,7 @@ printf(
 			</th>
 			<td>
 				<div class="description"><?php echo $security_risk_notice; ?></div>
-				<textarea name="auhfc[head]" id="auhfc_head" class="widefat code" rows="5"><?php echo ! empty( $auhfc_form_data['head'] ) ? esc_textarea( $auhfc_form_data['head'] ) : ''; ?></textarea>
+				<textarea name="auhfc[head]" id="auhfc_head" class="widefat code codeEditor" rows="5"><?php echo ! empty( $auhfc_form_data['head'] ) ? esc_textarea( $auhfc_form_data['head'] ) : ''; ?></textarea>
 				<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;link&nbsp;rel="stylesheet" href="<?php echo esc_url( $auhfc_demo_url ); ?>/custom-style.css" type="text/css" media="all"&gt;</code></p>
 			</td>
 		</tr>
@@ -77,7 +78,7 @@ printf(
 			</th>
 			<td>
 				<div class="description"><?php echo $security_risk_notice; ?></div>
-				<textarea name="auhfc[body]" id="auhfc_body" class="widefat code" rows="5"><?php echo ! empty( $auhfc_form_data['body'] ) ? esc_textarea( $auhfc_form_data['body'] ) : ''; ?></textarea>
+				<textarea name="auhfc[body]" id="auhfc_body" class="widefat code codeEditor" rows="5"><?php echo ! empty( $auhfc_form_data['body'] ) ? esc_textarea( $auhfc_form_data['body'] ) : ''; ?></textarea>
 				<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;script src="<?php echo esc_url( $auhfc_demo_url ); ?>/body-script.js" type="text/javascript"&gt;&lt;/script&gt;</code></p>
 			</td>
 		</tr>
@@ -87,20 +88,19 @@ printf(
 			</th>
 			<td>
 				<div class="description"><?php echo $security_risk_notice; ?></div>
-				<textarea name="auhfc[footer]" id="auhfc_footer" class="widefat code" rows="5"><?php echo ! empty( $auhfc_form_data['footer'] ) ? esc_textarea( $auhfc_form_data['footer'] ) : ''; ?></textarea>
+				<textarea name="auhfc[footer]" id="auhfc_footer" class="widefat code codeEditor" rows="5"><?php echo ! empty( $auhfc_form_data['footer'] ) ? esc_textarea( $auhfc_form_data['footer'] ) : ''; ?></textarea>
 				<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;script src="<?php echo esc_url( $auhfc_demo_url ); ?>/footer-script.js" type="text/javascript"&gt;&lt;/script&gt;</code></p>
 			</td>
 		</tr>
 	</tbody>
 </table>
 <script type="text/javascript">
-	(function(){
-		'use strict';
-		var auhfc_cm_head = wp.codeEditor.initialize(document.getElementById('auhfc_head'), cm_settings);
-		auhfc_cm_head.codemirror.on('change', function(el) { el.save(); });
-		var auhfc_cm_body = wp.codeEditor.initialize(document.getElementById('auhfc_body'), cm_settings);
-		auhfc_cm_body.codemirror.on('change', function(el) { el.save(); });
-		var auhfc_cm_footer = wp.codeEditor.initialize(document.getElementById('auhfc_footer'), cm_settings);
-		auhfc_cm_footer.codemirror.on('change', function(el) { el.save(); });
-	})();
+	jQuery(document).ready(function($) {
+		$('#auhfc-head-footer-code .codeEditor').each(function() {
+			var editor = wp.codeEditor.initialize(this, cm_settings);
+			editor.codemirror.on('change', function(cm) {
+				cm.save();
+			});
+		});
+	});
 </script>

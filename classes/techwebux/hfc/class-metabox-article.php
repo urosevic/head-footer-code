@@ -94,14 +94,8 @@ class Metabox_Article {
 			return;
 		}
 
-		// Sanitize each field separately.
-		$data = array(
-			'behavior' => isset( $_POST['auhfc']['behavior'] ) ? sanitize_key( $_POST['auhfc']['behavior'] ) : '',
-			'head'     => isset( $_POST['auhfc']['head'] ) ? Common::sanitize_html_with_scripts( $_POST['auhfc']['head'] ) : '',
-			'body'     => isset( $_POST['auhfc']['body'] ) ? Common::sanitize_html_with_scripts( $_POST['auhfc']['body'] ) : '',
-			'footer'   => isset( $_POST['auhfc']['footer'] ) ? Common::sanitize_html_with_scripts( $_POST['auhfc']['footer'] ) : '',
-		);
-
+		// Sanitize data and update post meta.
+		$data = Common::sanitize_hfc_data( $_POST['auhfc'] );
 		update_post_meta( $post_id, '_auhfc', wp_slash( $data ) );
 	} // END public function save
 

@@ -4,8 +4,8 @@ Contributors: urkekg, techwebux
 Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: head, body, footer, code, script
 Requires at least: 4.9
-Tested up to: 6.9
-Stable tag: 1.4.6
+Tested up to: 7.0
+Stable tag: 1.5.0
 Requires PHP: 5.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -71,7 +71,7 @@ If you find **Head &amp; Footer Code** useful for your project, please [review p
 
 ### Features
 
-* **Multisite** and **PHP 8.3** compatible!
+* **Multisite** and **PHP 8.5** compatible!
 * Set site-wide custom content for:
   * head page section (before the `</head>`)
   * body section (after the `<body>`) - **Requires WordPress 5.2!**
@@ -180,6 +180,10 @@ Please report security bugs found in the source code of the Head & Footer Code p
 
 ## Upgrade Notice
 
+### 1.5.0
+
+To improve security and prevent XSS, this release introduce filtering of all opening SCRIPT and STYLE tags, and remove all not allowed attributes from them (eg. `onload`, `onmouseover`, etc).
+
 ### 1.0.0
 
 Initial release of new plugin developed by Aleksandar Urosevic.
@@ -190,8 +194,16 @@ Introduced restriction for non-privileged roles (eg. Editor and Author) to acces
 
 ## Changelog
 
+### 1.5.0 (2026-02-22)
+* Test: WordPress 7.0-beta1, Twenty Twenty-Five 1.4, PHP 8.5.3
+* Fix: Missing code editor when creating a new article
+* Fix: Incorrect use of <label for=FORM_ELEMENT>
+* Improve: Security (validate settings save data, better code filtering with included opening SCRIPT and STYLE tags)
+* Optimize: Code editor on articles
+* Optimize: Settings maintainability
+
 ### 1.4.6 (2025-12-01)
-* Test: WordPress 6.9RC3, Twenty Twenty-Five 1.6, PHP 8.4.15
+* Test: WordPress 6.9RC3, Twenty Twenty-Five 1.3, PHP 8.4.15
 
 ### 1.4.5 (2025-06-13)
 * Fix: Compatibility with Jetpack > Writing > Composing > Compose using shortcode to embed media from popular sites
