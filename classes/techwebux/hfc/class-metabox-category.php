@@ -54,8 +54,10 @@ class Metabox_Category {
 
 		// Render nonce and form.
 		wp_nonce_field( 'auhfc_category_save_action', 'auhfc_category_nonce' );
+		echo '<div id="auhfc-head-footer-code">';
 		echo '<h2>' . esc_html( HFC_PLUGIN_NAME ) . '</h2>';
 		include_once HFC_DIR . '/templates/hfc-form.php';
+		echo '</div>';
 	} // END public function form
 
 	/**

@@ -269,7 +269,6 @@ class Common {
 	 */
 	public static function sanitize_html_with_scripts( $content ) {
 		$allowed_html = self::allowed_html();
-		file_put_contents( __DIR__ . '/allowed_html.txt', print_r( $allowed_html, true ) );
 		$placeholders = array();
 
 		$regex = '#<(script|style)\b[^>]*>.*?</\1>#is';

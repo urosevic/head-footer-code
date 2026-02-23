@@ -5,7 +5,7 @@ Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: head, body, footer, code, script
 Requires at least: 4.9
 Tested up to: 7.0
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 Requires PHP: 5.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -99,7 +99,7 @@ Each post/page/custom post type specific HEAD, BODY and FOOTER code and behaviou
 Each category specific HEAD, BODY and FOOTER code and behaviour saves to taxonomy meta `_auhfc`.
 
 During the Uninstall process all these data has been deleted from the database.
-In case you wish to reinstall plugin, **DO NOT UNINSTALL IT** although **Deactivate**, then delete the directory `/wp-content/plugins-head-footer-code` and then reinstall plugin.
+In case you wish to reinstall plugin, **DO NOT UNINSTALL IT** although **Deactivate**, then delete the directory `/wp-content/plugins/head-footer-code` and then reinstall plugin.
 
 
 ### Permissions on Multisite WordPress
@@ -173,9 +173,8 @@ Please report security bugs found in the source code of the Head & Footer Code p
 4. Example of custom code inserted to HEAD section (site-wide with appended article specific)
 5. Example of custom code inserted to BODY and FOOTER sections (site-wide with appended article specific)
 6. Category specific metabox
-7. Example of custom code inserted to HEAD section (site-wide with appended category specific)
-8. Example of custom code inserted to BODY and FOOTER section (site-wide with appended category specific)
-9. Example of **Head &amp; Footer Code** column on Pages listing, to identify which pages have set custom code, which one and what mode is selected
+7. Example of custom code inserted to HEAD, BODY and FOOTER section (site-wide with appended category specific)
+8. Example of **Head &amp; Footer Code** column on Pages listing, to identify which pages have set custom code, which one and what mode is selected
 
 
 ## Upgrade Notice
@@ -193,6 +192,11 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 Introduced restriction for non-privileged roles (eg. Editor and Author) to access HFC on pages, posts and custom CPTs. If you wish to allow them manage article-specific HFC, make sure you enable that at the bottom of the global plugin settings page.
 
 ## Changelog
+
+### 1.5.1 (2026-02-23)
+* Fix: Code editor missing on categories
+* Cleanup: Remove debugging info
+* Update: Screenshots
 
 ### 1.5.0 (2026-02-22)
 * Test: WordPress 7.0-beta1, Twenty Twenty-Five 1.4, PHP 8.5.3
