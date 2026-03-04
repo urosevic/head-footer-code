@@ -177,14 +177,23 @@ class Common {
 					'media'      => true,
 					'property'   => true,
 				),
-				// Allow <noscript> and <iframe> for GTag
+				// Allow <noscript> and <iframe> for GTag and custom
 				'noscript' => true,
 				'iframe'   => array(
-					'src'     => true,
-					'height'  => true,
-					'width'   => true,
-					'style'   => true,
-					'loading' => true,
+					// standard
+					'src'      => true,
+					'srcdoc'   => true,
+					'name'     => true,
+					'sandbox'  => true,
+					'seamless' => true,
+					'width'    => true,
+					'height'   => true,
+					// global
+					'class'    => true,
+					'hidden'   => true,
+					'id'       => true,
+					'style'    => true,
+					'loading'  => true,
 				),
 			)
 		);
