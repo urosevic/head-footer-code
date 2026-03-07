@@ -77,21 +77,21 @@ class Grid {
 		}
 
 		$sections = array();
-		if ( ! empty( Common::get_meta( 'head', $post_id ) ) ) {
+		if ( ! empty( Common::get_post_meta( 'head', $post_id ) ) ) {
 			$sections[] = sprintf(
 				'<a href="post.php?post=%1$s&action=edit#auhfc_head" class="badge" title="%2$s">H</a>',
 				$post_id,
 				esc_html__( 'Article specific code is defined in HEAD section', 'head-footer-code' )
 			);
 		}
-		if ( ! empty( Common::get_meta( 'body', $post_id ) ) ) {
+		if ( ! empty( Common::get_post_meta( 'body', $post_id ) ) ) {
 			$sections[] = sprintf(
 				'<a href="post.php?post=%1$s&action=edit#auhfc_body" class="badge" title="%2$s">B</a>',
 				$post_id,
 				esc_html__( 'Article specific code is defined in BODY section', 'head-footer-code' )
 			);
 		}
-		if ( ! empty( Common::get_meta( 'footer', $post_id ) ) ) {
+		if ( ! empty( Common::get_post_meta( 'footer', $post_id ) ) ) {
 			$sections[] = sprintf(
 				'<a href="post.php?post=%1$s&action=edit#auhfc_footer" class="badge" title="%2$s">F</a>',
 				$post_id,

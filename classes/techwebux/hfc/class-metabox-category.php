@@ -34,6 +34,7 @@ class Metabox_Category {
 	 * Function to prepare variables and render Category metabox fields for Head & Footer Code.
 	 *
 	 * @param object $term_object Taxonomy term object.
+	 * @return void
 	 */
 	public function form( $term_object ) {
 		/** @var string $form_scope Used in templates/hfc-form.php */
@@ -41,17 +42,16 @@ class Metabox_Category {
 
 		$auhfc_security_risk_notice = Common::security_risk_notice();
 
-		// Get existing HFC meta for known Category or use defaults.
+		$term_id = isset( $term_object->term_id ) ? (int) $term_object->term_id : 0;
+
+		// Get category specific termmeta.
 		/** @var array $auhfc_form_data Used in templates/hfc-form.php */
-		$auhfc_form_data = ! empty( $term_object->term_id )
-			? get_term_meta( $term_object->term_id, '_auhfc', true )
-			: array(
-				'init'     => 'default',
-				'behavior' => 'append',
-				'head'     => '',
-				'body'     => '',
-				'footer'   => '',
-			);
+		$auhfc_form_data = array(
+			'behavior' => Common::get_term_meta( 'behavior', $term_id ),
+			'head'     => Common::get_term_meta( 'head', $term_id ),
+			'body'     => Common::get_term_meta( 'body', $term_id ),
+			'footer'   => Common::get_term_meta( 'footer', $term_id ),
+		);
 
 		// Render nonce and form.
 		wp_nonce_field( 'auhfc_category_save_action', 'auhfc_category_nonce' );
@@ -59,7 +59,7 @@ class Metabox_Category {
 		echo '<h2>' . esc_html( HFC_PLUGIN_NAME ) . '</h2>';
 		include_once HFC_DIR . '/templates/hfc-form.php';
 		echo '</div>';
-	} // END public function form
+	}
 
 	/**
 	 * Function to update category meta

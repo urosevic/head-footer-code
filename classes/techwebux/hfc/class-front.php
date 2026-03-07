@@ -48,29 +48,25 @@ class Front {
 	 */
 	public function wp_head() {
 		// Get variables to test.
-		$head_code              = '';
 		$head_behavior          = 'none';
+		$head_code              = '';
 		$is_paged               = is_paged() ? 'yes' : 'no';
 		$post_type              = Common::get_post_type();
 		$is_homepage_blog_posts = Common::is_homepage_blog_posts();
 
-		// Get meta for post only if it's singular.
+		$dbg_set = $post_type;
+
 		if ( 'not singular' !== $post_type && in_array( $post_type, $this->settings['article']['post_types'], true ) ) {
-			$head_behavior = Common::get_meta( 'behavior' );
-			$head_code     = Common::get_meta( 'head' );
+			// Get meta for singular article.
+			$head_behavior = Common::get_meta_auto( 'behavior' );
+			$head_code     = Common::get_meta_auto( 'head' );
 			$dbg_set       = "type: {$post_type}; bahavior: {$head_behavior}; priority: {$this->settings['sitewide']['priority_h']}; do_shortcode_h: {$this->settings['sitewide']['do_shortcode_h']}";
 		} elseif ( is_category() ) {
-			// Get category (term) meta with get_term_meta().
-			$category  = get_queried_object();
-			$auhfc_cat = get_term_meta( $category->term_id, '_auhfc', true );
-			if ( ! empty( $auhfc_cat ) ) {
-				$head_behavior = $auhfc_cat['behavior'];
-				$head_code     = $auhfc_cat['head'];
-			}
-			$dbg_set = "type: category; bahavior: {$head_behavior}; priority: {$this->settings['sitewide']['priority_h']}; do_shortcode_h: {$this->settings['sitewide']['do_shortcode_h']}";
+			// Get meta for category.
+			$head_behavior = Common::get_meta_auto( 'behavior', 'term' );
+			$head_code     = Common::get_meta_auto( 'head', 'term' );
+			$dbg_set       = "type: category; bahavior: {$head_behavior}; priority: {$this->settings['sitewide']['priority_h']}; do_shortcode_h: {$this->settings['sitewide']['do_shortcode_h']}";
 		} else {
-			$dbg_set = $post_type;
-
 			// Get meta for homepage.
 			if ( $is_homepage_blog_posts ) {
 				$add_to_homepage_paged = Common::add_to_homepage_paged( $is_homepage_blog_posts, $this->settings );
@@ -113,35 +109,32 @@ class Front {
 			: $out;
 			// We do not use wp_kses( $out, $this->allowed_html );
 			// because that mess up <, > and & which is sanitized on entry
-	} // END public function wp_head
+	}
 
 	/**
 	 * Inject site-wide and Article specific body code right after opening <body>
 	 */
 	public function wp_body() {
 		// Get variables to test.
-		$body_code              = '';
 		$body_behavior          = 'none';
+		$body_code              = '';
 		$is_paged               = is_paged() ? 'yes' : 'no';
 		$post_type              = Common::get_post_type();
 		$is_homepage_blog_posts = Common::is_homepage_blog_posts();
 
-		// Get meta for post only if it's singular.
+		$dbg_set = $post_type;
+
 		if ( 'not singular' !== $post_type && in_array( $post_type, $this->settings['article']['post_types'], true ) ) {
-			$body_behavior = Common::get_meta( 'behavior' );
-			$body_code     = Common::get_meta( 'body' );
+			// Get meta for singular article.
+			$body_behavior = Common::get_meta_auto( 'behavior' );
+			$body_code     = Common::get_meta_auto( 'body' );
 			$dbg_set       = "type: {$post_type}; bahavior: {$body_behavior}; priority: {$this->settings['sitewide']['priority_b']}; do_shortcode_b: {$this->settings['sitewide']['do_shortcode_b']}";
 		} elseif ( is_category() ) {
-			// Get category (term) meta with get_term_meta().
-			$category  = get_queried_object();
-			$auhfc_cat = get_term_meta( $category->term_id, '_auhfc', true );
-			if ( ! empty( $auhfc_cat ) ) {
-				$body_behavior = $auhfc_cat['behavior'];
-				$body_code     = $auhfc_cat['body'];
-			}
-			$dbg_set = "type: category; bahavior: {$body_behavior}; priority: {$this->settings['sitewide']['priority_b']}; do_shortcode_b: {$this->settings['sitewide']['do_shortcode_b']}";
+			// Get meta for category.
+			$body_behavior = Common::get_meta_auto( 'behavior', 'term' );
+			$body_code     = Common::get_meta_auto( 'body', 'term' );
+			$dbg_set       = "type: category; bahavior: {$body_behavior}; priority: {$this->settings['sitewide']['priority_b']}; do_shortcode_b: {$this->settings['sitewide']['do_shortcode_b']}";
 		} else {
-			$dbg_set = $post_type;
 			// Get meta for homepage.
 			if ( $is_homepage_blog_posts ) {
 				$add_to_homepage_paged = Common::add_to_homepage_paged( $is_homepage_blog_posts, $this->settings );
@@ -151,7 +144,7 @@ class Front {
 			}
 		}
 
-		// If no code to inject, simple exit.
+		// If no code to inject, exit.
 		if ( empty( $this->settings['sitewide']['body'] ) && empty( $body_code ) ) {
 			return;
 		}
@@ -191,38 +184,35 @@ class Front {
 	 */
 	public function wp_footer() {
 		// Get variables to test.
-		$footer_code            = '';
 		$footer_behavior        = 'none';
+		$footer_code            = '';
 		$is_paged               = is_paged() ? 'yes' : 'no';
 		$post_type              = Common::get_post_type();
 		$is_homepage_blog_posts = Common::is_homepage_blog_posts();
 
-		// Get meta for post only if it's singular.
+		$dbg_set = $post_type;
+
 		if ( 'not singular' !== $post_type && in_array( $post_type, $this->settings['article']['post_types'], true ) ) {
-			$footer_code     = Common::get_meta( 'footer' );
-			$footer_behavior = Common::get_meta( 'behavior' );
+			// Get meta for singular article.
+			$footer_behavior = Common::get_meta_auto( 'behavior' );
+			$footer_code     = Common::get_meta_auto( 'footer' );
 			$dbg_set         = "type: {$post_type}; bahavior: {$footer_behavior}; priority: {$this->settings['sitewide']['priority_f']}; do_shortcode_f: {$this->settings['sitewide']['do_shortcode_f']}";
 		} elseif ( is_category() ) {
-			// Get category (term) meta with get_term_meta().
-			$category  = get_queried_object();
-			$auhfc_cat = get_term_meta( $category->term_id, '_auhfc', true );
-			if ( ! empty( $auhfc_cat ) ) {
-				$footer_behavior = $auhfc_cat['behavior'];
-				$footer_code     = $auhfc_cat['footer'];
-			}
-			$dbg_set = "type: category; bahavior: {$footer_behavior}; priority: {$this->settings['sitewide']['priority_f']}; do_shortcode_f: {$this->settings['sitewide']['do_shortcode_f']}";
+			// Get met for category.
+			$footer_behavior = Common::get_meta_auto( 'behavior', 'term' );
+			$footer_code     = Common::get_meta_auto( 'footer', 'term' );
+			$dbg_set         = "type: category; bahavior: {$footer_behavior}; priority: {$this->settings['sitewide']['priority_f']}; do_shortcode_f: {$this->settings['sitewide']['do_shortcode_f']}";
 		} else {
-			$dbg_set = $post_type;
 			// Get meta for homepage.
 			if ( $is_homepage_blog_posts ) {
 				$add_to_homepage_paged = Common::add_to_homepage_paged( $is_homepage_blog_posts, $this->settings );
-				$footer_code           = $add_to_homepage_paged ? $this->settings['homepage']['footer'] : ' ';
 				$footer_behavior       = $this->settings['homepage']['behavior'];
+				$footer_code           = $add_to_homepage_paged ? $this->settings['homepage']['footer'] : ' ';
 				$dbg_set               = "type: homepage; bahavior: {$footer_behavior}; is_paged: {$is_paged}; add_on_paged: {$this->settings['homepage']['paged']}; priority: {$this->settings['sitewide']['priority_f']}; do_shortcode_f: {$this->settings['sitewide']['do_shortcode_f']}";
 			}
 		}
 
-		// If no code to inject, simple exit.
+		// If no code to inject, exit.
 		if ( empty( $this->settings['sitewide']['footer'] ) && empty( $footer_code ) ) {
 			return;
 		}

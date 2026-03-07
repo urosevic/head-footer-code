@@ -57,13 +57,41 @@ class Metabox_Article {
 			add_meta_box(
 				'auhfc-head-footer-code',
 				esc_html( HFC_PLUGIN_NAME ),
-				array( $this, 'html' ),
+				array( $this, 'form' ),
 				$post_type,
 				'normal',
 				'low'
 			);
 		}
 	} // END public function add
+
+	/**
+	 * Callback function to prepare variables and render article metabox for Head & Footer Code.
+	 *
+	 * @param object $post WP_Post object.
+	 * @return void
+	 */
+	public function form( $post ) {
+		/** @var string $form_scope Used in ../templates/hfc-form.php */
+		$form_scope = esc_html__( 'article specific', 'head-footer-code' );
+
+		$auhfc_security_risk_notice = Common::security_risk_notice();
+
+		$post_id = $post->ID;
+
+		// Get article specific postmeta.
+		/** @var array $auhfc_form_data Used in ../templates/hfc-form.php */
+		$auhfc_form_data = array(
+			'behavior' => Common::get_post_meta( 'behavior', $post_id ),
+			'head'     => Common::get_post_meta( 'head', $post_id ),
+			'body'     => Common::get_post_meta( 'body', $post_id ),
+			'footer'   => Common::get_post_meta( 'footer', $post_id ),
+		);
+
+		// Render nonce and form.
+		wp_nonce_field( '_head_footer_code_nonce', 'head_footer_code_nonce' );
+		include_once HFC_DIR . '/templates/hfc-form.php';
+	}
 
 	/**
 	 * Save meta box content.
@@ -99,27 +127,4 @@ class Metabox_Article {
 		$data = Common::sanitize_hfc_data( $_POST['auhfc'] );
 		update_post_meta( $post_id, '_auhfc', wp_slash( $data ) );
 	} // END public function save
-
-	/**
-	 * Callback function to prepare variables and render article metabox for Head & Footer Code.
-	 */
-	public function html() {
-		/** @var string $form_scope Used in ../templates/hfc-form.php */
-		$form_scope = esc_html__( 'article specific', 'head-footer-code' );
-
-		$auhfc_security_risk_notice = Common::security_risk_notice();
-
-		// Get article specific postmeta.
-		/** @var array $auhfc_form_data Used in ../templates/hfc-form.php */
-		$auhfc_form_data = array(
-			'behavior' => Common::get_meta( 'behavior' ),
-			'head'     => Common::get_meta( 'head' ),
-			'body'     => Common::get_meta( 'body' ),
-			'footer'   => Common::get_meta( 'footer' ),
-		);
-
-		// Render nonce and form.
-		wp_nonce_field( '_head_footer_code_nonce', 'head_footer_code_nonce' );
-		include_once HFC_DIR . '/templates/hfc-form.php';
-	} // END public function html
 } // END class Metabox

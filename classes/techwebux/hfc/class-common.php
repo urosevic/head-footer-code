@@ -350,53 +350,59 @@ class Common {
 	}
 
 	/**
-	 * Get values of metabox fields
+	 * Get values of metabox fields for Posts or Terms.
 	 *
-	 * @param  string $field_name Post meta field key.
-	 * @param  string $post_id    Post ID (optional).
-	 * @return string             Post meta field value.
+	 * @param string $field_name Field key.
+	 * @param int    $id         Post ID or Term ID.
+	 * @param string $type       `post` or `term`.
+	 * @return mixed
 	 */
-	public static function get_meta( $field_name = '', $post_id = null ) {
-		if ( empty( $field_name ) ) {
-			return false;
+	public static function get_meta( $field_name, $id, $type = 'post' ) {
+		if ( empty( $field_name ) || empty( $id ) ) {
+			return ( 'behavior' === $field_name ) ? 'append' : '';
 		}
 
-		if ( empty( $post_id ) || intval( $post_id ) !== $post_id ) {
-			if ( is_admin() ) {
-				global $post;
+		$meta_key = '_auhfc';
 
-				// If $post has not an object, return false.
-				if ( empty( $post ) || ! is_object( $post ) ) {
-					return false;
-				}
+		// Get meta data based on type
+		$data = ( 'post' === $type )
+			? get_post_meta( $id, $meta_key, true )
+			: get_term_meta( $id, $meta_key, true );
 
-				$post_id = $post->ID;
-			} else {
-				if ( is_singular() ) {
-					global $wp_the_query;
-					$post_id = $wp_the_query->get_queried_object_id();
-				} else {
-					$post_id = false;
-				}
-			}
-		} else {
-			$post_id = (int) $post_id;
+		// Check if we got array and requested key exists
+		if ( is_array( $data ) && isset( $data[ $field_name ] ) ) {
+			// Remove slashes from escaped value (make value ready to use)
+			return stripslashes_deep( $data[ $field_name ] );
 		}
 
-		if ( empty( $post_id ) ) {
-			return false;
-		}
-
-		$field = get_post_meta( $post_id, '_auhfc', true );
-
-		if ( ! empty( $field ) && is_array( $field ) && ! empty( $field[ $field_name ] ) ) {
-			return stripslashes_deep( $field[ $field_name ] );
-		} elseif ( 'behavior' === $field_name ) {
+		// Default for behavior
+		if ( 'behavior' === $field_name ) {
 			return 'append';
-		} else {
-			return false;
 		}
-	} // END public static function get_meta
+
+		return '';
+	}
+
+	/**
+	 * Helper: Get post meta values.
+	 */
+	public static function get_post_meta( $field_name, $post_id ) {
+		return self::get_meta( $field_name, $post_id, 'post' );
+	}
+
+	/**
+	 * Helper: Get term meta values.
+	 */
+	public static function get_term_meta( $field_name, $term_id ) {
+		return self::get_meta( $field_name, $term_id, 'term' );
+	}
+
+	/**
+	 * Smart wrapper: Get meta with auto-detected ID.
+	 */
+	public static function get_meta_auto( $field_name, $type = 'post' ) {
+		return self::get_meta( $field_name, get_queried_object_id(), $type );
+	}
 
 	/**
 	 * Function to get Post Type
