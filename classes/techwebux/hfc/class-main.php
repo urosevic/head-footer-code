@@ -25,6 +25,8 @@ class Main {
 	private static $settings = null;
 
 	public function __construct() {
+		add_filter( 'safe_style_css', array( $this, 'extend_safe_css' ) );
+
 		// Include back-end/front-end resources and maybe update settings.
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
@@ -156,6 +158,17 @@ class Main {
 		}
 		return;
 	} // END public function admin_enqueue_scripts
+
+	/**
+	 * Allow widely used style properties for KSES, eg. `display` in WP prior 7.0
+	 * and `visibility` used in GTM noscript.
+	 *
+	 * @param array $styles The current array of allowed CSS properties.
+	 * @return array Modified array of allowed CSS properties.
+	 */
+	public function extend_safe_css( $styles ) {
+		return array_unique( array_merge( (array) $styles, array( 'display', 'visibility' ) ) );
+	}
 
 	/**
 	 * Provide global settings with default fallback.
