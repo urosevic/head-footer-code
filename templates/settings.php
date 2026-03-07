@@ -26,15 +26,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<span class="actions long-header">
 			<a href="https://wordpress.org/plugins/head-footer-code/#faq" class="page-title-action" target="_blank"><?php esc_html_e( 'FAQ', 'head-footer-code' ); ?></a>
 			<a href="https://wordpress.org/support/plugin/head-footer-code/" class="page-title-action" target="_blank"><?php esc_html_e( 'Community Support', 'head-footer-code' ); ?></a>
-			<a href="https://wordpress.org/support/plugin/head-footer-code/reviews/#new-post" class="page-title-action" target="_blank">
-				<?php
-				printf(
-					/* translators: %s will be replaced with plugin name Head & Footer Code */
-					esc_html__( 'Review %s', 'head-footer-code' ),
-					esc_html( HFC_PLUGIN_NAME )
-				);
-				?>
-			</a>
 		</span>
 	</h1>
 	<form method="post" action="options.php">

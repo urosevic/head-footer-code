@@ -39,6 +39,13 @@ class Settings {
 
 		// Update links in plugin row on Plugins page.
 		add_filter( 'plugin_row_meta', array( $this, 'add_plugin_meta_links' ), 10, 2 );
+
+		add_filter(
+			'admin_footer_text',
+			function ( $text ) {
+				return '<span id="footer-thankyou">If you like the plugin please rate Head & Footer Code <a target="_blank" rel="nofollow" href="https://wordpress.org/support/plugin/head-footer-code/reviews/#new-post">★★★★★</a> on <a target="_blank" rel="nofollow" href="https://wordpress.org/support/plugin/head-footer-code/reviews/#new-post">WordPress.org</a> to help us spread the word ♥ from the Head & Footer Code team. </span>';
+			}
+		);
 	} // END public function __construct
 
 	/**
