@@ -17,9 +17,9 @@
  * License:     GPLv3
  * License URI: https://www.gnu.org/licenses/gpl-3.0.txt
  * Text Domain: head-footer-code
- * Requires at least: 4.9
+ * Requires at least: 5.2
  * Tested up to: 7.0
- * Requires PHP: 5.5
+ * Requires PHP: 5.6
  */
 
 namespace Techwebux\Hfc;
@@ -29,8 +29,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HFC__MIN_PHP', '5.5' );
-define( 'HFC__MIN_WP', '4.9' );
+define( 'HFC__MIN_PHP', '5.6' );
+define( 'HFC__MIN_WP', '5.2' );
 
 define( 'HFC_VER', '1.5.3' );
 define( 'HFC_VER_DB', '9' );
@@ -45,15 +45,3 @@ register_activation_hook( HFC_FILE, array( '\Techwebux\Hfc\Main', 'plugin_activa
 // Load files.
 require_once HFC_DIR . '/classes/autoload.php';
 new Main();
-
-/**
- * Add `wp_body_open` backward compatibility for WordPress installations prior 5.2
- */
-if ( ! function_exists( 'wp_body_open' ) ) {
-	/**
-	 * Fire the wp_body_open action.
-	 */
-	function wp_body_open() {
-		do_action( 'wp_body_open' );
-	}
-}

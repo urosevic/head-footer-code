@@ -72,9 +72,7 @@ class Settings {
 		 * Get settings from options table
 		 */
 		$auhfc_homepage_blog_posts  = 'posts' === get_option( 'show_on_front', false ) ? true : false;
-		$wp52note                   = version_compare( get_bloginfo( 'version' ), '5.2', '<' ) ? ' ' . esc_html__( 'Requires WordPress 5.2 or later.', 'head-footer-code' ) : '';
 		$head_note                  = $this->head_note();
-		$body_note                  = $this->body_note();
 		$this->security_risk_notice = Common::security_risk_notice();
 
 		/**
@@ -153,11 +151,11 @@ class Settings {
 			'textarea_field_render',
 			'sitewide',
 			array(
-				'description' => $body_note . '<p>' . sprintf(
+				'description' => '<p>' . sprintf(
 					/* translators: %s will be replaced with preformatted HTML tag <body> */
 					esc_html__( 'Code to enqueue in BODY section (after the %s).', 'head-footer-code' ),
 					Common::html2code( '<body>' )
-				) . ' ' . $wp52note . '</p>',
+				) . '</p>',
 				'field_class' => 'widefat code codeEditor',
 				'rows'        => 7,
 			)
@@ -177,8 +175,7 @@ class Settings {
 					),
 					10,
 					Common::html2code( '<body>' )
-				)
-				. $wp52note,
+				),
 				'class'       => 'num',
 				'min'         => 1,
 				'max'         => 1000,
@@ -313,12 +310,11 @@ class Settings {
 				'homepage',
 				array(
 					'label'       => __( 'Homepage BODY Code', 'head-footer-code' ),
-					'description' => $body_note . '<p>' . sprintf(
+					'description' => '<p>' . sprintf(
 						/* translators: %s: preformatted HTML tag <body> */
 						esc_html__( 'Code to enqueue in BODY section (after the %s) on Homepage.', 'head-footer-code' ),
 						Common::html2code( '<body>' )
-					) . '</p>'
-					. $wp52note,
+					) . '</p>',
 					'field_class' => 'widefat code codeEditor',
 					'rows'        => 5,
 				)
@@ -783,16 +779,6 @@ class Settings {
 		) . '</p>';
 	} // END public function head_note
 
-	/**
-	 * Function to print note for body section
-	 */
-	public function body_note() {
-		return '<p class="notice">' . sprintf(
-			/* translators: %s will be replaced with a link to wp_body_open page on WordPress.org */
-			esc_html__( 'Make sure that your active theme support %s hook.', 'head-footer-code' ),
-			'<a href="https://developer.wordpress.org/reference/hooks/wp_body_open/" target="_hook">wp_body_open</a>'
-		) . '</p>';
-	} // END public function body_note
 
 	/**
 	 * Sanitize SiteWide settings
