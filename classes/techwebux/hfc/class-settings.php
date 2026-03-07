@@ -45,15 +45,20 @@ class Settings {
 		// Create menu item for settings page.
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 
-		// Plugins settings only hooks.
+		// add_action( 'admin_init', array( $this, 'settings_init' ) );
+		add_action( 'admin_init', array( $this, 'settings_register' ) );
+
+		// Plugins settings page only hooks.
 		$current_page = isset( $_GET['page'] ) ? $_GET['page'] : '';
 		if ( $current_page === $this->plugin->slug ) {
-			$this->settings          = Main::settings();
+
+			$this->settings          = Main::get_settings();
 			$this->allowed_html      = Common::allowed_html();
 			$this->form_allowed_html = Common::form_allowed_html();
 
 			// Initiate settings section and fields.
-			add_action( 'admin_init', array( $this, 'settings_init' ) );
+
+			add_action( 'admin_init', array( $this, 'settings_prepare' ) );
 
 			// Add Review CTA to the footer thankyou
 			add_filter( 'admin_footer_text', array( $this, 'custom_footer_thankyou' ) );
@@ -76,10 +81,52 @@ class Settings {
 	}
 
 	/**
+	 * Register a setting and its sanitization callback.
+	 *
+	 * This is part of the Settings API, which lets you automatically generate
+	 * wp-admin settings pages by registering your settings and using a few
+	 * callbacks to control the output.
+	 *
+	 * @return void
+	 */
+	public function settings_register() {
+		$homepage_blog_posts = 'posts' === get_option( 'show_on_front', false ) ? true : false;
+
+		// Site-wide.
+		register_setting(
+			'head_footer_code_settings', // Option group.
+			'auhfc_settings_sitewide',   // Option name.
+			array(
+				'sanitize_callback' => array( $this, 'sanitize_sitewide' ),
+			)
+		);
+
+		// Blog gomepage.
+		if ( $homepage_blog_posts ) {
+			register_setting(
+				'head_footer_code_settings', // Option group.
+				'auhfc_settings_homepage',   // Option name.
+				array(
+					'sanitize_callback' => array( $this, 'sanitize_homepage' ),
+				)
+			);
+		}
+
+		// Articles
+		register_setting(
+			'head_footer_code_settings', // Option group.
+			'auhfc_settings_article',    // Option name.
+			array(
+				'sanitize_callback' => array( $this, 'sanitize_article' ),
+			)
+		);
+	}
+
+	/**
 	 * Register a setting and its sanitization callback
 	 * define section and settings fields
 	 */
-	public function settings_init() {
+	public function settings_prepare() {
 		/**
 		 * Get settings from options table
 		 */
@@ -261,20 +308,6 @@ class Settings {
 		);
 
 		/**
-		 * Register a setting and its sanitization callback.
-		 * This is part of the Settings API, which lets you automatically generate
-		 * wp-admin settings pages by registering your settings and using a few
-		 * callbacks to control the output.
-		 */
-		register_setting(
-			'head_footer_code_settings', // Option group.
-			'auhfc_settings_sitewide',   // Option name.
-			array(
-				'sanitize_callback' => array( $this, 'sanitize_sitewide' ),
-			)
-		);
-
-		/**
 		 * Add section for Homepage if show_on_front is set to Blog Posts
 		 */
 		if ( $homepage_blog_posts ) {
@@ -378,20 +411,6 @@ class Settings {
 					'class'       => 'regular-text',
 				)
 			);
-
-			/**
-			 * Register a setting and its sanitization callback.
-			 * This is part of the Settings API, which lets you automatically generate
-			 * wp-admin settings pages by registering your settings and using a few
-			 * callbacks to control the output.
-			 */
-			register_setting(
-				'head_footer_code_settings', // Option group.
-				'auhfc_settings_homepage',   // Option name.
-				array(
-					'sanitize_callback' => array( $this, 'sanitize_homepage' ),
-				)
-			);
 		} // END condition: $homepage_blog_posts
 
 		/**
@@ -428,7 +447,33 @@ class Settings {
 				'items'       => $clean_post_types,
 				'description' => esc_html__( 'Choose the post types that will have an article specific section.', 'head-footer-code' )
 								. '<br>'
-								. esc_html__( 'Note that if you add head, body, and footer code for individual articles and then disable that post type, the article-specific code will no longer be output and only the site-wide code will be used.', 'head-footer-code' ),
+								. esc_html__( 'Please note, if you add head, body, and footer code for individual articles and then disable that post type, the article-specific code will no longer be output and only the site-wide code will be used.', 'head-footer-code' ),
+				'class'       => 'checkbox',
+			)
+		);
+
+		// Prepare list of public taxonomies, including built-in ones
+		$public_taxonomies = get_taxonomies( array( 'public' => true ), 'objects' );
+		$clean_taxonomies  = array();
+		foreach ( $public_taxonomies as $tax_slug => $tax_object ) {
+			// Skip specific eg. nav_menu, post_format
+			if ( in_array( $tax_slug, array( 'nav_menu', 'post_format' ), true ) ) {
+				continue;
+			}
+
+			$clean_taxonomies[ $tax_slug ] = esc_html( $tax_object->label ) . ' (' . esc_attr( $tax_slug ) . ')';
+		}
+		$this->add_field(
+			'taxonomies',                                   // Field key.
+			esc_html__( 'Taxonomies', 'head-footer-code' ), // Title.
+			'checkbox_group_field_render',                  // Callback method name.
+			'article',                                      // Section.
+			array(                                          // Arguments.
+				'label_for'   => false,
+				'items'       => $clean_taxonomies,
+				'description' => esc_html__( 'Choose the taxonomies that will have a taxonomy specific section.', 'head-footer-code' )
+								. '<br>'
+								. esc_html__( 'Please note, if you add head, body, and footer code for individual taxonomy and then disable that taxonomy, the txonomy-specific code will no longer be output and only the site-wide code will be used.', 'head-footer-code' ),
 				'class'       => 'checkbox',
 			)
 		);
@@ -444,30 +489,16 @@ class Settings {
 					'editor' => __( 'Editor', 'head-footer-code' ),
 					'author' => __( 'Author', 'head-footer-code' ),
 				),
-				'description' => esc_html__( 'Choose which unprivileged user roles can manage article-specific and category-specific code.', 'head-footer-code' )
+				'description' => esc_html__( 'Choose which unprivileged user roles can manage article-specific and taxonomy-specific code.', 'head-footer-code' )
 								. '<br>'
 								. '<span class="warn"><strong>'
 								. esc_html__( 'Security Notice', 'head-footer-code' )
 								. '</strong><br>'
-								. '<i></i>' . esc_html__( 'Granting access to non-administrator roles (e.g., Editors) allows users to inject raw HTML, CSS, and JavaScript into individual posts and pages, and categories!', 'head-footer-code' )
+								. '<i></i>' . esc_html__( 'Granting access to non-administrator roles (e.g., Editors) allows users to inject raw HTML, CSS, and JavaScript into individual posts and pages, and taxonomies!', 'head-footer-code' )
 								. '<br><i></i>' . esc_html__( 'This may pose a security risk if those users are not fully trusted!', 'head-footer-code' )
 								. '<br><i></i>' . esc_html__( 'Only allow for roles you trust to handle code responsibly!', 'head-footer-code' )
 								. '</span>',
 				'class'       => 'checkbox',
-			)
-		);
-
-		/**
-		 * Register a setting and its sanitization callback.
-		 * This is part of the Settings API, which lets you automatically generate
-		 * wp-admin settings pages by registering your settings and using a few
-		 * callbacks to control the output.
-		 */
-		register_setting(
-			'head_footer_code_settings', // Option group.
-			'auhfc_settings_article',    // Option name.
-			array(
-				'sanitize_callback' => array( $this, 'sanitize_article' ),
 			)
 		);
 	}
@@ -852,6 +883,7 @@ class Settings {
 	public function sanitize_article( $options ) {
 		$sanitized = array(
 			'post_types'    => array(),
+			'taxonomies'    => array(),
 			'allowed_roles' => array(),
 		);
 
@@ -863,6 +895,18 @@ class Settings {
 				$post_type = sanitize_key( $post_type );
 				if ( isset( $registered_post_types[ $post_type ] ) ) {
 					$sanitized['post_types'][] = $post_type;
+				}
+			}
+		}
+
+		// Sanitize Article Taxonomies (allow only registered public taxonomies)
+		if ( ! empty( $options['taxonomies'] ) && is_array( $options['taxonomies'] ) ) {
+			$registered_taxonmies = get_taxonomies( array( 'public' => true ) );
+
+			foreach ( $options['taxonomies'] as $taxonomy ) {
+				$taxonomy = sanitize_key( $taxonomy );
+				if ( isset( $registered_taxonmies[ $taxonomy ] ) ) {
+					$sanitized['taxonomies'][] = $taxonomy;
 				}
 			}
 		}
