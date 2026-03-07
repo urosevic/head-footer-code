@@ -5,7 +5,7 @@ Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: head, body, footer, code, script
 Requires at least: 4.9
 Tested up to: 7.0
-Stable tag: 1.5.2
+Stable tag: 1.5.3
 Requires PHP: 5.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -192,6 +192,17 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 Introduced restriction for non-privileged roles (eg. Editor and Author) to access HFC on pages, posts and custom CPTs. If you wish to allow them manage article-specific HFC, make sure you enable that at the bottom of the global plugin settings page.
 
 ## Changelog
+
+### 1.5.3 (2026-03-07)
+* Fix: Allow `display` and `visibility` CSS properties for KSES
+* Fix: Category specific code was double escaped
+* Improve: DRY Front rendering
+* Improve: DRY plugin activation handling
+* Improve: Post grid custom code indicators
+* Improve: Resolve some PCP errors and warnings
+* Test: PHP 8.4.15, WordPress 6.9.1, Twenty Twenty-Five 1.4
+* Test: PHP 8.5.3, WordPress 7.0-beta3, Twenty Twenty-Five 1.4
+* Test: PHP 5.6.20, WordPress 5.2.23, Twenty Ninetin 1.4
 
 ### 1.5.2 (2026-03-04)
 * Fix: Allow all W3C standard attributes for iframe

@@ -11,7 +11,7 @@
  * Plugin Name: Head & Footer Code
  * Plugin URI:  https://urosevic.net/wordpress/plugins/head-footer-code/
  * Description: Easy add site-wide, category or article specific custom code before the closing <strong>&lt;/head&gt;</strong> and <strong>&lt;/body&gt;</strong> or after opening <strong>&lt;body&gt;</strong> HTML tag.
- * Version:     1.5.2
+ * Version:     1.5.3
  * Author:      Aleksandar Urošević
  * Author URI:  https://urosevic.net/
  * License:     GPLv3
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'HFC__MIN_PHP', '5.5' );
 define( 'HFC__MIN_WP', '4.9' );
 
-define( 'HFC_VER', '1.5.2' );
+define( 'HFC_VER', '1.5.3' );
 define( 'HFC_VER_DB', '9' );
 define( 'HFC_FILE', __FILE__ );
 define( 'HFC_DIR', __DIR__ );
