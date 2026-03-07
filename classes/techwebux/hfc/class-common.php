@@ -218,13 +218,17 @@ class Common {
 	}
 
 	/**
-	 * Prepare allowed code for KSES filtering
+	 * Defines the expanded schema of allowed HTML tags and attributes for KSES.
 	 *
-	 * @return array
+	 * Extends the default `post` global with specific attributes required for
+	 * modern tracking scripts, preloading (fetchpriority, imagesrcset),
+	 * and security (nonce, integrity).
+	 *
+	 * @return array Map of allowed tags and their permitted attributes.
 	 */
 	public static function allowed_html() {
 		// Allow safe HTML, JS, and CSS.
-		return array_merge(
+		return array_replace_recursive(
 			wp_kses_allowed_html( 'post' ), // Allow safe HTML for posts.
 			array(
 				'noscript' => true,
@@ -366,12 +370,15 @@ class Common {
 	}
 
 	/**
-	 * Sanitize HTML code by temporarily removing content within the
-	 * <script>...</script> and <style>...</style> before filtering
-	 * allowed HTML through wp_kses
+	 * Sanitizes HTML content while preserving script and style tag integrity.
 	 *
-	 * @param string $content
-	 * @return string Sanitized content (code inside SCRIPT and STYLE is untouched)
+	 * This method employs a placeholder strategy: it extracts `<script>` and `<style>`
+	 * blocks, sanitizes their attributes, and hides them from `wp_kses()` to prevent
+	 * the stripping of valid JS/CSS logic. After the remaining HTML is sanitized,
+	 * the blocks are reinstated.
+	 *
+	 * @param  string $content The raw HTML/JS/CSS content to sanitize.
+	 * @return string          Sanitized content with preserved safe scripts/styles.
 	 */
 	public static function sanitize_html_with_scripts( $content ) {
 		$allowed_html = self::allowed_html();
@@ -433,7 +440,7 @@ class Common {
 			remove_filter( 'pre_kses', $jetpack_filter, 100 );
 		}
 
-		// Build anitized data array
+		// Build sanitized data array
 		$sanitized = array(
 			'behavior' => isset( $input['behavior'] ) ? sanitize_key( $input['behavior'] ) : 'append',
 			'head'     => isset( $input['head'] ) ? self::sanitize_html_with_scripts( $input['head'] ) : '',
@@ -505,22 +512,6 @@ class Common {
 	}
 
 	/**
-	 * Function to get Post Type
-	 */
-	public static function get_post_type_old() {
-		$auhfc_post_type = 'not singular';
-		// Get post type.
-		if ( is_singular() ) {
-			global $wp_the_query;
-			$auhfc_query = $wp_the_query->get_queried_object();
-			if ( is_object( $auhfc_query ) ) {
-				$auhfc_post_type = $auhfc_query->post_type;
-			}
-		}
-		return $auhfc_post_type;
-	} // END public static function get_post_type
-
-	/**
 	 * Get Post Type for singular requests.
 	 *
 	 * @return mixed Post type slug or `false` if not on a singular page.
@@ -530,16 +521,52 @@ class Common {
 	}
 
 	/**
-	 * Function to convert code to HTML special chars
+	 * Format security risk notice for appending to each code textarea description
 	 *
-	 * @param string $text RAW content.
+	 * @return string
 	 */
-	public static function html2code( $text ) {
-		return '<code>' . htmlspecialchars( $text ) . '</code>';
+	public static function get_security_risk_notice() {
+		return sprintf(
+			'<p class="notice notice-warning"><strong>%1$s</strong> %2$s</p>',
+			esc_html__( 'WARNING!', 'head-footer-code' ),
+			esc_html__( 'Enter only safe, secure, and code from a trusted source. Unsafe or invalid code may break your site or pose security risks.', 'head-footer-code' )
+		);
+	}
+
+	/** Helper: Get scope label. */
+	private static function get_scope_label( $scope ) {
+		$labels = array(
+			'h' => 'Homepage',
+			's' => 'Site-wide',
+			'a' => 'Article specific',
+			'c' => 'Category specific',
+			't' => 'Taxonomy specific',
+		);
+		return $labels[ $scope ] ?? 'Unknown';
+	}
+
+	/** Helper: Get localtion label. */
+	private static function get_location_label( $location ) {
+		$labels = array(
+			'h' => 'HEAD',
+			'b' => 'BODY',
+			'f' => 'FOOTER',
+		);
+		return $labels[ $location ] ?? 'UNKNOWN';
 	}
 
 	/**
-	 * Return debugging string if WP_DEBUG constant is true.
+	 * Wraps text in <code> tags and escapes HTML entities.
+	 *
+	 * @param string $text
+	 * @return string
+	 */
+	public static function format_as_code( $text ) {
+		return sprintf( '<code>%s</code>', esc_html( $text ) );
+	}
+
+	/**
+	 * Wrap code block with debugging info when WP_DEBUG is true.
 	 *
 	 * @param  string $scope    Scope of output (s - SITE WIDE, a - ARTICLE SPECIFIC, h - HOMEPAGE).
 	 * @param  string $location Location of output (h - HEAD, b - BODY, f - FOOTER).
@@ -547,7 +574,7 @@ class Common {
 	 * @param  string $code     Code for output.
 	 * @return string           Composed string.
 	 */
-	public static function out(
+	public static function annotate_code_block(
 		$scope = null,
 		$location = null,
 		$message = null,
@@ -561,71 +588,27 @@ class Common {
 			return;
 		}
 
-		switch ( $scope ) {
-			case 'h':
-				$scope = 'Homepage';
-				break;
-			case 's':
-				$scope = 'Site-wide';
-				break;
-			case 'a':
-				$scope = 'Article specific';
-				break;
-			case 'c':
-				$scope = 'Category specific';
-				break;
-			case 't':
-				$scope = 'Taxonomy specific';
-				break;
-			default:
-				$scope = 'Unknown';
-		}
-		switch ( $location ) {
-			case 'h':
-				$location = 'HEAD';
-				break;
-			case 'b':
-				$location = 'BODY';
-				break;
-			case 'f':
-				$location = 'FOOTER';
-				break;
-			default:
-				$location = 'UNKNOWN';
-				break;
-		}
+		$scope_label    = self::get_scope_label( $scope );
+		$location_label = self::get_location_label( $location );
 		return sprintf(
 			'<!-- %1$s: %2$s %3$s section start (%4$s) -->%6$s%5$s%6$s<!-- %1$s: %2$s %3$s section end (%4$s) -->%6$s',
-			self::$plugin->name, // 1
-			esc_html( $scope ),              // 2
-			esc_html( $location ),           // 3
-			esc_html( trim( $message ) ),    // 4
-			trim( $code ),                   // 5 - RAW (Pre-sanitized)
-			"\n"                             // 6
+			self::$plugin->name,          // 1
+			esc_html( $scope_label ),     // 2
+			esc_html( $location_label ),  // 3
+			esc_html( trim( $message ) ), // 4
+			trim( $code ),                // 5 - RAW (Pre-sanitized)
+			"\n"                          // 6
 		);
 	}
 
 	/**
-	 * Format security risk notice for appending to each code textarea description
-	 *
-	 * @return string
-	 */
-	public static function security_risk_notice() {
-		return sprintf(
-			'<p class="notice notice-warning"><strong>%1$s</strong> %2$s</p>',
-			esc_html__( 'WARNING!', 'head-footer-code' ),
-			esc_html__( 'Enter only safe, secure, and code from a trusted source. Unsafe or invalid code may break your site or pose security risks.', 'head-footer-code' )
-		);
-	}
-
-	/**
-	 * Output security risk notice
+	 * Print security risk notice
 	 *
 	 * @return void
 	 */
-	public static function display_security_risk_notice() {
+	public static function print_security_risk_notice() {
 		echo wp_kses(
-			self::security_risk_notice(),
+			self::get_security_risk_notice(),
 			array(
 				'p'      => array( 'class' => true ),
 				'strong' => array(),

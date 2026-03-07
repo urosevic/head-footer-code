@@ -68,7 +68,7 @@ class Metabox_Taxonomy {
 		$auhfc_form_scope = esc_html( "{$term_name} {$taxonomy_label} " )
 			. esc_html__( 'specific', 'head-footer-code' );
 
-		$auhfc_security_risk_notice = Common::security_risk_notice();
+		$auhfc_security_risk_notice = Common::get_security_risk_notice();
 
 		$term_id  = isset( $term_object->term_id ) ? (int) $term_object->term_id : 0;
 		$taxonomy = isset( $term_object->taxonomy ) ? (string) $term_object->taxonomy : 'category';

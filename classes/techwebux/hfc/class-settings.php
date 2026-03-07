@@ -132,7 +132,7 @@ class Settings {
 		 */
 		$homepage_blog_posts        = 'posts' === get_option( 'show_on_front', false ) ? true : false;
 		$head_note                  = $this->head_note();
-		$this->security_risk_notice = Common::security_risk_notice();
+		$this->security_risk_notice = Common::get_security_risk_notice();
 
 		/**
 		 * Settings Sections are the groups of settings you see on WordPress settings pages
@@ -163,7 +163,7 @@ class Settings {
 				'description' => $head_note . '<p>' . sprintf(
 					/* translators: %s will be replaced with preformatted HTML tag </head> */
 					esc_html__( 'Code to enqueue in HEAD section (before the %s).', 'head-footer-code' ),
-					Common::html2code( '</head>' )
+					Common::format_as_code( '</head>' )
 				) . '</p>',
 				'field_class' => 'widefat code codeEditor',
 				'rows'        => 7,
@@ -180,7 +180,7 @@ class Settings {
 					/* translators: 1: default HEAD priority, 2: preformatted HTML tag </head> */
 					esc_html__( 'Priority for enqueued HEAD code. Default is %1$d. Larger number inject code closer to %2$s.', 'head-footer-code' ),
 					10,
-					Common::html2code( '</head>' )
+					Common::format_as_code( '</head>' )
 				),
 				'class'       => 'num',
 				'min'         => 1,
@@ -213,7 +213,7 @@ class Settings {
 				'description' => '<p>' . sprintf(
 					/* translators: %s will be replaced with preformatted HTML tag <body> */
 					esc_html__( 'Code to enqueue in BODY section (after the %s).', 'head-footer-code' ),
-					Common::html2code( '<body>' )
+					Common::format_as_code( '<body>' )
 				) . '</p>',
 				'field_class' => 'widefat code codeEditor',
 				'rows'        => 7,
@@ -233,7 +233,7 @@ class Settings {
 						'head-footer-code'
 					),
 					10,
-					Common::html2code( '<body>' )
+					Common::format_as_code( '<body>' )
 				),
 				'class'       => 'num',
 				'min'         => 1,
@@ -266,7 +266,7 @@ class Settings {
 				'description' => '<p>' . sprintf(
 					/* translators: %s will be replaced with preformatted HTML tag </body> */
 					esc_html__( 'Code to enqueue in footer section (before the %s).', 'head-footer-code' ),
-					Common::html2code( '</body>' )
+					Common::format_as_code( '</body>' )
 				) . '</p>',
 				'field_class' => 'widefat code codeEditor',
 				'rows'        => 7,
@@ -283,7 +283,7 @@ class Settings {
 					/* translators: 1: default FOOTER priority, 2: preformatted HTML tag </body> */
 					esc_html__( 'Priority for enqueued FOOTER code. Default is %1$d. Larger number inject code closer to %2$s.', 'head-footer-code' ),
 					10,
-					Common::html2code( '</body>' )
+					Common::format_as_code( '</body>' )
 				),
 				'class'       => 'num',
 				'min'         => 1,
@@ -341,7 +341,7 @@ class Settings {
 					'description' => $head_note . '<p>' . sprintf(
 						/* translators: %s will be replaced with preformatted HTML tag </head> */
 						esc_html__( 'Code to enqueue in HEAD section (before the %s) on Homepage.', 'head-footer-code' ),
-						Common::html2code( '</head>' )
+						Common::format_as_code( '</head>' )
 					) . '</p>',
 					'field_class' => 'widefat code codeEditor',
 					'rows'        => 5,
@@ -358,7 +358,7 @@ class Settings {
 					'description' => '<p>' . sprintf(
 						/* translators: %s: preformatted HTML tag <body> */
 						esc_html__( 'Code to enqueue in BODY section (after the %s) on Homepage.', 'head-footer-code' ),
-						Common::html2code( '<body>' )
+						Common::format_as_code( '<body>' )
 					) . '</p>',
 					'field_class' => 'widefat code codeEditor',
 					'rows'        => 5,
@@ -375,7 +375,7 @@ class Settings {
 					'description' => '<p>' . sprintf(
 						/* translators: %s will be replaced with preformatted HTML tag </body> */
 						esc_html__( 'Code to enqueue in footer section (before the %s) on Homepage.', 'head-footer-code' ),
-						Common::html2code( '</body>' )
+						Common::format_as_code( '</body>' )
 					) . '</p>',
 					'field_class' => 'widefat code codeEditor',
 					'rows'        => 5,
@@ -827,8 +827,8 @@ class Settings {
 			/* translators: 1: italicized 'unseen elements', 2: <script>, 3: <style>, 4: italicized sentence 'could break layouts or lead to unexpected situations' */
 			esc_html__( 'Usage of this field should be reserved for output of %1$s like %2$s and %3$s tags or additional metadata. It should not be used to add arbitrary HTML content to a page that %4$s.', 'head-footer-code' ),
 			'<em>' . esc_html__( 'unseen elements', 'head-footer-code' ) . '</em>',
-			Common::html2code( '<script>' ),
-			Common::html2code( '<style>' ),
+			Common::format_as_code( '<script>' ),
+			Common::format_as_code( '<style>' ),
 			'<em>' . esc_html__( 'could break layouts or lead to unexpected situations', 'head-footer-code' ) . '</em>'
 		) . '</p>';
 	}

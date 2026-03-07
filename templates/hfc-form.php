@@ -24,7 +24,8 @@ printf(
 	'<code>&lt;body&gt;</code>',
 	'<code>&lt;/body&gt;</code>'
 );
-echo '<br>';
+
+echo '</p><p>';
 
 // One who can manage options and modify category settings
 if ( ! current_user_can( 'manage_options' ) ) {
@@ -43,7 +44,8 @@ if ( ! current_user_can( 'manage_options' ) ) {
 		'<a href="tools.php?page=' . esc_attr( $this->plugin->slug ) . '">' . esc_html__( 'Tools', 'head-footer-code' ) . ' > ' . esc_html( $this->plugin->name ) . '</a>'
 	);
 }
-echo '<br>';
+
+echo '</p><p>';
 
 printf(
 	/* translators: 1: category or article specific, HTML comment code */

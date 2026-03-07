@@ -117,17 +117,17 @@ class Front {
 				$is_supported_taxonomy
 			)
 		) {
-			$out .= Common::out( 's', 'h', $dbg_set, $this->settings['sitewide']['head'] );
+			$out .= Common::annotate_code_block( 's', 'h', $dbg_set, $this->settings['sitewide']['head'] );
 		}
 
 		// Inject head code for Homepage in Blog Posts mode OR article specific (for allowed post_type) head code OR taxonomy head code.
 		if ( ! empty( $head_code ) ) {
 			if ( $is_homepage_blog_posts ) {
-				$out .= Common::out( 'h', 'h', $dbg_set, $head_code );
+				$out .= Common::annotate_code_block( 'h', 'h', $dbg_set, $head_code );
 			} elseif ( $is_supported_post_type ) {
-				$out .= Common::out( 'a', 'h', $dbg_set, $head_code );
+				$out .= Common::annotate_code_block( 'a', 'h', $dbg_set, $head_code );
 			} else {
-				$out .= Common::out( 't', 'h', $dbg_set, $head_code );
+				$out .= Common::annotate_code_block( 't', 'h', $dbg_set, $head_code );
 			}
 		}
 
@@ -190,17 +190,17 @@ class Front {
 			! empty( $this->settings['sitewide']['body'] ) &&
 			Common::is_printable_sitewide( $body_behavior, $body_code, $singular_post_type, $this->settings['article']['post_types'], $is_supported_taxonomy )
 		) {
-			$out .= Common::out( 's', 'b', $dbg_set, $this->settings['sitewide']['body'] );
+			$out .= Common::annotate_code_block( 's', 'b', $dbg_set, $this->settings['sitewide']['body'] );
 		}
 
 		// Inject body code for Homepage in Blog Posts mode OR article specific (for allowed post_type) body code OR taxonomy body code.
 		if ( ! empty( $body_code ) ) {
 			if ( $is_homepage_blog_posts ) {
-				$out .= Common::out( 'h', 'b', $dbg_set, $body_code );
+				$out .= Common::annotate_code_block( 'h', 'b', $dbg_set, $body_code );
 			} elseif ( $is_supported_post_type ) {
-				$out .= Common::out( 'a', 'b', $dbg_set, $body_code );
+				$out .= Common::annotate_code_block( 'a', 'b', $dbg_set, $body_code );
 			} else {
-				$out .= Common::out( 't', 'b', $dbg_set, $body_code );
+				$out .= Common::annotate_code_block( 't', 'b', $dbg_set, $body_code );
 			}
 		}
 
@@ -263,17 +263,17 @@ class Front {
 			! empty( $this->settings['sitewide']['footer'] ) &&
 			Common::is_printable_sitewide( $footer_behavior, $footer_code, $singular_post_type, $this->settings['article']['post_types'], $is_supported_taxonomy )
 		) {
-			$out .= Common::out( 's', 'f', $dbg_set, $this->settings['sitewide']['footer'] );
+			$out .= Common::annotate_code_block( 's', 'f', $dbg_set, $this->settings['sitewide']['footer'] );
 		}
 
 		// Inject footer code for Homepage in Blog Posts mode OR article specific (for allowed post_type) footer code OR taxonomy footer code.
 		if ( ! empty( $footer_code ) ) {
 			if ( $is_homepage_blog_posts ) {
-				$out .= Common::out( 'h', 'f', $dbg_set, $footer_code );
+				$out .= Common::annotate_code_block( 'h', 'f', $dbg_set, $footer_code );
 			} elseif ( $is_supported_post_type ) {
-				$out .= Common::out( 'a', 'f', $dbg_set, $footer_code );
+				$out .= Common::annotate_code_block( 'a', 'f', $dbg_set, $footer_code );
 			} else {
-				$out .= Common::out( 't', 'f', $dbg_set, $footer_code );
+				$out .= Common::annotate_code_block( 't', 'f', $dbg_set, $footer_code );
 			}
 		}
 
