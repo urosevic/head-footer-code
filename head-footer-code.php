@@ -29,6 +29,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+define( 'HFC__MIN_PHP', '5.5' );
+define( 'HFC__MIN_WP', '4.9' );
+
 define( 'HFC_VER', '1.5.2' );
 define( 'HFC_VER_DB', '9' );
 define( 'HFC_FILE', __FILE__ );
@@ -36,6 +39,8 @@ define( 'HFC_DIR', __DIR__ );
 define( 'HFC_URL', plugin_dir_url( __FILE__ ) );
 define( 'HFC_PLUGIN_NAME', 'Head & Footer Code' );
 define( 'HFC_PLUGIN_SLUG', 'head-footer-code' );
+
+register_activation_hook( HFC_FILE, array( '\Techwebux\Hfc\Main', 'plugin_activation' ) );
 
 // Load files.
 require_once HFC_DIR . '/classes/autoload.php';

@@ -25,43 +25,49 @@ class Main {
 	private static $settings = null;
 
 	public function __construct() {
-		register_activation_hook( HFC_FILE, array( $this, 'activate' ) );
 		// Include back-end/front-end resources and maybe update settings.
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}
 
 	/**
-	 * Plugin Activation hook function to check for Minimum PHP and WordPress versions
+	 * Checks environment compatibility during plugin activation.
+	 *
+	 * Aborts activation and informs the user if the server PHP version
+	 * or WordPress version does not meet the minimum requirements.
+	 *
+	 * @return void
 	 */
-	public function activate() {
-		global $wp_version;
-
-		// Compare PHP and WordPress required and current versions
-		if ( version_compare( PHP_VERSION, '5.5', '<' ) ) {
-			$scope   = 'PHP';
-			$version = '5.5'; // Minimum version of PHP required for this plugin.
-		} elseif ( version_compare( $wp_version, '4.9', '<' ) ) {
-			$scope   = 'WordPress';
-			$version = '4.9'; // Minimum version of WordPress required for this plugin.
-		} else {
-			return '';
-		}
-
-		// First deactivate plutin...
-		deactivate_plugins( HFC_FILE );
-
-		// ... then inform user why plugin cannot be activated
-		wp_die(
-			'<p>' . sprintf(
-				/* translators: 1: Plugin name, 2: PHP or WordPress, 3: min version of PHP or WordPress */
-				esc_html__( 'The %1$s plugin cannot run on %2$s version older than %3$s. Please contact your host and ask them to upgrade.', 'head-footer-code' ),
-				sprintf( '<strong>%s</strong>', esc_html( HFC_PLUGIN_NAME ) ),
-				esc_attr( $scope ),
-				esc_attr( $version )
-			) . '</p>'
+	public static function plugin_activation() {
+		$requirements = array(
+			'PHP'       => array(
+				'min'     => HFC__MIN_PHP,
+				'current' => PHP_VERSION,
+			),
+			'WordPress' => array(
+				'min'     => HFC__MIN_WP,
+				'current' => $GLOBALS['wp_version'],
+			),
 		);
-	} // END public function activate
+
+		foreach ( $requirements as $type => $ver ) {
+			if ( version_compare( $ver['current'], $ver['min'], '<' ) ) {
+
+				deactivate_plugins( HFC_FILE );
+
+				wp_die(
+					'<p>' . sprintf(
+						/* translators: 1: Plugin name, 2: PHP or WordPress, 3: current version, 4: minimum version */
+						esc_html__( '%1$s activation error: %2$s %3$s is outdated. Minimum required: %4$s.', 'head-footer-code' ),
+						'<strong>' . esc_html( HFC_PLUGIN_NAME ) . '</strong>',
+						esc_html( $type ),
+						esc_html( $ver['current'] ),
+						esc_html( $ver['min'] )
+					) . '</p>'
+				);
+			}
+		}
+	}
 
 	/**
 	 * Function to load subclasses, check and update if it has to be done
