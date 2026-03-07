@@ -1,4 +1,5 @@
-$badge-border-radius: 30%;
+$color-blue: #0073aa;
+$color-red: #d63638;
 
 #head_footer_code_settings {
     .wp-heading-inline {
@@ -12,7 +13,7 @@ $badge-border-radius: 30%;
     }
     .form-table {
         .warn {
-            color: #d63638;
+            color: $color-red;
             i {
                 font-style: normal;
                 &::before {
@@ -35,30 +36,33 @@ $badge-border-radius: 30%;
         cursor: help;
         opacity: 0.5;
     }
-    .badges {
+    .hfc-badges-wrapper {
+        border-radius: 3px;
+        display: inline-flex;
+        flex-wrap: wrap;
+        overflow: hidden;
+
+        &.hfc-append {
+            background-color: $color-blue;
+        }
+        &.hfc-replace {
+            background-color: $color-red;
+        }
+
         .badge {
-            background: transparent;
-            border: 1px solid #bfe7f3;
-            display: inline-block;
-            font-size: .6rem;
-            font-weight: 600;
-            height: 1.2rem;
-            margin: .2rem 0 0 0;
+            border: 1px solid rgba(0, 0, 0, .1);
+            color: #fff;
+            display: block;
+            flex: 1 1 auto;
+            font-size: 13px;
             text-align: center;
-            width: 1.2rem;
-    
-            &:hover {
-                border-color: #007cba;
-            }
-        }
-        :first-child {
-            border-radius: $badge-border-radius 0 0 $badge-border-radius;
-        }
-        :last-child {
-            border-radius: 0 $badge-border-radius $badge-border-radius 0;
-        }
-        :only-child {
-            border-radius: $badge-border-radius;
+            text-decoration: none;
+            text-shadow: 0 0 3px rgba(0, 0, 0, .7);
+            -webkit-user-select: none;
+            user-select: none;
+
+            min-width: 2em;
+            position: static;
         }
     }
 }

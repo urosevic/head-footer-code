@@ -29,7 +29,7 @@ class Grid {
 			return;
 		}
 		add_action( 'admin_init', array( $this, 'admin_post_manage_columns' ) );
-	} // END public function __construct
+	}
 
 	public function admin_post_manage_columns() {
 		// And do this only for post types enabled on plugin settings page.
@@ -43,7 +43,7 @@ class Grid {
 				add_action( 'manage_' . $post_type . '_posts_custom_column', array( $this, 'posts_custom_columns' ), 10, 2 );
 			}
 		}
-	} // END public function admin_post_manage_columns
+	}
 
 	/**
 	 * Register Head & Footer Code column for posts table
@@ -53,7 +53,7 @@ class Grid {
 	public function posts_columns( $columns ) {
 		$columns['hfc'] = esc_html( HFC_PLUGIN_NAME );
 		return $columns;
-	} // END public function posts_columns
+	}
 
 	/**
 	 * Make Head & Footer Code column sortable
@@ -63,7 +63,7 @@ class Grid {
 	public function posts_sortable_columns( $columns ) {
 		$columns['hfc'] = 'hfc';
 		return $columns;
-	} // END public function posts_sortable_columns
+	}
 
 	/**
 	 * Populate Head & Footer Code column with indicators
@@ -76,59 +76,50 @@ class Grid {
 			return;
 		}
 
-		$sections = array();
-		if ( ! empty( Common::get_post_meta( 'head', $post_id ) ) ) {
-			$sections[] = sprintf(
-				'<a href="post.php?post=%1$s&action=edit#auhfc_head" class="badge" title="%2$s">H</a>',
-				$post_id,
-				esc_html__( 'Article specific code is defined in HEAD section', 'head-footer-code' )
-			);
-		}
-		if ( ! empty( Common::get_post_meta( 'body', $post_id ) ) ) {
-			$sections[] = sprintf(
-				'<a href="post.php?post=%1$s&action=edit#auhfc_body" class="badge" title="%2$s">B</a>',
-				$post_id,
-				esc_html__( 'Article specific code is defined in BODY section', 'head-footer-code' )
-			);
-		}
-		if ( ! empty( Common::get_post_meta( 'footer', $post_id ) ) ) {
-			$sections[] = sprintf(
-				'<a href="post.php?post=%1$s&action=edit#auhfc_footer" class="badge" title="%2$s">F</a>',
-				$post_id,
-				esc_html__( 'Article specific code is defined in FOOTER section', 'head-footer-code' )
-			);
+		$meta = get_post_meta( $post_id, '_auhfc', true );
+		if ( empty( $meta['head'] ) && empty( $meta['body'] ) && empty( $meta['footer'] ) ) {
+			echo '<span class="n-a">' . esc_html__( 'No custom code', 'head-footer-code' ) . '</span>';
+			return;
 		}
 
-		if ( empty( $sections ) ) {
-			printf(
-				'<span class="n-a" title="%1$s">%2$s</span>',
-				/* translators: This is description for article without defined code */
-				esc_html__( 'No article specific code defined in any section', 'head-footer-code' ),
-				/* translators: This is label for article without defined code */
-				esc_html__( 'No custom code', 'head-footer-code' )
-			);
-		} else {
-			$mode = Common::get_meta( 'behavior', $post_id );
-			if ( 'append' === $mode ) {
-				/* translators: This is description for article specific mode label 'Append' */
-				$method_description = esc_html__( 'Append article specific code to site-wide code', 'head-footer-code' );
-				/* translators: This is label for article specific mode meaning 'Append to site-wide' ) */
-				$method_label = esc_html__( 'Append', 'head-footer-code' );
-			} else {
-				/* translators: This is description for article specific mode label 'Replace' */
-				$method_description = esc_html__( 'Replace site-wide code with article specific code', 'head-footer-code' );
-				/* translators: This is label for article specific mode meaning 'Replace site-wide with' */
-				$method_label = esc_html__( 'Replace', 'head-footer-code' );
+		$behavior       = isset( $meta['behavior'] ) ? $meta['behavior'] : 'append';
+		$behavior_class = ( 'replace' === $behavior ) ? 'hfc-replace' : 'hfc-append';
+		$behavior_text  = ( 'replace' === $behavior )
+			? esc_attr__( 'replace site-wide code with', 'head-footer-code' )
+			: esc_attr__( 'append to site-wide code', 'head-footer-code' );
+
+		$sections = array(
+			'head'   => array(
+				'label' => 'H',
+				'key'   => 'head',
+				'title' => esc_attr__( 'Article-specific HEAD', 'head-footer-code' ),
+			),
+			'body'   => array(
+				'label' => 'B',
+				'key'   => 'body',
+				'title' => esc_attr__( 'Article-specific BODY', 'head-footer-code' ),
+			),
+			'footer' => array(
+				'label' => 'F',
+				'key'   => 'footer',
+				'title' => esc_attr__( 'Article-specific FOOTER', 'head-footer-code' ),
+			),
+		);
+
+		echo '<div class="hfc-badges-wrapper ' . esc_attr( $behavior_class ) . '">';
+
+		foreach ( $sections as $id => $data ) {
+			if ( ! empty( $meta[ $data['key'] ] ) ) {
+				printf(
+					'<a href="post.php?post=%1$s&action=edit#auhfc_%2$s" class="badge" title="%3$s">%4$s</a>',
+					$post_id,
+					$id,
+					esc_attr( "{$data['title']} ({$behavior_text})" ),
+					esc_html( $data['label'] )
+				);
 			}
-			printf(
-				'<a href="post.php?post=%1$s&action=edit#auhfc_behavior" class="label" title="%2$s">%3$s</a><br />%4$s',
-				absint( $post_id ),              // 1
-				esc_html( $method_description ), // 3
-				esc_html( $method_label ),       // 4
-				'<div class="badges">'
-				. wp_kses( implode( '', $sections ), Common::allowed_html() )
-				. '</div>'                       // 5
-			);
 		}
-	} // END public function posts_custom_columns
-} // END class Grid
+
+		echo '</div>';
+	}
+}
