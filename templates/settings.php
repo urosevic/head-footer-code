@@ -19,10 +19,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		printf(
 			/* translators: Plugin name */
 			esc_html__( '%s Settings', 'head-footer-code' ),
-			esc_html( HFC_PLUGIN_NAME )
+			esc_html( $this->plugin->name )
 		);
 		?>
-		<span class="ver">v. <?php echo esc_html( HFC_VER ); ?></span>
+		<span class="ver">v. <?php echo esc_html( $this->plugin->version ); ?></span>
 		<span class="actions long-header">
 			<a href="https://wordpress.org/plugins/head-footer-code/#faq" class="page-title-action" target="_blank"><?php esc_html_e( 'FAQ', 'head-footer-code' ); ?></a>
 			<a href="https://wordpress.org/support/plugin/head-footer-code/" class="page-title-action" target="_blank"><?php esc_html_e( 'Community Support', 'head-footer-code' ); ?></a>
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<form method="post" action="options.php">
 	<?php
 		settings_fields( 'head_footer_code_settings' );
-		do_settings_sections( HFC_PLUGIN_SLUG );
+		do_settings_sections( $this->plugin->slug );
 		submit_button();
 	?>
 	</form>

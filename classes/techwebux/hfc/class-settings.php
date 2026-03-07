@@ -17,13 +17,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Settings {
-
+	/** @var array Settings retrieved from the main controller. */
 	private $settings;
+
+	/** @var Plugin_Info Plugin metadata object. */
+	protected $plugin;
+
+	/** @var array Allowed HTML tags for sanitization. */
 	public $allowed_html;
 	public $form_allowed_html;
 	public $security_risk_notice;
 
-	public function __construct() {
+	/**
+	 * Initializes the class and registers admin hooks.
+	 *
+	 * @param Plugin_Info $plugin Instance of the plugin info object.
+	 */
+	public function __construct( Plugin_Info $plugin ) {
+		$this->plugin            = $plugin;
 		$this->settings          = Main::settings();
 		$this->allowed_html      = Common::allowed_html();
 		$this->form_allowed_html = Common::form_allowed_html();
@@ -35,18 +46,19 @@ class Settings {
 		add_action( 'admin_init', array( $this, 'settings_init' ) );
 
 		// Add Settings page link to plugin actions cell.
-		add_filter( 'plugin_action_links_' . plugin_basename( HFC_FILE ), array( $this, 'plugin_settings_link' ) );
+		add_filter( 'plugin_action_links_' . $this->plugin->basename, array( $this, 'plugin_settings_link' ) );
 
 		// Update links in plugin row on Plugins page.
 		add_filter( 'plugin_row_meta', array( $this, 'add_plugin_meta_links' ), 10, 2 );
 
+		// Add Review CTA to the footer thankyou
 		add_filter(
 			'admin_footer_text',
 			function ( $text ) {
 				return '<span id="footer-thankyou">If you like the plugin please rate Head & Footer Code <a target="_blank" rel="nofollow" href="https://wordpress.org/support/plugin/head-footer-code/reviews/#new-post">★★★★★</a> on <a target="_blank" rel="nofollow" href="https://wordpress.org/support/plugin/head-footer-code/reviews/#new-post">WordPress.org</a> to help us spread the word ♥ from the Head & Footer Code team. </span>';
 			}
 		);
-	} // END public function __construct
+	}
 
 	/**
 	 * Add submenu for Head & Footer code to Tools.
@@ -54,14 +66,14 @@ class Settings {
 	public function add_admin_menu() {
 		add_submenu_page(
 			'tools.php',                   // Parent Slug.
-			HFC_PLUGIN_NAME,               // Page Title.
-			HFC_PLUGIN_NAME,               // Menu Title.
+			$this->plugin->name,           // Page Title.
+			$this->plugin->name,           // Menu Title.
 			'manage_options',              // Capability.
-			HFC_PLUGIN_SLUG,               // Menu Slug.
+			$this->plugin->slug,           // Menu Slug.
 			array( $this, 'options_page' ) // Callback.
 			// Position.
 		);
-	} // END public function add_admin_menu
+	}
 
 	/**
 	 * Register a setting and its sanitization callback
@@ -71,7 +83,7 @@ class Settings {
 		/**
 		 * Get settings from options table
 		 */
-		$auhfc_homepage_blog_posts  = 'posts' === get_option( 'show_on_front', false ) ? true : false;
+		$homepage_blog_posts        = 'posts' === get_option( 'show_on_front', false ) ? true : false;
 		$head_note                  = $this->head_note();
 		$this->security_risk_notice = Common::security_risk_notice();
 
@@ -86,7 +98,7 @@ class Settings {
 			'head_footer_code_settings_sitewide',                             // Id.
 			__( 'Site-wide head, body and footer code', 'head-footer-code' ), // Title.
 			array( $this, 'sitewide_settings_section_description' ),          // Callback.
-			HFC_PLUGIN_SLUG                                                   // Page.
+			$this->plugin->slug                                               // Page.
 		);
 
 		/**
@@ -96,11 +108,11 @@ class Settings {
 		 * callbacks to control the output.
 		 */
 		$this->add_field(
-			'head',                                // Id.
+			'head',                                        // Id.
 			esc_html__( 'HEAD Code', 'head-footer-code' ), // Title.
-			'textarea_field_render',               // Callback method name.
-			'sitewide',                            // Section.
-			array(                                 // Arguments.
+			'textarea_field_render',                       // Callback method name.
+			'sitewide',                                    // Section.
+			array(                                         // Arguments.
 				'description' => $head_note . '<p>' . sprintf(
 					/* translators: %s will be replaced with preformatted HTML tag </head> */
 					esc_html__( 'Code to enqueue in HEAD section (before the %s).', 'head-footer-code' ),
@@ -265,7 +277,7 @@ class Settings {
 		/**
 		 * Add section for Homepage if show_on_front is set to Blog Posts
 		 */
-		if ( $auhfc_homepage_blog_posts ) {
+		if ( $homepage_blog_posts ) {
 			/**
 			 * Settings Sections are the groups of settings you see on WordPress settings pages
 			 * with a shared heading. In your plugin you can add new sections to existing
@@ -277,7 +289,7 @@ class Settings {
 				'head_footer_code_settings_homepage',                                                          // Id.
 				esc_html__( 'Head, body and footer code on Homepage in Blog Posts mode', 'head-footer-code' ), // Title.
 				array( $this, 'homepage_settings_section_description' ),                                       // Callback.
-				HFC_PLUGIN_SLUG                                                                                // Page.
+				$this->plugin->slug                                                                            // Page.
 			);
 
 			/**
@@ -287,10 +299,10 @@ class Settings {
 			 * callbacks to control the output.
 			 */
 			$this->add_field(
-				'head',                             // Id.
+				'head',                                                 // Id.
 				esc_html__( 'Homepage HEAD Code', 'head-footer-code' ), // Title.
 				'textarea_field_render',                                // Callback name.
-				'homepage',                   // Section.
+				'homepage',                                             // Section.
 				array(                                                  // Arguments.
 					'label'       => __( 'Homepage HEAD Code', 'head-footer-code' ),
 					'description' => $head_note . '<p>' . sprintf(
@@ -375,12 +387,12 @@ class Settings {
 			 */
 			register_setting(
 				'head_footer_code_settings', // Option group.
-				'auhfc_settings_homepage',    // Option name.
+				'auhfc_settings_homepage',   // Option name.
 				array(
 					'sanitize_callback' => array( $this, 'sanitize_homepage' ),
 				)
 			);
-		} // END condition: $auhfc_homepage_blog_posts
+		} // END condition: $homepage_blog_posts
 
 		/**
 		 * Settings Sections are the groups of settings you see on WordPress settings pages
@@ -393,7 +405,7 @@ class Settings {
 			'head_footer_code_settings_article',                           // Id.
 			esc_html__( 'Article specific settings', 'head-footer-code' ), // Title.
 			array( $this, 'article_settings_section_description' ),        // Callback.
-			HFC_PLUGIN_SLUG                                                // Page.
+			$this->plugin->slug                                            // Page.
 		);
 
 		// Prepare clean list of post types w/o attachment.
@@ -458,7 +470,7 @@ class Settings {
 				'sanitize_callback' => array( $this, 'sanitize_article' ),
 			)
 		);
-	} // END public function settings_init
+	}
 
 	/**
 	 * Wrapper for add_settings_field
@@ -501,7 +513,7 @@ class Settings {
 			'auhfc_' . $key,
 			$title,
 			array( $this, $callback_name ),
-			HFC_PLUGIN_SLUG,
+			$this->plugin->slug,
 			'head_footer_code_settings_' . $section,
 			$args
 		);
@@ -567,7 +579,7 @@ class Settings {
 		if ( is_callable( array( 'Filter_Embedded_HTML_Objects', 'maybe_create_links' ) ) ) {
 			add_filter( 'pre_kses', array( 'Filter_Embedded_HTML_Objects', 'maybe_create_links' ), 100 );
 		}
-	} // END public function textarea_field_render
+	}
 
 	/**
 	 * This function provides number input for settings fields
@@ -607,7 +619,7 @@ class Settings {
 
 		// Filter allowed HTML tags and attributes.
 		echo wp_kses( $html, $this->form_allowed_html );
-	} // END public function number_field_render
+	}
 
 	/**
 	 * This function provides checkbox group for settings fields
@@ -652,7 +664,7 @@ class Settings {
 
 		// Filter allowed HTML tags and attributes.
 		echo wp_kses( $html, $this->form_allowed_html );
-	} // END public function checkbox_group_field_render
+	}
 
 	/**
 	 * This function provides select for settings fields
@@ -701,28 +713,28 @@ class Settings {
 
 		// Filter allowed HTML tags and attributes.
 		echo wp_kses( $html, $this->form_allowed_html );
-	} // END public function select_field_render
+	}
 
 	/**
 	 * Print description for site-wide section
 	 */
 	public function sitewide_settings_section_description() {
 		echo '<p>' . esc_html__( 'Define site-wide code and behavior. You can Add custom content like JavaScript, CSS, HTML meta and link tags, Google Analytics, site verification, etc.', 'head-footer-code' ) . '</p>';
-	} // END public function sitewide_settings_section_description
+	}
 
 	/**
 	 * Print description for homepage section
 	 */
 	public function homepage_settings_section_description() {
 		echo '<p>' . esc_html__( 'Define code and behavior for the Homepage in Blog Posts mode.', 'head-footer-code' ) . '</p>';
-	} // END public function homepage_settings_section_description
+	}
 
 	/**
 	 * Print description for article section
 	 */
 	public function article_settings_section_description() {
 		echo '<p>' . esc_html__( 'Define what post types will support article specific features, and which non-priviledged user roles will have access to it.', 'head-footer-code' ) . '</p>';
-	} // END public function article_settings_section_description
+	}
 
 	/**
 	 * Print settings page from template
@@ -732,8 +744,8 @@ class Settings {
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'head-footer-code' ) );
 		}
 		// Render the settings template.
-		include HFC_DIR . '/templates/settings.php';
-	} // END public function options_page
+		include $this->plugin->dir . '/templates/settings.php';
+	}
 
 	/**
 	 * Append Settings link for Plugins page
@@ -743,10 +755,10 @@ class Settings {
 	 * @return array        Array of plugin links with appended link for Settings page
 	 */
 	public function plugin_settings_link( $links ) {
-		$settings_link = '<a href="' . esc_url( admin_url( 'tools.php?page=' . HFC_PLUGIN_SLUG ) ) . '">' . esc_html__( 'Settings', 'head-footer-code' ) . '</a>';
+		$settings_link = '<a href="' . esc_url( admin_url( 'tools.php?page=' . $this->plugin->slug ) ) . '">' . esc_html__( 'Settings', 'head-footer-code' ) . '</a>';
 		array_unshift( $links, $settings_link );
 		return $links; // Return updated array of links
-	} // END public function plugin_settings_link
+	}
 
 	/**
 	 * Add link to plugin community support
@@ -757,13 +769,13 @@ class Settings {
 	 * @return array       Array of default plugin meta links with appended link for Support community forum
 	 */
 	public function add_plugin_meta_links( $links, $file ) {
-		if ( plugin_basename( HFC_FILE ) === $file ) {
+		if ( $this->plugin->basename === $file ) {
 			$links[] = '<a href="https://wordpress.org/support/plugin/head-footer-code/" target="_blank">' . esc_html__( 'Support', 'head-footer-code' ) . '</a>';
 		}
 
 		// Return updated array of links
 		return $links;
-	} // END public function add_plugin_meta_links
+	}
 
 	/**
 	 * Function to print note for head section
@@ -777,7 +789,7 @@ class Settings {
 			Common::html2code( '<style>' ),
 			'<em>' . esc_html__( 'could break layouts or lead to unexpected situations', 'head-footer-code' ) . '</em>'
 		) . '</p>';
-	} // END public function head_note
+	}
 
 
 	/**
@@ -858,4 +870,4 @@ class Settings {
 
 		return $sanitized;
 	}
-} // END class Settings
+}

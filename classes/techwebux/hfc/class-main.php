@@ -17,14 +17,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Main {
-	/**
-	 * Cached settings.
-	 *
-	 * @var array|null
-	 */
+	/** @var array Settings retrieved from the main controller. */
 	private static $settings = null;
 
+	/** @var Plugin_Info Plugin metadata object. */
+	protected $plugin;
+
+	/**
+	 * Initializes the class and registers hooks.
+	 */
 	public function __construct() {
+		$this->plugin = new Plugin_Info();
+		Common::init( $this->plugin );
+
 		add_filter( 'safe_style_css', array( $this, 'extend_safe_css' ) );
 
 		// Include back-end/front-end resources and maybe update settings.
@@ -41,13 +46,15 @@ class Main {
 	 * @return void
 	 */
 	public static function plugin_activation() {
+		$plugin = Plugin_Info::get_static_data();
+
 		$requirements = array(
 			'PHP'       => array(
-				'min'     => HFC__MIN_PHP,
+				'min'     => $plugin->min_php,
 				'current' => PHP_VERSION,
 			),
 			'WordPress' => array(
-				'min'     => HFC__MIN_WP,
+				'min'     => $plugin->min_wp,
 				'current' => $GLOBALS['wp_version'],
 			),
 		);
@@ -55,13 +62,13 @@ class Main {
 		foreach ( $requirements as $type => $ver ) {
 			if ( version_compare( $ver['current'], $ver['min'], '<' ) ) {
 
-				deactivate_plugins( HFC_FILE );
+				deactivate_plugins( $plugin->file );
 
 				wp_die(
 					'<p>' . sprintf(
 						/* translators: 1: Plugin name, 2: PHP or WordPress, 3: current version, 4: minimum version */
 						esc_html__( '%1$s activation error: %2$s %3$s is outdated. Minimum required: %4$s.', 'head-footer-code' ),
-						'<strong>' . esc_html( HFC_PLUGIN_NAME ) . '</strong>',
+						'<strong>' . esc_html( $plugin->name ) . '</strong>',
 						esc_html( $type ),
 						esc_html( $ver['current'] ),
 						esc_html( $ver['min'] )
@@ -80,30 +87,30 @@ class Main {
 		if ( is_admin() && current_user_can( 'publish_posts' ) && Common::user_has_allowed_role() ) {
 			// Load Settings if the current user can manage options
 			if ( current_user_can( 'manage_options' ) ) {
-				new Settings();
+				new Settings( $this->plugin );
 			}
 			// Always load the Grid and Metabox classes for allowed roles.
-			new Grid();
-			new Metabox_Article();
+			new Grid( $this->plugin );
+			new Metabox_Article( $this->plugin );
 
 			// If the user can manage categories, load the Metabox_Category class.
 			if ( current_user_can( 'manage_categories' ) ) {
-				new Metabox_Category();
+				new Metabox_Category( $this->plugin );
 			}
 		} elseif ( ! is_admin() ) {
 			// Load front-end magic.
-			new Front();
+			new Front( $this->plugin );
 		}
 
 		// Bail if this plugin data doesn't need updating.
-		if ( get_option( 'auhfc_db_ver' ) >= HFC_VER_DB ) {
+		if ( get_option( 'auhfc_db_ver' ) >= $this->plugin->db_ver ) {
 			return;
 		}
 
 		// Require update script and trigger update function.
-		require_once HFC_DIR . '/update.php';
+		require_once $this->plugin->dir . '/update.php';
 		auhfc_update();
-	} // END public function plugins_loaded
+	}
 
 	/**
 	 * Enqueue admin styles and scripts to enable code editor in plugin settings and custom column on article listing
@@ -112,19 +119,19 @@ class Main {
 	 */
 	public function admin_enqueue_scripts( $hook ) {
 		// Admin Stylesheet.
-		if ( in_array( $hook, array( 'post.php', 'post-new.php', 'edit.php', 'tools_page_' . HFC_PLUGIN_SLUG ), true ) ) {
+		if ( in_array( $hook, array( 'post.php', 'post-new.php', 'edit.php', 'tools_page_' . $this->plugin->slug ), true ) ) {
 			wp_enqueue_style(
 				'head-footer-code-admin',
-				HFC_URL . 'assets/css/admin.min.css',
+				$this->plugin->url . 'assets/css/admin.min.css',
 				array(),
-				HFC_VER
+				$this->plugin->version
 			);
 		}
 
 		// Codemirror Assets.
 		$screen = get_current_screen();
 		if (
-			'tools_page_' . HFC_PLUGIN_SLUG === $hook ||
+			'tools_page_' . $this->plugin->slug === $hook ||
 			'post.php' === $hook ||
 			'post-new.php' === $hook ||
 			(
@@ -151,13 +158,13 @@ class Main {
 			wp_enqueue_script( 'wp-codemirror' );
 			wp_enqueue_style(
 				'head-footer-code-edit',
-				HFC_URL . 'assets/css/edit.min.css',
+				$this->plugin->url . 'assets/css/edit.min.css',
 				array(),
-				HFC_VER
+				$this->plugin->version
 			);
 		}
 		return;
-	} // END public function admin_enqueue_scripts
+	}
 
 	/**
 	 * Allow widely used style properties for KSES, eg. `display` in WP prior 7.0
@@ -171,9 +178,14 @@ class Main {
 	}
 
 	/**
-	 * Provide global settings with default fallback.
+	 * Retrieves and parses plugin settings with default fallback values.
 	 *
-	 * @return array Arary of defined global values.
+	 * @return array {
+	 * Array of settings.
+	 * @type array $sitewide Site-wide settings (head, body, footer, priorities).
+	 * @type array $homepage Homepage-specific settings.
+	 * @type array $article  Post type and role-based access settings.
+	 * }
 	 */
 	public static function settings() {
 		// If settings are already cached, return them.
@@ -217,5 +229,5 @@ class Main {
 		self::$settings = $settings;
 
 		return $settings;
-	} // END public static function settings
-} // END class Main
+	}
+}

@@ -33,14 +33,14 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	printf(
 		/* translators: 1: User role(s) that can manage options (Super Admin and/or Administrator), 2: Path/Name of Plugin Settings page */
 		esc_html__( 'They work in exactly the same way as site-wide code, which %1$s can configure under %2$s.', 'head-footer-code' ),
-		esc_html__( 'Tools', 'head-footer-code' ) . ' > ' . esc_html( HFC_PLUGIN_NAME ),
+		esc_html__( 'Tools', 'head-footer-code' ) . ' > ' . esc_html( $this->plugin->name ),
 		esc_html( $auhfc_allowed_managers )
 	);
 } else {
 	printf(
 		/* translators: Link to Plugin Settings page */
 		esc_html__( 'They work in exactly the same way as site-wide code, which you can configure under %s.', 'head-footer-code' ),
-		'<a href="tools.php?page=' . esc_attr( HFC_PLUGIN_SLUG ) . '">' . esc_html__( 'Tools', 'head-footer-code' ) . ' > ' . esc_html( HFC_PLUGIN_NAME ) . '</a>'
+		'<a href="tools.php?page=' . esc_attr( $this->plugin->slug ) . '">' . esc_html__( 'Tools', 'head-footer-code' ) . ' > ' . esc_html( $this->plugin->name ) . '</a>'
 	);
 }
 echo '<br>';

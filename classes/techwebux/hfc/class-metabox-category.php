@@ -17,7 +17,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Metabox_Category {
-	public function __construct() {
+	/** @var Plugin_Info Plugin metadata object. */
+	protected $plugin;
+
+	/**
+	 * Initializes the class and registers frontend hooks.
+	 *
+	 * @param Plugin_Info $plugin Instance of the plugin info object.
+	 */
+	public function __construct( Plugin_Info $plugin ) {
+		$this->plugin = $plugin;
+
 		// Check if the current user's role has permission to edit HFC
 		if ( ! Common::user_has_allowed_role() ) {
 			return;
@@ -56,8 +66,8 @@ class Metabox_Category {
 		// Render nonce and form.
 		wp_nonce_field( 'auhfc_category_save_action', 'auhfc_category_nonce' );
 		echo '<div id="auhfc-head-footer-code">';
-		echo '<h2>' . esc_html( HFC_PLUGIN_NAME ) . '</h2>';
-		include_once HFC_DIR . '/templates/hfc-form.php';
+		echo '<h2>' . esc_html( $this->plugin->name ) . '</h2>';
+		include_once $this->plugin->dir . '/templates/hfc-form.php';
 		echo '</div>';
 	}
 
@@ -66,7 +76,9 @@ class Metabox_Category {
 	 */
 	public function save() {
 		// Sanitize the nonce input.
-		$nonce = isset( $_POST['auhfc_category_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['auhfc_category_nonce'] ) ) : '';
+		$nonce = isset( $_POST['auhfc_category_nonce'] )
+			? sanitize_text_field( wp_unslash( $_POST['auhfc_category_nonce'] ) )
+			: '';
 
 		// Verify nonce and user capabilities
 		if (
@@ -90,5 +102,5 @@ class Metabox_Category {
 		 * The term_id of Category is provided in $_POST key `tag_ID`
 		 */
 		update_term_meta( $term_id, '_auhfc', wp_slash( $data ) );
-	} // END public function save
-} // END class Metabox_Category
+	}
+}

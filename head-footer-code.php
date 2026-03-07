@@ -22,8 +22,6 @@
  * Requires PHP: 5.6
  */
 
-namespace Techwebux\Hfc;
-
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -35,13 +33,8 @@ define( 'HFC__MIN_WP', '5.2' );
 define( 'HFC_VER', '1.5.3' );
 define( 'HFC_VER_DB', '9' );
 define( 'HFC_FILE', __FILE__ );
-define( 'HFC_DIR', __DIR__ );
-define( 'HFC_URL', plugin_dir_url( __FILE__ ) );
-define( 'HFC_PLUGIN_NAME', 'Head & Footer Code' );
-define( 'HFC_PLUGIN_SLUG', 'head-footer-code' );
 
 register_activation_hook( HFC_FILE, array( '\Techwebux\Hfc\Main', 'plugin_activation' ) );
 
-// Load files.
-require_once HFC_DIR . '/classes/autoload.php';
-new Main();
+require_once __DIR__ . '/classes/autoload.php';
+new \Techwebux\Hfc\Main();

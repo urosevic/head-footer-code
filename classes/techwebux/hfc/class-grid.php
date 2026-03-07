@@ -17,17 +17,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Grid {
+	/** @var array Settings retrieved from the main controller. */
 	private $settings;
 
-	public function __construct() {
-		// Do this ONLY in admin dashboard!
-		if ( ! is_admin() ) {
-			return;
-		}
+	/** @var Plugin_Info Plugin metadata object. */
+	protected $plugin;
+
+	/**
+	 * Initializes the class and registers admin hooks.
+	 *
+	 * @param Plugin_Info $plugin Instance of the plugin info object.
+	 */
+	public function __construct( Plugin_Info $plugin ) {
+		$this->plugin   = $plugin;
 		$this->settings = Main::settings();
-		if ( ! Common::user_has_allowed_role() ) {
-			return;
-		}
+
 		add_action( 'admin_init', array( $this, 'admin_post_manage_columns' ) );
 	}
 
@@ -51,7 +55,7 @@ class Grid {
 	 * @param array $columns Array of existing columns for table.
 	 */
 	public function posts_columns( $columns ) {
-		$columns['hfc'] = esc_html( HFC_PLUGIN_NAME );
+		$columns['hfc'] = esc_html( $this->plugin->name );
 		return $columns;
 	}
 

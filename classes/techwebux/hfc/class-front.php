@@ -16,15 +16,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class Front
+ *
+ * Conditionaly output code snippets on frontend
+ */
 class Front {
+	/** @var array Settings retrieved from the main controller. */
 	private $settings;
+
+	/** @var Plugin_Info Plugin metadata object. */
+	protected $plugin;
+
+	/** @var array Allowed HTML tags for sanitization. */
 	public $allowed_html;
 
-	public function __construct() {
+	/**
+	 * Initializes the class and registers frontend hooks.
+	 *
+	 * @param Plugin_Info $plugin Instance of the plugin info object.
+	 */
+	public function __construct( Plugin_Info $plugin ) {
+		$this->plugin       = $plugin;
+		$this->settings     = Main::settings();
+		$this->allowed_html = Common::allowed_html();
+
 		/**
 		 * Inject site-wide code to head, body and footer with custom priorty.
 		 */
-		$this->settings = Main::settings();
 		if ( empty( $this->settings['sitewide']['priority_h'] ) ) {
 			$this->settings['sitewide']['priority_h'] = 10;
 		}
@@ -35,13 +54,11 @@ class Front {
 			$this->settings['sitewide']['priority_f'] = 10;
 		}
 
-		$this->allowed_html = Common::allowed_html();
-
-		// Define actions for HEAD and FOOTER.
+		// Define actions for HEAD, BODY and FOOTER.
 		add_action( 'wp_head', array( $this, 'wp_head' ), $this->settings['sitewide']['priority_h'] );
 		add_action( 'wp_body_open', array( $this, 'wp_body' ), $this->settings['sitewide']['priority_b'] );
 		add_action( 'wp_footer', array( $this, 'wp_footer' ), $this->settings['sitewide']['priority_f'] );
-	} // END public function __construct
+	}
 
 	/**
 	 * Inject site-wide and Homepage or Article specific head code before </head>
@@ -177,7 +194,7 @@ class Front {
 			: $out;
 			// We do not use wp_kses( $out, $this->allowed_html );
 			// because that mess up <, > and & which is sanitized on entry
-	} // END public function wp_body
+	}
 
 	/**
 	 * Inject site-wide and Article specific footer code before the </body>
@@ -245,5 +262,5 @@ class Front {
 			: $out;
 			// We do not use wp_kses( $out, $this->allowed_html );
 			// because that mess up <, > and & which is sanitized on entry
-	} // END public function wp_footer
-} // END class Front
+	}
+}

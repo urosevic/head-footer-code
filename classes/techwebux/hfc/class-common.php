@@ -17,8 +17,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Common {
-
+	/** @var array Settings retrieved from the main controller. */
 	private static $settings = null;
+
+	/** @var Plugin_Info Plugin metadata object. */
+	protected static $plugin;
+
+	/**
+	 * Injects the plugin metadata object into the Common utility class.
+	 *
+	 * This allows static methods to access plugin properties like name,
+	 * version, and directory without needing global constants.
+	 *
+	 * @param Plugin_Info $plugin The plugin metadata container.
+	 * @return void
+	 */
+	public static function init( Plugin_Info $plugin ) {
+		self::$plugin = $plugin;
+	}
 
 	/**
 	 * Initialize settings if not already set.
@@ -482,14 +498,14 @@ class Common {
 		}
 		return sprintf(
 			'<!-- %1$s: %2$s %3$s section start (%4$s) -->%6$s%5$s%6$s<!-- %1$s: %2$s %3$s section end (%4$s) -->%6$s',
-			HFC_PLUGIN_NAME,  // 1
-			$scope,           // 2
-			$location,        // 3
-			trim( $message ), // 4
-			trim( $code ),    // 5
-			"\n"              // 6
+			esc_html( self::$plugin->name ), // 1
+			esc_html( $scope ),              // 2
+			esc_html( $location ),           // 3
+			esc_html( trim( $message ) ),    // 4
+			trim( $code ),                   // 5 - RAW (Pre-sanitized)
+			"\n"                             // 6
 		);
-	} // END public static function out
+	}
 
 	/**
 	 * Determine should we print site-wide code
@@ -549,9 +565,25 @@ class Common {
 	 * @return string
 	 */
 	public static function security_risk_notice() {
-		return '<p class="notice notice-warning">'
-			. '<strong>' . esc_html__( 'WARNING!', 'head-footer-code' ) . '</strong> '
-			. esc_html__( 'Enter only safe, secure, and code from a trusted source. Unsafe or invalid code may break your site or pose security risks.', 'head-footer-code' )
-			. '</p>';
+		return sprintf(
+			'<p class="notice notice-warning"><strong>%1$s</strong> %2$s</p>',
+			esc_html__( 'WARNING!', 'head-footer-code' ),
+			esc_html__( 'Enter only safe, secure, and code from a trusted source. Unsafe or invalid code may break your site or pose security risks.', 'head-footer-code' )
+		);
+	}
+
+	/**
+	 * Output security risk notice
+	 *
+	 * @return void
+	 */
+	public static function display_security_risk_notice() {
+		echo wp_kses(
+			self::security_risk_notice(),
+			array(
+				'p'      => array( 'class' => true ),
+				'strong' => array(),
+			)
+		);
 	}
 }
