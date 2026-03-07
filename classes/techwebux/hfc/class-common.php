@@ -43,7 +43,7 @@ class Common {
 	 */
 	private static function init_settings() {
 		if ( null === self::$settings ) {
-			self::$settings = Main::settings();
+			self::$settings = Main::get_settings();
 		}
 	}
 
@@ -53,6 +53,9 @@ class Common {
 	 * @return bool
 	 */
 	public static function user_has_allowed_role() {
+		// Ensure settings are initialized.
+		self::init_settings();
+
 		// Always allow Super Admin (Multisite)
 		$current_user = wp_get_current_user();
 		if ( is_super_admin( $current_user->ID ) ) {
@@ -61,9 +64,6 @@ class Common {
 
 		// Get current user roles
 		$user_roles = (array) $current_user->roles;
-
-		// Initialize settings if not already initialized
-		self::init_settings();
 
 		// Merge fixed always-allowed and configurable allowed roles
 		$allowed_roles = array_merge(
@@ -76,14 +76,98 @@ class Common {
 	}
 
 	/**
-	 * Function to check if homepage uses Blog mode
+	 * Check if homepage uses Blog mode
+	 *
+	 * @return bool
 	 */
 	public static function is_homepage_blog_posts() {
 		if ( is_home() && 'posts' === get_option( 'show_on_front', false ) ) {
 			return true;
 		}
 		return false;
-	} // END public static function is_homepage_blog_posts
+	}
+
+	/**
+	 * Check if the current singular post type is enabled in plugin settings.
+	 *
+	 * @return bool
+	 */
+	public static function is_supported_singular_post_type() {
+		// Ensure settings are initialized.
+		self::init_settings();
+
+		$singular_post_type = self::get_singular_post_type();
+
+		return $singular_post_type && in_array( $singular_post_type, self::$settings['article']['post_types'], true );
+	}
+
+	/**
+	 * Check if current queried request is on supported taxonomy page
+	 *
+	 * @return bool
+	 */
+	public static function is_supported_taxonomy() {
+		// Ensure settings are initialized.
+		self::init_settings();
+
+		$queried_object = get_queried_object();
+
+		return ( is_category() || is_tag() || is_tax() )
+			&& isset( $queried_object->taxonomy )
+			&& in_array( $queried_object->taxonomy, self::$settings['article']['taxonomies'], true );
+	}
+
+	/**
+	 * Determine should we print site-wide code
+	 * or it should be replaced with homepage/article/taxonomy code.
+	 *
+	 * @param  string  $behavior       Behavior for article specific code (replace/append).
+	 * @param  string  $code           Article specific custom code.
+	 * @param  string  $post_type      Post type of current article.
+	 * @param  array   $post_types     Array of post types where article specific code is enabled.
+	 * @param  boolean $is_taxonomy    Indicate if current displayed page is taxonomy or not.
+	 * @return boolean                 Boolean that determine should site-wide code be printed (true) or not (false).
+	 */
+	public static function is_printable_sitewide(
+		$behavior = 'append',
+		$code = '',
+		$post_type = null,
+		$post_types = array(),
+		$is_taxonomy = false
+	) {
+		// On homepage print site wide if...
+		$is_homepage_blog_posts = self::is_homepage_blog_posts();
+		if ( $is_homepage_blog_posts ) {
+			// ... homepage behavior is not replace, or...
+			// ... homepage behavior is replace but homepage code is empty.
+			if (
+				'replace' !== $behavior
+				|| ( 'replace' === $behavior && empty( $code ) )
+			) {
+				return true;
+			}
+		} elseif ( $is_taxonomy ) { // On taxonomy page print site wide if...
+			// ... behavior is not replace, or...
+			// ... behavior is replace but taxonomy content is empty.
+			if (
+				'replace' !== $behavior
+				|| ( 'replace' === $behavior && empty( $code ) )
+			) {
+				return true;
+			}
+		} elseif ( // On Blog Post or Custom Post Type ...
+			// ... article behavior is not replace, or...
+			// ... article behavior is replace but current Post Type is not in allowed Post Types, or...
+			// ... article behavior is replace and current Post Type is in allowed Post Types but article code is empty.
+			'replace' !== $behavior
+			|| ( 'replace' === $behavior && ! in_array( $post_type, $post_types, true ) )
+			|| ( 'replace' === $behavior && in_array( $post_type, $post_types, true ) && empty( $code ) )
+		) {
+			return true;
+		}
+
+		return false;
+	}
 
 	/**
 	 * Function to check if code should be added on paged homepage in Blog mode
@@ -92,20 +176,20 @@ class Common {
 	 *
 	 * @return bool
 	 */
-	public static function add_to_homepage_paged( $is_homepage_blog_posts ) {
+	public static function is_addable_to_paged_homepage( $is_homepage_blog_posts ) {
 		// Ensure settings are initialized.
 		self::init_settings();
 
 		if (
 			true === $is_homepage_blog_posts
+			&& is_paged()
 			&& ! empty( self::$settings['homepage']['paged'] )
 			&& 'no' === self::$settings['homepage']['paged']
-			&& is_paged()
 		) {
 			return false;
 		}
 		return true;
-	} // END public static function add_to_homepage_paged
+	}
 
 	/**
 	 * Sanitizes an HTML classnames to ensure it only contains valid characters.
@@ -210,7 +294,7 @@ class Common {
 				),
 			)
 		);
-	} // END public static function allowed_html
+	}
 
 	/**
 	 * Define allowed FORM HTML for wp_kses
@@ -279,7 +363,7 @@ class Common {
 			),
 			'i'        => true,
 		);
-	} // END public static function form_allowed_html
+	}
 
 	/**
 	 * Sanitize HTML code by temporarily removing content within the
@@ -423,7 +507,7 @@ class Common {
 	/**
 	 * Function to get Post Type
 	 */
-	public static function get_post_type() {
+	public static function get_post_type_old() {
 		$auhfc_post_type = 'not singular';
 		// Get post type.
 		if ( is_singular() ) {
@@ -437,13 +521,22 @@ class Common {
 	} // END public static function get_post_type
 
 	/**
+	 * Get Post Type for singular requests.
+	 *
+	 * @return mixed Post type slug or `false` if not on a singular page.
+	 */
+	public static function get_singular_post_type() {
+		return is_singular() ? get_post_type() : false;
+	}
+
+	/**
 	 * Function to convert code to HTML special chars
 	 *
 	 * @param string $text RAW content.
 	 */
 	public static function html2code( $text ) {
 		return '<code>' . htmlspecialchars( $text ) . '</code>';
-	} // END public static function html2code
+	}
 
 	/**
 	 * Return debugging string if WP_DEBUG constant is true.
@@ -463,9 +556,11 @@ class Common {
 		if ( ! WP_DEBUG ) {
 			return $code;
 		}
+
 		if ( null === $scope || null === $location || null === $message ) {
 			return;
 		}
+
 		switch ( $scope ) {
 			case 'h':
 				$scope = 'Homepage';
@@ -478,6 +573,9 @@ class Common {
 				break;
 			case 'c':
 				$scope = 'Category specific';
+				break;
+			case 't':
+				$scope = 'Taxonomy specific';
 				break;
 			default:
 				$scope = 'Unknown';
@@ -498,7 +596,7 @@ class Common {
 		}
 		return sprintf(
 			'<!-- %1$s: %2$s %3$s section start (%4$s) -->%6$s%5$s%6$s<!-- %1$s: %2$s %3$s section end (%4$s) -->%6$s',
-			esc_html( self::$plugin->name ), // 1
+			self::$plugin->name, // 1
 			esc_html( $scope ),              // 2
 			esc_html( $location ),           // 3
 			esc_html( trim( $message ) ),    // 4
@@ -506,58 +604,6 @@ class Common {
 			"\n"                             // 6
 		);
 	}
-
-	/**
-	 * Determine should we print site-wide code
-	 * or it should be replaced with homepage/article/category code.
-	 *
-	 * @param  string  $behavior       Behavior for article specific code (replace/append).
-	 * @param  string  $code           Article specific custom code.
-	 * @param  string  $post_type      Post type of current article.
-	 * @param  array   $post_types     Array of post types where article specific code is enabled.
-	 * @param  boolean $is_category    Indicate if current displayed page is category or not.
-	 * @return boolean                 Boolean that determine should site-wide code be printed (true) or not (false).
-	 */
-	public static function print_sitewide(
-		$behavior = 'append',
-		$code = '',
-		$post_type = null,
-		$post_types = array(),
-		$is_category = false
-	) {
-		// On homepage print site wide if...
-		$is_homepage_blog_posts = self::is_homepage_blog_posts();
-		if ( $is_homepage_blog_posts ) {
-			// ... homepage behavior is not replace, or...
-			// ... homepage behavior is replace but homepage code is empty.
-			if (
-				'replace' !== $behavior
-				|| ( 'replace' === $behavior && empty( $code ) )
-			) {
-				return true;
-			}
-		} elseif ( $is_category ) { // On category page print site wide if...
-			// ... behavior is not replace, or...
-			// ... behavior is replace but category content is empty.
-			if (
-				'replace' !== $behavior
-				|| ( 'replace' === $behavior && empty( $code ) )
-			) {
-				return true;
-			}
-		} elseif ( // On Blog Post or Custom Post Type ...
-			// ... article behavior is not replace, or...
-			// ... article behavior is replace but current Post Type is not in allowed Post Types, or...
-			// ... article behavior is replace and current Post Type is in allowed Post Types but article code is empty.
-			'replace' !== $behavior
-			|| ( 'replace' === $behavior && ! in_array( $post_type, $post_types, true ) )
-			|| ( 'replace' === $behavior && in_array( $post_type, $post_types, true ) && empty( $code ) )
-		) {
-			return true;
-		}
-
-		return false;
-	} // END public static function print_sitewide
 
 	/**
 	 * Format security risk notice for appending to each code textarea description

@@ -67,8 +67,4 @@ class Plugin_Info {
 	public static function get_static_data() {
 		return new self();
 	}
-
-	public static function get_supported_taxonomies() {
-		return array( 'category', 'product_cat' );
-	}
 }

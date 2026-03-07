@@ -19,7 +19,7 @@ $auhfc_demo_url = get_stylesheet_directory_uri();
 printf(
 	/* translators: 1: category or article specific, 2: </head>, 3: <body>, 4: </body> */
 	esc_html__( 'Here you can insert %1$s code for HEAD (before the %2$s), BODY (after the %3$s) and FOOTER (before the %4$s) sections.', 'head-footer-code' ),
-	esc_html( $form_scope ),
+	esc_html( $auhfc_form_scope ),
 	'<code>&lt;/head&gt;</code>',
 	'<code>&lt;body&gt;</code>',
 	'<code>&lt;/body&gt;</code>'
@@ -48,7 +48,7 @@ echo '<br>';
 printf(
 	/* translators: 1: category or article specific, HTML comment code */
 	esc_html__( 'Please note, if you leave empty any of %1$s fields and choose replace behavior, site-wide code will not be removed until you add empty space or empty HTML comment %2$s here.', 'head-footer-code' ),
-	esc_html( $form_scope ),
+	esc_html( $auhfc_form_scope ),
 	'<code>&lt;!-- --&gt;</code>'
 );
 ?>

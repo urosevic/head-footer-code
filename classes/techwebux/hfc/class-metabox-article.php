@@ -33,7 +33,7 @@ class Metabox_Article {
 	 */
 	public function __construct( Plugin_Info $plugin ) {
 		$this->plugin   = $plugin;
-		$this->settings = Main::settings();
+		$this->settings = Main::get_settings();
 
 		// Check if the current user's role has permission to edit HFC
 		if ( ! Common::user_has_allowed_role() ) {

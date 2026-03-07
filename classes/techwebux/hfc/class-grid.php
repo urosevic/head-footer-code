@@ -30,7 +30,7 @@ class Grid {
 	 */
 	public function __construct( Plugin_Info $plugin ) {
 		$this->plugin   = $plugin;
-		$this->settings = Main::settings();
+		$this->settings = Main::get_settings();
 
 		add_action( 'admin_init', array( $this, 'admin_post_manage_columns' ) );
 	}

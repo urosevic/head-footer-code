@@ -95,7 +95,8 @@ class Main {
 
 			// If the user can manage categories, load the Metabox_Category class.
 			if ( current_user_can( 'manage_categories' ) ) {
-				new Metabox_Category( $this->plugin );
+				$enabled_taxonomies = self::$settings['article']['taxonomies'];
+				new Metabox_Taxonomy( $this->plugin, $enabled_taxonomies );
 			}
 		} elseif ( ! is_admin() ) {
 			// Load front-end magic.
@@ -130,15 +131,13 @@ class Main {
 
 		// Codemirror Assets.
 		$screen = get_current_screen();
-		if (
-			'tools_page_' . $this->plugin->slug === $hook ||
-			'post.php' === $hook ||
-			'post-new.php' === $hook ||
-			(
-				'term.php' === $hook
-				&& 'edit-category' === $screen->id
-			)
-		) {
+
+		// Prepare conditions
+		$is_hfc_settings = ( 'tools_page_' . $this->plugin->slug === $hook );
+		$is_post_edit    = in_array( $hook, array( 'post.php', 'post-new.php' ), true );
+		$is_term_edit    = ( 'term.php' === $hook && in_array( $screen->taxonomy, self::$settings['article']['taxonomies'], true ) );
+
+		if ( $is_hfc_settings || $is_post_edit || $is_term_edit ) {
 			// Define $cm_settings to prevent undefined variable error.
 			$cm_settings = array(
 				'codeEditor' => wp_enqueue_code_editor(
@@ -187,7 +186,7 @@ class Main {
 	 * @type array $article  Post type and role-based access settings.
 	 * }
 	 */
-	public static function settings() {
+	public static function get_settings() {
 		// If settings are already cached, return them.
 		if ( null !== self::$settings ) {
 			return self::$settings;
@@ -215,6 +214,7 @@ class Main {
 			),
 			'article'  => array(
 				'post_types'    => array(),
+				'taxonomies'    => array(),
 				'allowed_roles' => array(),
 			),
 		);
