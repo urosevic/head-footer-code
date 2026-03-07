@@ -34,16 +34,7 @@ class Settings {
 	 * @param Plugin_Info $plugin Instance of the plugin info object.
 	 */
 	public function __construct( Plugin_Info $plugin ) {
-		$this->plugin            = $plugin;
-		$this->settings          = Main::settings();
-		$this->allowed_html      = Common::allowed_html();
-		$this->form_allowed_html = Common::form_allowed_html();
-
-		// Create menu item for settings page.
-		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
-
-		// Initiate settings section and fields.
-		add_action( 'admin_init', array( $this, 'settings_init' ) );
+		$this->plugin = $plugin;
 
 		// Add Settings page link to plugin actions cell.
 		add_filter( 'plugin_action_links_' . $this->plugin->basename, array( $this, 'plugin_settings_link' ) );
@@ -51,13 +42,22 @@ class Settings {
 		// Update links in plugin row on Plugins page.
 		add_filter( 'plugin_row_meta', array( $this, 'add_plugin_meta_links' ), 10, 2 );
 
-		// Add Review CTA to the footer thankyou
-		add_filter(
-			'admin_footer_text',
-			function ( $text ) {
-				return '<span id="footer-thankyou">If you like the plugin please rate Head & Footer Code <a target="_blank" rel="nofollow" href="https://wordpress.org/support/plugin/head-footer-code/reviews/#new-post">★★★★★</a> on <a target="_blank" rel="nofollow" href="https://wordpress.org/support/plugin/head-footer-code/reviews/#new-post">WordPress.org</a> to help us spread the word ♥ from the Head & Footer Code team. </span>';
-			}
-		);
+		// Create menu item for settings page.
+		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
+
+		// Plugins settings only hooks.
+		$current_page = isset( $_GET['page'] ) ? $_GET['page'] : '';
+		if ( $current_page === $this->plugin->slug ) {
+			$this->settings          = Main::settings();
+			$this->allowed_html      = Common::allowed_html();
+			$this->form_allowed_html = Common::form_allowed_html();
+
+			// Initiate settings section and fields.
+			add_action( 'admin_init', array( $this, 'settings_init' ) );
+
+			// Add Review CTA to the footer thankyou
+			add_filter( 'admin_footer_text', array( $this, 'custom_footer_thankyou' ) );
+		}
 	}
 
 	/**
@@ -775,6 +775,17 @@ class Settings {
 
 		// Return updated array of links
 		return $links;
+	}
+
+	/**
+	 * Set custom footer thankyou text on plugin settings page
+	 *
+	 * @param string $text Default WordPress admin footer thankyou text
+	 *
+	 * @return string Custom Head & Footer Code review CTA text
+	 */
+	public function custom_footer_thankyou( $text ) {
+		return '<span id="footer-thankyou">If you like the plugin please rate Head & Footer Code <a target="_blank" rel="nofollow" href="https://wordpress.org/support/plugin/head-footer-code/reviews/#new-post">★★★★★</a> on <a target="_blank" rel="nofollow" href="https://wordpress.org/support/plugin/head-footer-code/reviews/#new-post">WordPress.org</a> to help us spread the word ♥ from the Head & Footer Code team. </span>';
 	}
 
 	/**
