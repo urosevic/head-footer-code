@@ -1,19 +1,17 @@
 <?php
 /**
- * Head & Footer Code General Settings page template
+ * General plugin settings page template.
  *
- * @category Template
- * @package Head_Footer_Code
- * @author Aleksandar Urosevic
- * @license https://www.gnu.org/copyleft/gpl-3.0.html GNU General Public License v3.0
- * @link https://urosevic.net
- * @link https://www.techwebux.com
+ * @package    Head_Footer_Code
+ * @category   Template
+ * @since      1.0.0
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
+
 ?>
 <div class="wrap" id="head_footer_code_settings">
 	<h1 class="wp-heading-inline">

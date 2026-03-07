@@ -1,10 +1,17 @@
 <?php
 /**
- * Template to render article and category specific metaboxes.
+ * Single article and category metabox template.
  *
- * @package Head_Footer_Code
- * @since: 1.4.0
+ * @package    Head_Footer_Code
+ * @category   Template
+ * @since      1.4.0
  */
+
+// If this file is called directly, abort.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 $auhfc_demo_url = get_stylesheet_directory_uri();
 ?>
 <p>
@@ -54,10 +61,10 @@ printf(
 				<label for="auhfc_behavior"><?php esc_html_e( 'Behavior', 'head-footer-code' ); ?></label>
 			</th>
 			<td>
-				<?php $current_behavior = isset( $auhfc_form_data['behavior'] ) ? $auhfc_form_data['behavior'] : 'append'; ?>
+				<?php $auhfc_current_behavior = isset( $auhfc_form_data['behavior'] ) ? $auhfc_form_data['behavior'] : 'append'; ?>
 				<select name="auhfc[behavior]" id="auhfc_behavior">
-					<option value="append" <?php selected( $current_behavior, 'append' ); ?>><?php esc_html_e( 'Append to the site-wide code', 'head-footer-code' ); ?></option>
-					<option value="replace" <?php selected( $current_behavior, 'replace' ); ?>><?php esc_html_e( 'Replace the site-wide code', 'head-footer-code' ); ?></option>
+					<option value="append" <?php selected( $auhfc_current_behavior, 'append' ); ?>><?php esc_html_e( 'Append to the site-wide code', 'head-footer-code' ); ?></option>
+					<option value="replace" <?php selected( $auhfc_current_behavior, 'replace' ); ?>><?php esc_html_e( 'Replace the site-wide code', 'head-footer-code' ); ?></option>
 				</select>
 			</td>
 		</tr>
@@ -67,7 +74,7 @@ printf(
 				<label for="auhfc_head"><?php esc_html_e( 'HEAD Code', 'head-footer-code' ); ?></label>
 			</th>
 			<td>
-				<div class="description"><?php echo $security_risk_notice; ?></div>
+				<div class="description"><?php echo $auhfc_security_risk_notice; ?></div>
 				<textarea name="auhfc[head]" id="auhfc_head" class="widefat code codeEditor" rows="5"><?php echo ! empty( $auhfc_form_data['head'] ) ? esc_textarea( $auhfc_form_data['head'] ) : ''; ?></textarea>
 				<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;link&nbsp;rel="stylesheet" href="<?php echo esc_url( $auhfc_demo_url ); ?>/custom-style.css" type="text/css" media="all"&gt;</code></p>
 			</td>
@@ -77,7 +84,7 @@ printf(
 				<label for="auhfc_body"><?php esc_html_e( 'BODY Code', 'head-footer-code' ); ?></label>
 			</th>
 			<td>
-				<div class="description"><?php echo $security_risk_notice; ?></div>
+				<div class="description"><?php echo $auhfc_security_risk_notice; ?></div>
 				<textarea name="auhfc[body]" id="auhfc_body" class="widefat code codeEditor" rows="5"><?php echo ! empty( $auhfc_form_data['body'] ) ? esc_textarea( $auhfc_form_data['body'] ) : ''; ?></textarea>
 				<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;script src="<?php echo esc_url( $auhfc_demo_url ); ?>/body-script.js" type="text/javascript"&gt;&lt;/script&gt;</code></p>
 			</td>
@@ -87,7 +94,7 @@ printf(
 				<label for="auhfc_footer"><?php esc_html_e( 'FOOTER Code', 'head-footer-code' ); ?></label>
 			</th>
 			<td>
-				<div class="description"><?php echo $security_risk_notice; ?></div>
+				<div class="description"><?php echo $auhfc_security_risk_notice; ?></div>
 				<textarea name="auhfc[footer]" id="auhfc_footer" class="widefat code codeEditor" rows="5"><?php echo ! empty( $auhfc_form_data['footer'] ) ? esc_textarea( $auhfc_form_data['footer'] ) : ''; ?></textarea>
 				<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;script src="<?php echo esc_url( $auhfc_demo_url ); ?>/footer-script.js" type="text/javascript"&gt;&lt;/script&gt;</code></p>
 			</td>

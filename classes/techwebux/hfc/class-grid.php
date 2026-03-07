@@ -1,19 +1,20 @@
 <?php
 /**
- * Generate Head & Footer Code indicator columns on article listing
+ * Admin list view helper.
  *
- * @package Head_Footer_Code
+ * Adds and populates custom columns in post/page/CPT listings
+ * to provide visual indicators of attached code snippets.
+ *
+ * @package   Head_Footer_Code
+ * @since     1.2.1
  */
 
 namespace Techwebux\Hfc;
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
-
-use Techwebux\Hfc\Main;
-use Techwebux\Hfc\Common;
 
 class Grid {
 	private $settings;

@@ -1,19 +1,20 @@
 <?php
 /**
- * Class for Head & Footer Code article metabox
+ * Article metabox handler.
  *
- * @package Head_Footer_Code
+ * Manages the creation and data persistence of custom code snippet
+ * metaboxes for posts, pages, and custom post types.
+ *
+ * @package   Head_Footer_Code
+ * @since     1.0.0
  */
 
 namespace Techwebux\Hfc;
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
-
-use Techwebux\Hfc\Main;
-use Techwebux\Hfc\Common;
 
 /**
  * Class to compose Head & Footer article metabox
@@ -106,7 +107,7 @@ class Metabox_Article {
 		/** @var string $form_scope Used in ../templates/hfc-form.php */
 		$form_scope = esc_html__( 'article specific', 'head-footer-code' );
 
-		$security_risk_notice = Common::security_risk_notice();
+		$auhfc_security_risk_notice = Common::security_risk_notice();
 
 		// Get article specific postmeta.
 		/** @var array $auhfc_form_data Used in ../templates/hfc-form.php */

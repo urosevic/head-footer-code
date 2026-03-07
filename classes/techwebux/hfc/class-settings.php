@@ -1,19 +1,20 @@
 <?php
 /**
- * Settings page for Head & Footer Code plugin
+ * Admin settings handler.
  *
- * @package Head_Footer_Code
+ * Manages rendering of the options page, sanitization of inputs,
+ * and saving general plugin configurations.
+ *
+ * @package   Head_Footer_Code
+ * @since     1.0.0
  */
 
 namespace Techwebux\Hfc;
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
-
-use Techwebux\Hfc\Main;
-use Techwebux\Hfc\Common;
 
 class Settings {
 
@@ -425,8 +426,8 @@ class Settings {
 			array(                                                    // Arguments.
 				'label_for'   => false,
 				'items'       => array(
-					'editor' => __( 'Editor' ),
-					'author' => __( 'Author' ),
+					'editor' => __( 'Editor', 'head-footer-code' ),
+					'author' => __( 'Author', 'head-footer-code' ),
 				),
 				'description' => esc_html__( 'Choose which unprivileged user roles can manage article-specific and category-specific code.', 'head-footer-code' )
 								. '<br>'

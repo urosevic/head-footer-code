@@ -1,6 +1,9 @@
 <?php
 /**
- * Routine to handle Category metabox for Head & Footer Code
+ * Category metabox handler.
+ *
+ * Extends taxonomy edit screens to include code snippet inputs
+ * for category-specific injections.
  *
  * @package Head_Footer_Code
  * @since 1.3.0
@@ -9,11 +12,9 @@
 namespace Techwebux\Hfc;
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
-
-use Techwebux\Hfc\Common;
 
 class Metabox_Category {
 	public function __construct() {
@@ -38,7 +39,7 @@ class Metabox_Category {
 		/** @var string $form_scope Used in templates/hfc-form.php */
 		$form_scope = esc_html__( 'category specific', 'head-footer-code' );
 
-		$security_risk_notice = Common::security_risk_notice();
+		$auhfc_security_risk_notice = Common::security_risk_notice();
 
 		// Get existing HFC meta for known Category or use defaults.
 		/** @var array $auhfc_form_data Used in templates/hfc-form.php */

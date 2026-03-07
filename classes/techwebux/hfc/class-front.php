@@ -1,18 +1,20 @@
 <?php
 /**
- * Frontend magic for Head & Footer Code
+ * Frontend code injector.
  *
- * @package Head_Footer_Code
+ * Handles output of scripts/styles in `<head>`, start of `<body>`, and before
+ * `</body>` across various site contexts (site-wide, singular, archive, home).
+ *
+ * @package   Head_Footer_Code
+ * @since     1.0.0
  */
 
 namespace Techwebux\Hfc;
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
-
-use Techwebux\Hfc\Common;
 
 class Front {
 	private $settings;

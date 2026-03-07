@@ -2,6 +2,11 @@
 
 namespace Techwebux\Hfc;
 
+// If this file is called directly, abort.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 spl_autoload_register( __NAMESPACE__ . '\autoload' );
 
 /**

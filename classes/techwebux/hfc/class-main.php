@@ -1,15 +1,19 @@
 <?php
 /**
- * Main class for Head & Footer Code
+ * Main plugin orchestrator.
  *
- * @package Head_Footer_Code
+ * Handles plugin bootstrap, hook registration, admin asset management,
+ * and initializes core components.
+ *
+ * @package    Head_Footer_Code
+ * @since      1.4.0
  */
 
 namespace Techwebux\Hfc;
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 class Main {

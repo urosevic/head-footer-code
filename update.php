@@ -2,12 +2,13 @@
 /**
  * Routines to update Head & Footer Code database through new versions
  *
- * @package Head_Footer_Code
+ * @package   Head_Footer_Code
+ * @since     1.0.1
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 /**

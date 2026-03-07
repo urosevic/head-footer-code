@@ -1,15 +1,19 @@
 <?php
 /**
- * Various common functions for Head & Footer Code
+ * Utility functions collection.
  *
- * @package Head_Footer_Code
+ * Provides shared helper methods and reusable logic used across
+ * different components of the plugin.
+ *
+ * @package   Head_Footer_Code
+ * @since     1.4.0
  */
 
 namespace Techwebux\Hfc;
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 class Common {
@@ -110,15 +114,8 @@ class Common {
 			return self::sanitize_html_classes( $fallback );
 		}
 
-		/**
-		 * Filters a sanitized HTML class string.
-		 *
-		 * @param string $sanitized The sanitized HTML class.
-		 * @param string $classse   HTML class before sanitization.
-		 * @param string $fallback  The fallback string.
-		 */
-		return apply_filters( 'sanitize_html_classes', $sanitized, $classes, $fallback );
-	} // END public static function sanitize_html_classes
+		return $sanitized;
+	}
 
 	/**
 	 * Prepare allowed code for KSES filtering
