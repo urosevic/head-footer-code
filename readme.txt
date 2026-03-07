@@ -3,10 +3,10 @@
 Contributors: urkekg, techwebux
 Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: head, body, footer, code, script
-Requires at least: 4.9
+Requires at least: 5.2
 Tested up to: 7.0
-Stable tag: 1.5.3
-Requires PHP: 5.5
+Stable tag: 1.5.4
+Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -192,6 +192,14 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 Introduced restriction for non-privileged roles (eg. Editor and Author) to access HFC on pages, posts and custom CPTs. If you wish to allow them manage article-specific HFC, make sure you enable that at the bottom of the global plugin settings page.
 
 ## Changelog
+
+### 1.5.4 (2026-03-xx)
+* New: Add dynamic support for all public taxonomies (eg, Tags, Product Categories)
+* Change: Move review CTA to the bottom of the Settings page
+* Change: Increased minimum requirements to WordPress 5.2 and PHP 5.6
+* Cleanup: Removed `wp_body_open` fallback (no longer needed with WP 5.2+ requirement)
+* Improve: Introduce `Plugin_Info` class for cleaner constant management
+* Optimize: Internal code refactoring for better maintainability and naming clarity
 
 ### 1.5.3 (2026-03-07)
 * Fix: Allow `display` and `visibility` CSS properties for KSES
