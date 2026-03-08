@@ -817,7 +817,7 @@ class Settings {
 	 * @return string Custom Head & Footer Code review CTA text
 	 */
 	public function custom_footer_thankyou( $text ) {
-		return '<span id="footer-thankyou">If you like the plugin please rate Head & Footer Code <a target="_blank" rel="nofollow" href="https://wordpress.org/support/plugin/head-footer-code/reviews/#new-post">★★★★★</a> on <a target="_blank" rel="nofollow" href="https://wordpress.org/support/plugin/head-footer-code/reviews/#new-post">WordPress.org</a> to help us spread the word ♥ from the Head & Footer Code team. </span>';
+		return '<span id="footer-thankyou">If you ♥ <strong>Head & Footer Code</strong> please leave us a <a target="_blank" rel="nofollow" href="https://wordpress.org/support/plugin/head-footer-code/reviews/#new-post">★★★★★</a> rating. A huge thanks in advance!</span>';
 	}
 
 	/**
