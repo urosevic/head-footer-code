@@ -542,7 +542,7 @@ class Common {
 			'c' => 'Category specific',
 			't' => 'Taxonomy specific',
 		);
-		return $labels[ $scope ] ?? 'Unknown';
+		return isset( $labels[ $scope ] ) ? $labels[ $scope ] : 'Unknown';
 	}
 
 	/** Helper: Get localtion label. */
@@ -552,7 +552,7 @@ class Common {
 			'b' => 'BODY',
 			'f' => 'FOOTER',
 		);
-		return $labels[ $location ] ?? 'UNKNOWN';
+		return isset( $labels[ $location ] ) ? $labels[ $location ] : 'UNKNOWN';
 	}
 
 	/**
