@@ -30,16 +30,18 @@ class Common {
 	 * version, and directory without needing global constants.
 	 *
 	 * @param Plugin_Info $plugin The plugin metadata container.
-	 * @return void
+	 * @param array       $settings Optional settings array to initialize.
 	 */
-	public static function init( Plugin_Info $plugin ) {
+	public static function init( Plugin_Info $plugin, $settings = null ) {
 		self::$plugin = $plugin;
+
+		if ( null !== $settings ) {
+			self::$settings = $settings;
+		}
 	}
 
 	/**
 	 * Initialize settings if not already set.
-	 *
-	 * @return void
 	 */
 	private static function init_settings() {
 		if ( null === self::$settings ) {
@@ -53,25 +55,24 @@ class Common {
 	 * @return bool
 	 */
 	public static function user_has_allowed_role() {
-		// Ensure settings are initialized.
 		self::init_settings();
 
-		// Always allow Super Admin (Multisite)
+		// Always allow Super Admin (Multisite).
 		$current_user = wp_get_current_user();
 		if ( is_super_admin( $current_user->ID ) ) {
 			return true;
 		}
 
-		// Get current user roles
+		// Get current user roles.
 		$user_roles = (array) $current_user->roles;
 
-		// Merge fixed always-allowed and configurable allowed roles
+		// Merge fixed always-allowed and configurable allowed roles.
 		$allowed_roles = array_merge(
 			array( 'administrator', 'shop_manager' ),
 			self::$settings['article']['allowed_roles']
 		);
 
-		// Check if any of user's roles are in the allowed list
+		// Check if any of user's roles are in the allowed list.
 		return (bool) array_intersect( $user_roles, $allowed_roles );
 	}
 
@@ -81,10 +82,7 @@ class Common {
 	 * @return bool
 	 */
 	public static function is_homepage_blog_posts() {
-		if ( is_home() && 'posts' === get_option( 'show_on_front', false ) ) {
-			return true;
-		}
-		return false;
+		return is_home() && 'posts' === get_option( 'show_on_front', false );
 	}
 
 	/**
@@ -93,7 +91,6 @@ class Common {
 	 * @return bool
 	 */
 	public static function is_supported_singular_post_type() {
-		// Ensure settings are initialized.
 		self::init_settings();
 
 		$singular_post_type = self::get_singular_post_type();
@@ -107,7 +104,6 @@ class Common {
 	 * @return bool
 	 */
 	public static function is_supported_taxonomy() {
-		// Ensure settings are initialized.
 		self::init_settings();
 
 		$queried_object = get_queried_object();
@@ -128,6 +124,43 @@ class Common {
 	 * @param  boolean $is_taxonomy    Indicate if current displayed page is taxonomy or not.
 	 * @return boolean                 Boolean that determine should site-wide code be printed (true) or not (false).
 	 */
+	public static function is_printable_sitewide_v1(
+		$behavior = 'append',
+		$code = '',
+		$post_type = null,
+		$post_types = array(),
+		$is_taxonomy = false
+	) {
+		// Always print if not replacing.
+		if ( 'replace' !== $behavior ) {
+			return true;
+		}
+
+		// If replacing but code is empty, still print sitewide.
+		if ( empty( $code ) ) {
+			return true;
+		}
+
+		// If replacing on non-supported post type, print sitewide.
+		if ( ! $is_taxonomy && ! in_array( $post_type, $post_types, true ) ) {
+			return true;
+		}
+
+		// Otherwise, don't print sitewide (it's being replaced).
+		return false;
+	}
+
+	/**
+	 * Determine should we print site-wide code
+	 * or it should be replaced with homepage/article/taxonomy code.
+	 *
+	 * @param  string  $behavior       Behavior for article specific code (replace/append).
+	 * @param  string  $code           Article specific custom code.
+	 * @param  string  $post_type      Post type of current article.
+	 * @param  array   $post_types     Array of post types where article specific code is enabled.
+	 * @param  boolean $is_taxonomy    Indicate if current displayed page is taxonomy or not.
+	 * @return boolean                 Boolean that determine should site-wide code be printed (true) or not (false).
+	 */
 	public static function is_printable_sitewide(
 		$behavior = 'append',
 		$code = '',
@@ -135,59 +168,63 @@ class Common {
 		$post_types = array(),
 		$is_taxonomy = false
 	) {
-		// On homepage print site wide if...
-		$is_homepage_blog_posts = self::is_homepage_blog_posts();
-		if ( $is_homepage_blog_posts ) {
-			// ... homepage behavior is not replace, or...
-			// ... homepage behavior is replace but homepage code is empty.
-			if (
-				'replace' !== $behavior
-				|| ( 'replace' === $behavior && empty( $code ) )
-			) {
-				return true;
-			}
-		} elseif ( $is_taxonomy ) { // On taxonomy page print site wide if...
-			// ... behavior is not replace, or...
-			// ... behavior is replace but taxonomy content is empty.
-			if (
-				'replace' !== $behavior
-				|| ( 'replace' === $behavior && empty( $code ) )
-			) {
-				return true;
-			}
-		} elseif ( // On Blog Post or Custom Post Type ...
-			// ... article behavior is not replace, or...
-			// ... article behavior is replace but current Post Type is not in allowed Post Types, or...
-			// ... article behavior is replace and current Post Type is in allowed Post Types but article code is empty.
-			'replace' !== $behavior
-			|| ( 'replace' === $behavior && ! in_array( $post_type, $post_types, true ) )
-			|| ( 'replace' === $behavior && in_array( $post_type, $post_types, true ) && empty( $code ) )
-		) {
+		// Always print if not replacing.
+		if ( 'replace' !== $behavior ) {
 			return true;
 		}
 
+		// If replacing but code is empty, still print sitewide.
+		if ( empty( $code ) ) {
+			return true;
+		}
+
+		// Check if we're on homepage in blog mode.
+		$is_homepage_blog_posts = self::is_homepage_blog_posts();
+
+		// On homepage with replace behavior and non-empty code, don't print sitewide.
+		if ( $is_homepage_blog_posts ) {
+			return false;
+		}
+
+		// On taxonomy with replace behavior and non-empty code, don't print sitewide.
+		if ( $is_taxonomy ) {
+			return false;
+		}
+
+		// If replacing on non-supported post type, print sitewide.
+		if ( ! in_array( $post_type, $post_types, true ) ) {
+			return true;
+		}
+
+		// We're on a supported post type with replace behavior and non-empty code.
+		// Don't print sitewide (it's being replaced).
 		return false;
 	}
 
 	/**
 	 * Function to check if code should be added on paged homepage in Blog mode
 	 *
-	 * @param bool  $is_homepage_blog_posts If current page is blog homepage
+	 * @param bool  $is_homepage_blog_posts If current page is blog homepage.
+	 * @param array $settings               Plugin settings (optional, uses static if not provided).
 	 *
 	 * @return bool
 	 */
-	public static function is_addable_to_paged_homepage( $is_homepage_blog_posts ) {
-		// Ensure settings are initialized.
-		self::init_settings();
+	public static function is_addable_to_paged_homepage( $is_homepage_blog_posts, $settings = null ) {
+		// Use provided settings or fall back to static settings.
+		if ( null === $settings ) {
+			self::init_settings();
+			$settings = self::$settings;
+		}
 
 		if (
 			true === $is_homepage_blog_posts
 			&& is_paged()
-			&& ! empty( self::$settings['homepage']['paged'] )
-			&& 'no' === self::$settings['homepage']['paged']
+			&& ! empty( $settings['homepage']['paged'] )
+			&& 'no' === $settings['homepage']['paged']
 		) {
 			return false;
 		}
+
 		return true;
 	}
 
@@ -197,11 +234,11 @@ class Common {
 	 * Strips the string down to A-Z,a-z,0-9,_,-, . If this results in an empty
 	 * string then it will return the alternative value supplied.
 	 *
-	 * @param string $classes    The classnames to be sanitized (multiple classnames separated by space)
+	 * @param string $classes    The classnames to be sanitized (multiple classnames separated by space).
 	 * @param string $fallback   Optional. The value to return if the sanitization ends up as an empty string.
 	 *                           Defaults to an empty string.
 	 *
-	 * @return string            The sanitized value
+	 * @return string            The sanitized value.
 	 */
 	public static function sanitize_html_classes( $classes, $fallback = '' ) {
 		// Strip out any %-encoded octets.
@@ -260,8 +297,8 @@ class Common {
 					'title'          => true,
 					'fetchpriority'  => true, // preload
 					'as'             => true, // preload
-					'imagesrcset'    => true, // preload for images https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/imageSrcset
-					'imagesizes'     => true, // preload for images https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement/imageSizes
+					'imagesrcset'    => true, // preload for images
+					'imagesizes'     => true, // preload for images
 					'crossorigin'    => true, // security
 					'nonce'          => true, // security
 					'itemprop'       => true, // for structured data
@@ -278,8 +315,7 @@ class Common {
 					'media'      => true,
 					'property'   => true,
 				),
-				// Allow <noscript> and <iframe> for GTag and custom
-				'noscript' => true,
+				// Allow <iframe> for GTag and custom embeds.
 				'iframe'   => array(
 					// standard
 					'src'      => true,
@@ -343,11 +379,6 @@ class Common {
 				'title' => array(),
 				'style' => array(),
 			),
-			/*
-			'div'      => array(
-				'class' => true,
-			),
-			*/
 			'p'        => array(
 				'class' => true,
 			),
@@ -357,7 +388,7 @@ class Common {
 				'class'  => true,
 				'title'  => true,
 			),
-			'code'     => array(), // No attributes for the <code> tag
+			'code'     => array(),
 			'br'       => array(),
 			'strong'   => array(),
 			'em'       => array(),
@@ -392,7 +423,7 @@ class Common {
 				$full_tag = $matches[0];
 				$tag_name = strtolower( $matches[1] ); // script or style
 
-				// Extract opening tag for improved security, eg. <script onload="…">
+				// Extract opening tag for improved security, e.g. <script onload="…">
 				if ( preg_match( '/^<' . $tag_name . '[^>]*>/i', $full_tag, $tag_match ) ) {
 					$opening_tag           = $tag_match[0];
 					$sanitized_opening_tag = wp_kses( $opening_tag, array( $tag_name => $allowed_html[ $tag_name ] ) );
@@ -409,7 +440,7 @@ class Common {
 			$content
 		);
 
-		// Sanitize rest of content (outside scripts/styles)
+		// Sanitize rest of content (outside scripts/styles).
 		$content = wp_kses( $content, $allowed_html );
 
 		if ( ! empty( $placeholders ) ) {
@@ -440,7 +471,7 @@ class Common {
 			remove_filter( 'pre_kses', $jetpack_filter, 100 );
 		}
 
-		// Build sanitized data array
+		// Build sanitized data array.
 		$sanitized = array(
 			'behavior' => isset( $input['behavior'] ) ? sanitize_key( $input['behavior'] ) : 'append',
 			'head'     => isset( $input['head'] ) ? self::sanitize_html_with_scripts( $input['head'] ) : '',
@@ -448,7 +479,7 @@ class Common {
 			'footer'   => isset( $input['footer'] ) ? self::sanitize_html_with_scripts( $input['footer'] ) : '',
 		);
 
-		// Reinstate Jetpack filter
+		// Reinstate Jetpack filter.
 		if ( $has_jetpack ) {
 			add_filter( 'pre_kses', $jetpack_filter, 100 );
 		}
@@ -471,18 +502,18 @@ class Common {
 
 		$meta_key = '_auhfc';
 
-		// Get meta data based on type
+		// Get meta data based on type.
 		$data = ( 'post' === $type )
 			? get_post_meta( $id, $meta_key, true )
 			: get_term_meta( $id, $meta_key, true );
 
-		// Check if we got array and requested key exists
+		// Check if we got array and requested key exists.
 		if ( is_array( $data ) && isset( $data[ $field_name ] ) ) {
-			// Remove slashes from escaped value (make value ready to use)
+			// Remove slashes from escaped value (make value ready to use).
 			return stripslashes_deep( $data[ $field_name ] );
 		}
 
-		// Default for behavior
+		// Default for behavior.
 		if ( 'behavior' === $field_name ) {
 			return 'append';
 		}
@@ -492,6 +523,10 @@ class Common {
 
 	/**
 	 * Helper: Get post meta values.
+	 *
+	 * @param string $field_name Field key.
+	 * @param int    $post_id    Post ID.
+	 * @return mixed
 	 */
 	public static function get_post_meta( $field_name, $post_id ) {
 		return self::get_meta( $field_name, $post_id, 'post' );
@@ -499,6 +534,10 @@ class Common {
 
 	/**
 	 * Helper: Get term meta values.
+	 *
+	 * @param string $field_name Field key.
+	 * @param int    $term_id    Term ID.
+	 * @return mixed
 	 */
 	public static function get_term_meta( $field_name, $term_id ) {
 		return self::get_meta( $field_name, $term_id, 'term' );
@@ -506,6 +545,10 @@ class Common {
 
 	/**
 	 * Smart wrapper: Get meta with auto-detected ID.
+	 *
+	 * @param string $field_name Field key.
+	 * @param string $type       `post` or `term`.
+	 * @return mixed
 	 */
 	public static function get_meta_auto( $field_name, $type = 'post' ) {
 		return self::get_meta( $field_name, get_queried_object_id(), $type );
@@ -533,7 +576,12 @@ class Common {
 		);
 	}
 
-	/** Helper: Get scope label. */
+	/**
+	 * Helper: Get scope label.
+	 *
+	 * @param string $scope Scope identifier.
+	 * @return string
+	 */
 	private static function get_scope_label( $scope ) {
 		$labels = array(
 			'h' => 'Homepage',
@@ -545,7 +593,12 @@ class Common {
 		return isset( $labels[ $scope ] ) ? $labels[ $scope ] : 'Unknown';
 	}
 
-	/** Helper: Get localtion label. */
+	/**
+	 * Helper: Get location label.
+	 *
+	 * @param string $location Location identifier.
+	 * @return string
+	 */
 	private static function get_location_label( $location ) {
 		$labels = array(
 			'h' => 'HEAD',
@@ -558,7 +611,7 @@ class Common {
 	/**
 	 * Wraps text in <code> tags and escapes HTML entities.
 	 *
-	 * @param string $text
+	 * @param string $text Text to format.
 	 * @return string
 	 */
 	public static function format_as_code( $text ) {
@@ -580,16 +633,17 @@ class Common {
 		$message = null,
 		$code = null
 	) {
-		if ( ! WP_DEBUG ) {
+		if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
 			return $code;
 		}
 
 		if ( null === $scope || null === $location || null === $message ) {
-			return;
+			return '';
 		}
 
 		$scope_label    = self::get_scope_label( $scope );
 		$location_label = self::get_location_label( $location );
+
 		return sprintf(
 			'<!-- %1$s: %2$s %3$s section start (%4$s) -->%6$s%5$s%6$s<!-- %1$s: %2$s %3$s section end (%4$s) -->%6$s',
 			self::$plugin->name,          // 1
@@ -603,8 +657,6 @@ class Common {
 
 	/**
 	 * Print security risk notice
-	 *
-	 * @return void
 	 */
 	public static function print_security_risk_notice() {
 		echo wp_kses(
