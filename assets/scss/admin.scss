@@ -31,14 +31,11 @@ $color-red: #d63638;
 }
 
 .fixed .column-hfc {
-    width: 14%;
-    .n-a {
-        cursor: help;
-        opacity: 0.5;
-    }
+    width: 6em;
+
     .hfc-badges-wrapper {
         border-radius: 3px;
-        display: inline-flex;
+        display: flex;
         flex-wrap: wrap;
         overflow: hidden;
 
@@ -52,17 +49,16 @@ $color-red: #d63638;
         .badge {
             border: 1px solid rgba(0, 0, 0, .1);
             color: #fff;
-            display: block;
+            // display: block;
             flex: 1 1 auto;
-            font-size: 13px;
+            font-size: 12px;
+            min-width: 1.4em;
             text-align: center;
             text-decoration: none;
             text-shadow: 0 0 3px rgba(0, 0, 0, .7);
             -webkit-user-select: none;
             user-select: none;
 
-            min-width: 2em;
-            position: static;
         }
     }
 }

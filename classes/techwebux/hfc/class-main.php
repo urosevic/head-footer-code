@@ -114,13 +114,13 @@ class Main {
 	}
 
 	/**
-	 * Enqueue admin styles and scripts to enable code editor in plugin settings and custom column on article listing
+	 * Enqueue admin styles and scripts to enable code editor in plugin settings and custom column on article and taxonomy listings
 	 *
 	 * @param  string $hook Current page hook.
 	 */
 	public function admin_enqueue_scripts( $hook ) {
 		// Admin Stylesheet.
-		if ( in_array( $hook, array( 'post.php', 'post-new.php', 'edit.php', 'tools_page_' . $this->plugin->slug ), true ) ) {
+		if ( in_array( $hook, array( 'post.php', 'post-new.php', 'edit.php', 'edit-tags.php', 'tools_page_' . $this->plugin->slug ), true ) ) {
 			wp_enqueue_style(
 				'head-footer-code-admin',
 				$this->plugin->url . 'assets/css/admin.min.css',
