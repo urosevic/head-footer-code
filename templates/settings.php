@@ -31,6 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<form method="post" action="options.php">
 	<?php
 		settings_fields( 'head_footer_code_settings' );
+		settings_errors();
 		do_settings_sections( $this->plugin->slug );
 		submit_button();
 	?>

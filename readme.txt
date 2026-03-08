@@ -195,6 +195,7 @@ Introduced restriction for non-privileged roles (eg. Editor and Author) to acces
 
 ### 1.5.4 (2026-03-xx)
 * New: Add dynamic support for all public taxonomies (eg, Tags, Product Categories)
+* Fix: There was no `Settings saved.` notification
 * Change: Move review CTA to the bottom of the Settings page
 * Change: Increased minimum requirements to WordPress 5.2 and PHP 5.6
 * Cleanup: Removed `wp_body_open` fallback (no longer needed with WP 5.2+ requirement)
