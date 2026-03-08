@@ -32,7 +32,6 @@ class Main {
 
 		add_filter( 'safe_style_css', array( $this, 'extend_safe_css' ) );
 
-		// Include back-end/front-end resources and maybe update settings.
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}
@@ -82,25 +81,23 @@ class Main {
 	 * Function to load subclasses, check and update if it has to be done
 	 */
 	public function plugins_loaded() {
+		$settings = self::get_settings();
+
 		// Include back-end/front-end resources based on capabilities.
 		// https://wordpress.org/documentation/article/roles-and-capabilities/
 		if ( is_admin() && current_user_can( 'publish_posts' ) && Common::user_has_allowed_role() ) {
 			// Load Settings if the current user can manage options
 			if ( current_user_can( 'manage_options' ) ) {
-				new Settings( $this->plugin );
+				new Settings( $this->plugin, $settings );
 			}
 			// Always load the Grid and Metabox classes for allowed roles.
-			new Grid( $this->plugin );
-			new Metabox_Article( $this->plugin );
+			new Grid( $this->plugin, $settings );
+			new Metabox_Article( $this->plugin, $settings );
+			new Metabox_Taxonomy( $this->plugin, $settings );
 
-			// If the user can manage categories, load the Metabox_Category class.
-			if ( current_user_can( 'manage_categories' ) ) {
-				$enabled_taxonomies = self::$settings['article']['taxonomies'];
-				new Metabox_Taxonomy( $this->plugin, $enabled_taxonomies );
-			}
 		} elseif ( ! is_admin() ) {
 			// Load front-end magic.
-			new Front( $this->plugin );
+			new Front( $this->plugin, $settings );
 		}
 
 		// Bail if this plugin data doesn't need updating.

@@ -17,6 +17,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Metabox_Taxonomy {
+	/** @var array Settings retrieved from the main controller. */
+	private $settings;
+
 	/** @var Plugin_Info Plugin metadata object. */
 	protected $plugin;
 
@@ -26,18 +29,15 @@ class Metabox_Taxonomy {
 	 * Initializes the class and registers frontend hooks.
 	 *
 	 * @param Plugin_Info $plugin Instance of the plugin info object.
+	 * @param array       $settings Plugin settings array.
 	 */
 	public function __construct(
 		Plugin_Info $plugin,
-		array $taxonomies = array( 'category' )
+		$settings
 	) {
 		$this->plugin     = $plugin;
-		$this->taxonomies = $taxonomies;
-
-		// Check if the current user's role has permission to edit HFC
-		if ( ! Common::user_has_allowed_role() ) {
-			return;
-		}
+		$this->settings   = $settings;
+		$this->taxonomies = $this->settings['article']['taxonomies'];
 
 		foreach ( $this->taxonomies as $taxonomy ) {
 			// Dynamic hook: {taxonomy}_edit_form & edit_{taxonomy}
@@ -127,13 +127,13 @@ class Metabox_Taxonomy {
 
 		// Maybe delete HFC for this taxonomy?
 		if ( ! isset( $_POST['auhfc'] ) ) {
-			delete_term_meta( $term_id, '_auhfc' );
+			delete_term_meta( $term_id, $this->plugin->meta_key );
 			return;
 		}
 
 		// Sanitize data and update term meta.
 		$data = Common::sanitize_hfc_data( $_POST['auhfc'] );
-		update_term_meta( $term_id, '_auhfc', wp_slash( $data ) );
+		update_term_meta( $term_id, $this->plugin->meta_key, wp_slash( $data ) );
 	}
 
 	/**

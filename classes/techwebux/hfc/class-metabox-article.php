@@ -29,16 +29,12 @@ class Metabox_Article {
 	/**
 	 * Initializes the class and registers frontend hooks.
 	 *
-	 * @param Plugin_Info $plugin Instance of the plugin info object.
+	 * @param Plugin_Info $plugin   Instance of the plugin info object.
+	 * @param array       $settings Plugin settings array.
 	 */
-	public function __construct( Plugin_Info $plugin ) {
+	public function __construct( Plugin_Info $plugin, $settings ) {
 		$this->plugin   = $plugin;
-		$this->settings = Main::get_settings();
-
-		// Check if the current user's role has permission to edit HFC
-		if ( ! Common::user_has_allowed_role() ) {
-			return;
-		}
+		$this->settings = $settings;
 
 		add_action( 'load-post.php', array( $this, 'init_metaboxes' ) );
 		add_action( 'load-post-new.php', array( $this, 'init_metaboxes' ) );
@@ -136,6 +132,6 @@ class Metabox_Article {
 
 		// Sanitize data and update post meta.
 		$data = Common::sanitize_hfc_data( $_POST['auhfc'] );
-		update_post_meta( $post_id, '_auhfc', wp_slash( $data ) );
+		update_post_meta( $post_id, $this->plugin->meta_key, wp_slash( $data ) );
 	}
 }

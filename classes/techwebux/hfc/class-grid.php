@@ -30,10 +30,11 @@ class Grid {
 	 * Initializes the class and registers admin hooks.
 	 *
 	 * @param Plugin_Info $plugin Instance of the plugin info object.
+	 * @param array       $settings Plugin settings array.
 	 */
-	public function __construct( Plugin_Info $plugin ) {
+	public function __construct( Plugin_Info $plugin, $settings ) {
 		$this->plugin   = $plugin;
-		$this->settings = Main::get_settings();
+		$this->settings = $settings;
 
 		add_action( 'admin_init', array( $this, 'admin_manage_columns' ) );
 	}

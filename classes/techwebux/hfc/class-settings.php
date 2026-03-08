@@ -32,9 +32,11 @@ class Settings {
 	 * Initializes the class and registers admin hooks.
 	 *
 	 * @param Plugin_Info $plugin Instance of the plugin info object.
+	 * @param array       $settings Plugin settings array.
 	 */
-	public function __construct( Plugin_Info $plugin ) {
-		$this->plugin = $plugin;
+	public function __construct( Plugin_Info $plugin, $settings ) {
+		$this->plugin   = $plugin;
+		$this->settings = $settings;
 
 		// Add Settings page link to plugin actions cell.
 		add_filter( 'plugin_action_links_' . $this->plugin->basename, array( $this, 'plugin_settings_link' ) );
@@ -52,7 +54,6 @@ class Settings {
 		$current_page = isset( $_GET['page'] ) ? $_GET['page'] : '';
 		if ( $current_page === $this->plugin->slug ) {
 
-			$this->settings          = Main::get_settings();
 			$this->allowed_html      = Common::allowed_html();
 			$this->form_allowed_html = Common::form_allowed_html();
 
