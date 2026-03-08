@@ -82,7 +82,7 @@ class Metabox_Article {
 	 */
 	public function form( $post ) {
 		/** @var string $form_scope Used in ../templates/hfc-form.php */
-		$form_scope = esc_html__( 'article specific', 'head-footer-code' );
+		$auhfc_form_scope = esc_html__( 'article specific', 'head-footer-code' );
 
 		$auhfc_security_risk_notice = Common::get_security_risk_notice();
 
