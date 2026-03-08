@@ -257,7 +257,7 @@ function auhfc_update_9() {
  * Migration for v. 1.5.3
  * Clean up double slashes from existing meta data caused by previous double-slashing.
  */
-function twu_hfc_update_10() {
+function auhfc_update_10() {
 	global $wpdb;
 
 	$meta_key = '_auhfc';
