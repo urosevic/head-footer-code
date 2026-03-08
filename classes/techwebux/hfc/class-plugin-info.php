@@ -51,6 +51,9 @@ class Plugin_Info {
 	/** @var string Plugin slug. */
 	public $slug;
 
+	/** @var string Post/Taxonomy meta key. */
+	public $meta_key;
+
 	public function __construct() {
 		$this->min_wp   = HFC__MIN_WP;
 		$this->min_php  = HFC__MIN_PHP;
@@ -62,6 +65,7 @@ class Plugin_Info {
 		$this->basename = plugin_basename( HFC_FILE );
 		$this->name     = 'Head & Footer Code';
 		$this->slug     = 'head-footer-code';
+		$this->meta_key = '_auhfc';
 	}
 
 	public static function get_static_data() {
