@@ -125,8 +125,13 @@ class Grid {
 			return $output;
 		}
 
-		$meta     = get_term_meta( $term_id, $this->plugin->meta_key, true );
-		$edit_url = get_edit_term_link( $term_id );
+		$meta = get_term_meta( $term_id, $this->plugin->meta_key, true );
+		// Fallback for WP 5.2
+		$taxonomy = filter_input( INPUT_GET, 'taxonomy', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		if ( ! $taxonomy ) {
+			$taxonomy = '';
+		}
+		$edit_url = get_edit_term_link( $term_id, $taxonomy );
 
 		return $this->render_badges( $meta, $edit_url, 'taxonomy' );
 	}
