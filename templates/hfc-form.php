@@ -76,7 +76,12 @@ printf(
 				<label for="auhfc_head"><?php esc_html_e( 'HEAD Code', 'head-footer-code' ); ?></label>
 			</th>
 			<td>
-				<div class="description"><?php echo $auhfc_security_risk_notice; ?></div>
+				<div class="description">
+					<p class="notice notice-warning">
+						<strong><?php echo esc_html( $auhfc_security_risk_notice['title'] ); ?></strong>
+						<?php echo esc_html( $auhfc_security_risk_notice['message'] ); ?>
+					</p>
+				</div>
 				<textarea name="auhfc[head]" id="auhfc_head" class="widefat code codeEditor" rows="5"><?php echo ! empty( $auhfc_form_data['head'] ) ? esc_textarea( $auhfc_form_data['head'] ) : ''; ?></textarea>
 				<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;link&nbsp;rel="stylesheet" href="<?php echo esc_url( $auhfc_demo_url ); ?>/custom-style.css" type="text/css" media="all"&gt;</code></p>
 			</td>
@@ -86,7 +91,12 @@ printf(
 				<label for="auhfc_body"><?php esc_html_e( 'BODY Code', 'head-footer-code' ); ?></label>
 			</th>
 			<td>
-				<div class="description"><?php echo $auhfc_security_risk_notice; ?></div>
+				<div class="description">
+					<p class="notice notice-warning">
+						<strong><?php echo esc_html( $auhfc_security_risk_notice['title'] ); ?></strong>
+						<?php echo esc_html( $auhfc_security_risk_notice['message'] ); ?>
+					</p>
+				</div>
 				<textarea name="auhfc[body]" id="auhfc_body" class="widefat code codeEditor" rows="5"><?php echo ! empty( $auhfc_form_data['body'] ) ? esc_textarea( $auhfc_form_data['body'] ) : ''; ?></textarea>
 				<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;script src="<?php echo esc_url( $auhfc_demo_url ); ?>/body-script.js" type="text/javascript"&gt;&lt;/script&gt;</code></p>
 			</td>
@@ -96,7 +106,12 @@ printf(
 				<label for="auhfc_footer"><?php esc_html_e( 'FOOTER Code', 'head-footer-code' ); ?></label>
 			</th>
 			<td>
-				<div class="description"><?php echo $auhfc_security_risk_notice; ?></div>
+				<div class="description">
+					<p class="notice notice-warning">
+						<strong><?php echo esc_html( $auhfc_security_risk_notice['title'] ); ?></strong>
+						<?php echo esc_html( $auhfc_security_risk_notice['message'] ); ?>
+					</p>
+				</div>
 				<textarea name="auhfc[footer]" id="auhfc_footer" class="widefat code codeEditor" rows="5"><?php echo ! empty( $auhfc_form_data['footer'] ) ? esc_textarea( $auhfc_form_data['footer'] ) : ''; ?></textarea>
 				<p class="description"><?php esc_html_e( 'Example', 'head-footer-code' ); ?>: <code>&lt;script src="<?php echo esc_url( $auhfc_demo_url ); ?>/footer-script.js" type="text/javascript"&gt;&lt;/script&gt;</code></p>
 			</td>

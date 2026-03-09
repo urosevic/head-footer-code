@@ -564,15 +564,14 @@ class Common {
 	}
 
 	/**
-	 * Format security risk notice for appending to each code textarea description
+	 * Return security risk notice title and message
 	 *
-	 * @return string
+	 * @return array
 	 */
 	public static function get_security_risk_notice() {
-		return sprintf(
-			'<p class="notice notice-warning"><strong>%1$s</strong> %2$s</p>',
-			esc_html__( 'WARNING!', 'head-footer-code' ),
-			esc_html__( 'Enter only safe, secure, and code from a trusted source. Unsafe or invalid code may break your site or pose security risks.', 'head-footer-code' )
+		return array(
+			'title'   => __( 'WARNING!', 'head-footer-code' ),
+			'message' => __( 'Enter only safe, secure, and code from a trusted source. Unsafe or invalid code may break your site or pose security risks.', 'head-footer-code' ),
 		);
 	}
 

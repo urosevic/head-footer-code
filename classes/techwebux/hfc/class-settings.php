@@ -51,8 +51,9 @@ class Settings {
 		add_action( 'admin_init', array( $this, 'settings_register' ) );
 
 		// Plugins settings page only hooks.
-		$current_page = isset( $_GET['page'] ) ? $_GET['page'] : '';
-		if ( $current_page === $this->plugin->slug ) {
+		$current_page = filter_input( INPUT_GET, 'page', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+
+		if ( ! empty( $current_page ) && $current_page === $this->plugin->slug ) {
 
 			$this->allowed_html      = Common::allowed_html();
 			$this->form_allowed_html = Common::form_allowed_html();
@@ -584,7 +585,13 @@ class Settings {
 		$rows        = isset( $args['rows'] ) ? $args['rows'] : 7;
 
 		// Compose input HTML.
-		$html  = '<div class="description">' . $this->security_risk_notice . '</div>';
+
+		$html  = '<div class="description">';
+		$html .= '<p class="notice notice-warning">';
+		$html .= '<strong>' . esc_html( $this->security_risk_notice['title'] ) . '</strong> ';
+		$html .= esc_html( $this->security_risk_notice['message'] );
+		$html .= '</p></div>';
+
 		$html .= sprintf(
 			'<textarea name="%1$s" id="%2$s" rows="%3$s" class="%4$s" title="%5$s">%6$s</textarea>',
 			esc_attr( $field ),       // 1

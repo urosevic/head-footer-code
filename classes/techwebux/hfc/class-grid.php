@@ -108,7 +108,7 @@ class Grid {
 		$meta     = get_post_meta( $post_id, $this->plugin->meta_key, true );
 		$edit_url = get_edit_post_link( $post_id );
 
-		echo $this->render_badges( $meta, $edit_url, 'post' );
+		echo wp_kses_post( $this->render_badges( $meta, $edit_url, 'post' ) );
 	}
 
 	/**
