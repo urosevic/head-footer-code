@@ -23,6 +23,9 @@ class Common {
 	/** @var Plugin_Info Plugin metadata object. */
 	protected static $plugin;
 
+	/** @var array Custom set of allowed HTML tags. */
+	private static $allowed_html = null;
+
 	/**
 	 * Injects the plugin metadata object into the Common utility class.
 	 *
@@ -264,8 +267,13 @@ class Common {
 	 * @return array Map of allowed tags and their permitted attributes.
 	 */
 	public static function allowed_html() {
+		// Return cached value if already initialized.
+		if ( null !== self::$allowed_html ) {
+			return self::$allowed_html;
+		}
+
 		// Allow safe HTML, JS, and CSS.
-		return array_replace_recursive(
+		self::$allowed_html = array_replace_recursive(
 			wp_kses_allowed_html( 'post' ), // Allow safe HTML for posts.
 			array(
 				'noscript' => true,
@@ -278,6 +286,11 @@ class Common {
 					'crossorigin' => true, // security
 					'nonce'       => true, // security
 					'charset'     => true,
+					// global
+					'id'          => true,
+					'class'       => true,
+					'dir'         => true,
+					'data-*'      => true,
 				),
 				// Allow <style> tags.
 				'style'    => array(
@@ -285,6 +298,12 @@ class Common {
 					'type'   => true,
 					'scoped' => true,
 					'nonce'  => true,
+					'title'  => true,
+					// global
+					'id'     => true,
+					'class'  => true,
+					'dir'    => true,
+					'data-*' => true,
 				),
 				// Allow <link> tags for CSS and preloading.
 				'link'     => array(
@@ -304,6 +323,11 @@ class Common {
 					'itemprop'       => true, // for structured data
 					'referrerpolicy' => true, // security
 					'integrity'      => true, // security
+					// global
+					'id'             => true,
+					'class'          => true,
+					'dir'            => true,
+					'data-*'         => true,
 				),
 				// Allow <meta> tags.
 				'meta'     => array(
@@ -314,6 +338,11 @@ class Common {
 					'itemprop'   => true,
 					'media'      => true,
 					'property'   => true,
+					// global
+					'id'         => true,
+					'class'      => true,
+					'dir'        => true,
+					'data-*'     => true,
 				),
 				// Allow <iframe> for GTag and custom embeds.
 				'iframe'   => array(
@@ -331,9 +360,13 @@ class Common {
 					'id'       => true,
 					'style'    => true,
 					'loading'  => true,
+					'dir'      => true,
+					'data-*'   => true,
 				),
 			)
 		);
+
+		return self::$allowed_html;
 	}
 
 	/**
