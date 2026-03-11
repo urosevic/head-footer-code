@@ -21,9 +21,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - auhfc_update_6()
  */
 function auhfc_update() {
-	// Disable PHP timeout for running updates.
-	set_time_limit( 0 );
-
 	// Get the current database schema version number.
 	$current_db_ver = get_option( 'auhfc_db_ver', 0 );
 
