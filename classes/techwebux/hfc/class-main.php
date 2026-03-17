@@ -105,9 +105,18 @@ class Main {
 			return;
 		}
 
+		// Lock initiated updating
+		if ( get_transient( 'auhfc_updating' ) ) {
+			return;
+		}
+		set_transient( 'auhfc_updating', true, 5 * MINUTE_IN_SECONDS );
+
 		// Require update script and trigger update function.
 		require_once $this->plugin->dir . '/update.php';
 		auhfc_update();
+
+		// Remove updating lock
+		delete_transient( 'auhfc_updating' );
 	}
 
 	/**
