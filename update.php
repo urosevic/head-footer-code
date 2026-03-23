@@ -253,54 +253,80 @@ function auhfc_update_9() {
 /**
  * Migration for v. 1.5.3
  * Clean up double slashes from existing meta data caused by previous double-slashing.
+ * Processes 500 records at a time and stays on DB version 9 until
+ * all records are cleaned to prevent timeouts and memory exhaustion.
  */
 function auhfc_update_10() {
 	global $wpdb;
 
-	$meta_key = '_auhfc';
+	$meta_key   = '_auhfc';
+	$batch_size = 500;
+	$has_more   = false;
 
 	/**
-	 * Strip slashes from Post Metas
-	 * We use direct SQL to fetch all IDs at once to avoid N+1 query issues
-	 * and memory exhaustion on large databases.
+	 * Strip slashes from Post Metas when actually contain backslashes (\\) in meta_value.
 	 */
 	$post_metas = $wpdb->get_results(
 		$wpdb->prepare(
-			"SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = %s",
-			$meta_key
+			"SELECT post_id, meta_value FROM $wpdb->postmeta 
+			WHERE meta_key = %s AND meta_value LIKE %s 
+			LIMIT %d",
+			$meta_key,
+			'%' . $wpdb->esc_like( '\\' ) . '%',
+			$batch_size
 		)
 	);
 
 	if ( ! empty( $post_metas ) ) {
+		$has_more = true;
 		foreach ( $post_metas as $meta ) {
 			$original_data = maybe_unserialize( $meta->meta_value );
 
 			if ( is_array( $original_data ) ) {
 				$cleaned_data = stripslashes_deep( $original_data );
-				update_post_meta( $meta->post_id, $meta_key, wp_slash( $cleaned_data ) );
+				if ( $cleaned_data !== $original_data ) {
+					update_post_meta( $meta->post_id, $meta_key, wp_slash( $cleaned_data ) );
+				}
 			}
 		}
 	}
 
 	/**
-	 * Strip slashes from Taxonomies (Categories at the moment)
+	 * Strip slashes from Taxonomies (Terms) within available batch capacity.
 	 */
-	$term_metas = $wpdb->get_results(
-		$wpdb->prepare(
-			"SELECT term_id, meta_value FROM $wpdb->termmeta WHERE meta_key = %s",
-			$meta_key
-		)
-	);
+	if ( count( $post_metas ) < $batch_size ) {
+		$term_metas = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT term_id, meta_value FROM $wpdb->termmeta 
+				WHERE meta_key = %s AND meta_value LIKE %s 
+				LIMIT %d",
+				$meta_key,
+				'%' . $wpdb->esc_like( '\\' ) . '%',
+				$batch_size - count( $post_metas )
+			)
+		);
 
-	if ( ! empty( $term_metas ) ) {
-		foreach ( $term_metas as $meta ) {
-			$original_data = maybe_unserialize( $meta->meta_value );
+		if ( ! empty( $term_metas ) ) {
+			$has_more = true;
+			foreach ( $term_metas as $meta ) {
+				$original_data = maybe_unserialize( $meta->meta_value );
 
-			if ( is_array( $original_data ) ) {
-				$cleaned_data = stripslashes_deep( $original_data );
-				update_term_meta( $meta->term_id, $meta_key, wp_slash( $cleaned_data ) );
+				if ( is_array( $original_data ) ) {
+					$cleaned_data = stripslashes_deep( $original_data );
+					if ( $cleaned_data !== $original_data ) {
+						update_term_meta( $meta->term_id, $meta_key, wp_slash( $cleaned_data ) );
+					}
+				}
 			}
 		}
+	}
+
+	/**
+	 * Revert DB versin if there is more work in batches so
+	 * Main::plugins_loaded() triggers this function agaiuntil completion.
+	 */
+	if ( $has_more ) {
+		update_option( 'auhfc_db_ver', 9 );
 	}
 }
 
