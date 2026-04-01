@@ -5,7 +5,7 @@ Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: head, body, footer, code, script
 Requires at least: 5.2
 Tested up to: 7.0
-Stable tag: 1.5.6
+Stable tag: 1.5.7
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -192,6 +192,10 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 Introduced restriction for non-privileged roles (eg. Editor and Author) to access HFC on pages, posts and custom CPTs. If you wish to allow them manage article-specific HFC, make sure you enable that at the bottom of the global plugin settings page.
 
 ## Changelog
+
+### 1.5.7 (2026-04-01)
+* Improve: Allow Programmable Search Engine tags (PageMap, DataObject and Attribute)
+* Test: WordPress 7.0-RC2
 
 ### 1.5.6 (2026-03-23)
 * Fix: update routine 10 infinite loop on sites with huge number of posts (10k+)

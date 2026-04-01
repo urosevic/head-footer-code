@@ -448,6 +448,7 @@ class Common {
 		$allowed_html = self::allowed_html();
 		$placeholders = array();
 
+		// Extract <script> and <style> blocks.
 		$regex = '#<(script|style)\b[^>]*>.*?</\1>#is';
 
 		$content = preg_replace_callback(
@@ -473,9 +474,21 @@ class Common {
 			$content
 		);
 
+		// Extract Google PageMap XML comment blocks before wp_kses strips comments.
+		$content = preg_replace_callback(
+			'/<!--\s*<PageMap\b[^>]*>.*?<\/PageMap>\s*-->/is',
+			function ( $matches ) use ( &$placeholders ) {
+				$placeholder                  = '__TWU_PAGEMAP_PLACEHOLDER_' . count( $placeholders ) . '__';
+				$placeholders[ $placeholder ] = self::sanitize_pagemap( $matches[0] );
+				return $placeholder;
+			},
+			$content
+		);
+
 		// Sanitize rest of content (outside scripts/styles).
 		$content = wp_kses( $content, $allowed_html );
 
+		// Reinstate all placeholders.
 		if ( ! empty( $placeholders ) ) {
 			$content = str_replace( array_keys( $placeholders ), array_values( $placeholders ), $content );
 		}
@@ -518,6 +531,49 @@ class Common {
 		}
 
 		return $sanitized;
+	}
+
+	/**
+	 * Sanitize a Google PageMap XML comment block.
+	 *
+	 * Validates that only legal PageMap elements and attributes are present
+	 * before reinserting into the output. Strips anything unexpected.
+	 *
+	 * Structure: <!-- <PageMap> <DataObject type="..."> <Attribute name="..." value="..."/> </DataObject> </PageMap> -->
+	 *
+	 * @see https://developers.google.com/custom-search/docs/structured_data#using-pagemaps
+	 *
+	 * @param  string $raw Raw PageMap comment block.
+	 * @return string      Sanitized PageMap comment block, or empty string if invalid.
+	 */
+	private static function sanitize_pagemap( $raw ) {
+		// Strip the comment wrapper and work with the inner XML.
+		$inner = preg_replace( '/^<!--\s*(.*?)\s*-->$/is', '$1', trim( $raw ) );
+
+		if ( empty( $inner ) ) {
+			return '';
+		}
+
+		// Only allow known PageMap tags and attributes.
+		$allowed = array(
+			'pagemap'    => array(),
+			'dataobject' => array(
+				'type' => true,
+				'id'   => true,
+			),
+			'attribute'  => array(
+				'name'  => true,
+				'value' => true,
+			),
+		);
+
+		$sanitized_inner = wp_kses( $inner, $allowed );
+
+		if ( empty( trim( $sanitized_inner ) ) ) {
+			return '';
+		}
+
+		return '<!--' . "\n" . trim( $sanitized_inner ) . "\n" . '-->';
 	}
 
 	/**
