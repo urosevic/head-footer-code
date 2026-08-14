@@ -30,15 +30,19 @@ foreach ( $auhfc_options as $auhfc_option_name ) {
 $auhfc_post_meta_key = '_auhfc';
 delete_post_meta_by_key( $auhfc_post_meta_key );
 
-// Delete category meta values.
-$auhfc_category_meta_key = '_auhfc';
-$auhfc_category_ids      = get_terms(
+// Delete term meta values across all taxonomies (category, tags, or any custom
+// taxonomy the user selected in settings), including empty terms.
+$auhfc_term_meta_key = '_auhfc';
+$auhfc_term_ids       = get_terms(
 	array(
-		'taxonomy' => 'category',
-		'fields'   => 'ids',
-		'meta_key' => $auhfc_category_meta_key,
+		'taxonomy'   => get_taxonomies( array(), 'names' ),
+		'fields'     => 'ids',
+		'hide_empty' => false,
+		'meta_key'   => $auhfc_term_meta_key, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- One-time uninstall cleanup; no cheaper way to find terms carrying this meta key.
 	)
 );
-foreach ( $auhfc_category_ids as $auhfc_category_id ) {
-	delete_term_meta( $auhfc_category_id, $auhfc_category_meta_key );
+if ( ! is_wp_error( $auhfc_term_ids ) ) {
+	foreach ( $auhfc_term_ids as $auhfc_term_id ) {
+		delete_term_meta( $auhfc_term_id, $auhfc_term_meta_key );
+	}
 }
