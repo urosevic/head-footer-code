@@ -149,11 +149,17 @@ class Front {
 		$output = $this->build_output( $location, $injection_data, $context );
 
 		// Print with optional shortcode processing.
-		echo 'y' === $config['do_shortcode']
-			? do_shortcode( $output )
-			: $output;
-			// We do not use wp_kses( $output, $this->allowed_html );
-			// because that would escape <, > and & which is already sanitized on entry.
+		// Intentional raw output: this plugin's sole purpose is to let a `manage_options`
+		// user inject custom JS/CSS/HTML into head/body/footer. Running $output through
+		// esc_html()/wp_kses() here would break that custom code (encode tags, strip
+		// <script>/<style>, mangle inline JS). Access is capability-gated on save (see
+		// class-settings.php, class-metabox-article.php, class-metabox-taxonomy.php),
+		// which is the intended trust boundary for this feature.
+		if ( 'y' === $config['do_shortcode'] ) {
+			echo do_shortcode( $output ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Raw by design, see comment above.
+		} else {
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Raw by design, see comment above.
+		}
 	}
 
 	/**
