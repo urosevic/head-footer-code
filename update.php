@@ -265,11 +265,19 @@ function auhfc_update_10() {
 
 	/**
 	 * Strip slashes from Post Metas when actually contain backslashes (\\) in meta_value.
+	 *
+	 * Direct query by design: this is a one-time, batched data-repair migration that must
+	 * scan the raw meta_value with LIKE, including any orphaned postmeta rows (e.g. left
+	 * behind by a deleted post) that a WP_Query/get_posts()-based meta_query would silently
+	 * skip because it inner-joins against wp_posts. Caching does not apply because each row
+	 * found here is immediately rewritten (or the batch completes) - there is nothing to
+	 * cache between runs.
 	 */
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- See docblock above: one-time batched migration, must catch orphaned meta rows, nothing cacheable between runs.
 	$post_metas = $wpdb->get_results(
 		$wpdb->prepare(
-			"SELECT post_id, meta_value FROM $wpdb->postmeta 
-			WHERE meta_key = %s AND meta_value LIKE %s 
+			"SELECT post_id, meta_value FROM $wpdb->postmeta
+			WHERE meta_key = %s AND meta_value LIKE %s
 			LIMIT %d",
 			$meta_key,
 			'%' . $wpdb->esc_like( '\\' ) . '%',
@@ -293,12 +301,16 @@ function auhfc_update_10() {
 
 	/**
 	 * Strip slashes from Taxonomies (Terms) within available batch capacity.
+	 *
+	 * Direct query by design - same reasoning as the postmeta query above: one-time batched
+	 * migration that must catch orphaned termmeta rows via LIKE, with nothing to cache.
 	 */
 	if ( count( $post_metas ) < $batch_size ) {
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- See docblock above: one-time batched migration, must catch orphaned meta rows, nothing cacheable between runs.
 		$term_metas = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT term_id, meta_value FROM $wpdb->termmeta 
-				WHERE meta_key = %s AND meta_value LIKE %s 
+				"SELECT term_id, meta_value FROM $wpdb->termmeta
+				WHERE meta_key = %s AND meta_value LIKE %s
 				LIMIT %d",
 				$meta_key,
 				'%' . $wpdb->esc_like( '\\' ) . '%',
@@ -322,8 +334,8 @@ function auhfc_update_10() {
 	}
 
 	/**
-	 * Revert DB versin if there is more work in batches so
-	 * Main::plugins_loaded() triggers this function agaiuntil completion.
+	 * Revert DB version if there is more work in batches so
+	 * Main::plugins_loaded() triggers this function again until completion.
 	 */
 	if ( $has_more ) {
 		update_option( 'auhfc_db_ver', 9 );
