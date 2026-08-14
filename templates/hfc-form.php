@@ -12,6 +12,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * This template is always loaded via `include_once` from inside a class method
+ * (Metabox_Article::form(), Metabox_Taxonomy::form()), so it shares that method's
+ * local variable scope. The variables below are not defined in this file - they
+ * are set by the including method right before the `include_once` call.
+ *
+ * @var string                                                                   $auhfc_form_scope            Human-readable scope label, e.g. "article specific" or "Category Name category".
+ * @var array{title: string, message: string}                                    $auhfc_security_risk_notice  Security warning notice (see Common::get_security_risk_notice()).
+ * @var array{behavior?: string, head?: string, body?: string, footer?: string}  $auhfc_form_data             Saved HFC field values for this post/term.
+ * @var \Techwebux\Hfc\Metabox_Article|\Techwebux\Hfc\Metabox_Taxonomy           $this                        The including metabox instance (for $this->plugin).
+ */
+
 $auhfc_demo_url = get_stylesheet_directory_uri();
 ?>
 <p>

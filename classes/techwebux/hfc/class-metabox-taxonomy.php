@@ -23,6 +23,7 @@ class Metabox_Taxonomy {
 	/** @var Plugin_Info Plugin metadata object. */
 	protected $plugin;
 
+	/** @var string[] Taxonomy slugs this metabox is registered for. */
 	protected $taxonomies;
 
 	/**
@@ -62,12 +63,13 @@ class Metabox_Taxonomy {
 			: esc_html__( 'taxonomy', 'head-footer-code' );
 
 		// Get taxonomy name
-		$term_name = $term_object->name; // or $term_object->slug
+		$term_name = $term_object->name;
 
 		/** @var string $form_scope Used in templates/hfc-form.php */
 		$auhfc_form_scope = esc_html( "{$term_name} {$taxonomy_label} " )
 			. esc_html__( 'specific', 'head-footer-code' );
 
+		/** @var array $auhfc_security_risk_notice Used in templates/hfc-form.php */
 		$auhfc_security_risk_notice = Common::get_security_risk_notice();
 
 		$term_id  = isset( $term_object->term_id ) ? (int) $term_object->term_id : 0;
@@ -92,6 +94,8 @@ class Metabox_Taxonomy {
 
 	/**
 	 * Function to update taxonomy meta
+	 *
+	 * @param int $term_id Term ID.
 	 */
 	public function save( $term_id ) {
 		if ( ! isset( $_POST['auhfc'] ) ) {
@@ -146,6 +150,9 @@ class Metabox_Taxonomy {
 
 	/**
 	 * Generates the nonce field name for a given taxonomy.
+	 *
+	 * @param string $taxonomy Taxonomy slug.
+	 * @return string Nonce field name.
 	 */
 	private function get_nonce_name( $taxonomy ) {
 		return "auhfc_{$taxonomy}_nonce";
@@ -153,6 +160,9 @@ class Metabox_Taxonomy {
 
 	/**
 	 * Generates the nonce action string for a given taxonomy.
+	 *
+	 * @param string $taxonomy Taxonomy slug.
+	 * @return string Nonce action name.
 	 */
 	private function get_nonce_action( $taxonomy ) {
 		return "auhfc_{$taxonomy}_save_action";

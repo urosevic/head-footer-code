@@ -77,15 +77,16 @@ class Metabox_Article {
 	 * @return void
 	 */
 	public function form( $post ) {
-		/** @var string $form_scope Used in ../templates/hfc-form.php */
+		/** @var string $form_scope Used in templates/hfc-form.php */
 		$auhfc_form_scope = esc_html__( 'article specific', 'head-footer-code' );
 
+		/** @var array $auhfc_security_risk_notice Used in templates/hfc-form.php */
 		$auhfc_security_risk_notice = Common::get_security_risk_notice();
 
 		$post_id = $post->ID;
 
 		// Get article specific postmeta.
-		/** @var array $auhfc_form_data Used in ../templates/hfc-form.php */
+		/** @var array $auhfc_form_data Used in templates/hfc-form.php */
 		$auhfc_form_data = array(
 			'behavior' => Common::get_post_meta( 'behavior', $post_id ),
 			'head'     => Common::get_post_meta( 'head', $post_id ),

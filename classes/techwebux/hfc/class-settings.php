@@ -25,7 +25,11 @@ class Settings {
 
 	/** @var array Allowed HTML tags for sanitization. */
 	public $allowed_html;
+
+	/** @var array Allowed HTML tags for sanitizing rendered admin form markup. */
 	public $form_allowed_html;
+
+	/** @var array{title: string, message: string} Security risk notice shown next to code fields. */
 	public $security_risk_notice;
 
 	/**
