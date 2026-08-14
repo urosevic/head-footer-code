@@ -27,14 +27,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HFC__MIN_PHP', '5.6' );
-define( 'HFC__MIN_WP', '5.2' );
+define( 'TECHWEBUX_HFC__MIN_PHP', '5.6' );
+define( 'TECHWEBUX_HFC__MIN_WP', '5.2' );
 
-define( 'HFC_VER', '1.5.7' );
-define( 'HFC_VER_DB', '11' );
-define( 'HFC_FILE', __FILE__ );
+define( 'TECHWEBUX_HFC_VER', '1.5.7' );
+define( 'TECHWEBUX_HFC_VER_DB', '11' );
+define( 'TECHWEBUX_HFC_FILE', __FILE__ );
 
-register_activation_hook( HFC_FILE, array( '\Techwebux\Hfc\Main', 'plugin_activation' ) );
+register_activation_hook( TECHWEBUX_HFC_FILE, array( '\Techwebux\Hfc\Main', 'plugin_activation' ) );
 
 require_once __DIR__ . '/classes/autoload.php';
 new \Techwebux\Hfc\Main();

@@ -55,14 +55,14 @@ class Plugin_Info {
 	public $meta_key;
 
 	public function __construct() {
-		$this->min_wp   = HFC__MIN_WP;
-		$this->min_php  = HFC__MIN_PHP;
-		$this->version  = HFC_VER;
-		$this->db_ver   = absint( HFC_VER_DB );
-		$this->file     = HFC_FILE;
-		$this->dir      = dirname( HFC_FILE );
-		$this->url      = plugin_dir_url( HFC_FILE );
-		$this->basename = plugin_basename( HFC_FILE );
+		$this->min_wp   = TECHWEBUX_HFC__MIN_WP;
+		$this->min_php  = TECHWEBUX_HFC__MIN_PHP;
+		$this->version  = TECHWEBUX_HFC_VER;
+		$this->db_ver   = absint( TECHWEBUX_HFC_VER_DB );
+		$this->file     = TECHWEBUX_HFC_FILE;
+		$this->dir      = dirname( TECHWEBUX_HFC_FILE );
+		$this->url      = plugin_dir_url( TECHWEBUX_HFC_FILE );
+		$this->basename = plugin_basename( TECHWEBUX_HFC_FILE );
 		$this->name     = 'Head & Footer Code';
 		$this->slug     = 'head-footer-code';
 		$this->meta_key = '_auhfc';

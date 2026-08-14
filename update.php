@@ -25,7 +25,7 @@ function auhfc_update() {
 	$current_db_ver = get_option( 'auhfc_db_ver', 0 );
 
 	// Get the target version that we need to reach.
-	$target_db_ver = HFC_VER_DB;
+	$target_db_ver = TECHWEBUX_HFC_VER_DB;
 
 	// Run update routines one by one until the current version number
 	// reaches the target version number.
