@@ -598,8 +598,16 @@ class Common {
 
 		// Check if we got array and requested key exists.
 		if ( is_array( $data ) && isset( $data[ $field_name ] ) ) {
-			// Remove slashes from escaped value (make value ready to use).
-			return stripslashes_deep( $data[ $field_name ] );
+			// No need for stripslashes_deep() here because we want to preserve any backslashes
+			// the user entered in their custom JS/CSS.
+			// The get_post_meta()/get_term_meta() return the stored value as-is, no slash handling
+			// in either direction).
+			// The write side already nets out clean - add_metadata()/update_metadata() internally
+			// call wp_unslash() on the value we pass them, which is why the save() methods in
+			// Class_Metabox_Article/Class_Metabox_Taxonomy pass wp_slash( $data ) to
+			// update_post_meta()/update_term_meta() - that call cancels core's internal unslash
+			// so the stored value matches the sanitized input exactly.
+			return $data[ $field_name ];
 		}
 
 		// Default for behavior.

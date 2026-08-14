@@ -99,7 +99,7 @@ class Metabox_Taxonomy {
 		}
 
 		// Get taxonomy from form.
-		$taxonomy = isset( $_POST['taxonomy'] ) ? sanitize_text_field( $_POST['taxonomy'] ) : '';
+		$taxonomy = isset( $_POST['taxonomy'] ) ? sanitize_text_field( wp_unslash( $_POST['taxonomy'] ) ) : '';
 
 		// Bail if current taxonomy is not among allowed in plugin settings.
 		if ( ! in_array( $taxonomy, $this->taxonomies, true ) ) {
@@ -132,7 +132,15 @@ class Metabox_Taxonomy {
 		}
 
 		// Sanitize data and update term meta.
-		$data = Common::sanitize_hfc_data( $_POST['auhfc'] );
+		// Unslash first: WP adds magic-quotes slashes to all superglobals, and this raw
+		// custom JS/CSS/HTML content must not carry them into sanitize_hfc_data() or they
+		// interfere with its wp_kses()/regex-based sanitization.
+		// The update_term_meta() below still needs wp_slash( $data ) - core's update_metadata()
+		// and add_metadata() internally call wp_unslash() on the value we pass them and
+		// wp_slash() here cancels that out so the stored value matches this sanitized data exactly.
+		// See Common::get_meta() for the matching note on the read side (no stripslashes there
+		// as it would double-unslash).
+		$data = Common::sanitize_hfc_data( wp_unslash( $_POST['auhfc'] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized inside Common::sanitize_hfc_data() via sanitize_html_with_scripts()/wp_kses(), not here.
 		update_term_meta( $term_id, $this->plugin->meta_key, wp_slash( $data ) );
 	}
 
