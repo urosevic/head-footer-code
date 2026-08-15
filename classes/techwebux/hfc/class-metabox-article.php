@@ -119,12 +119,16 @@ class Metabox_Article {
 		 * 1. we have nonce
 		 * 2. nonce is valid
 		 * 3. user has permission to edit post
-		 * 4. we have AUHFC fields as an array
+		 * 4. user's role is allowed to manage HFC (defense-in-depth: the metabox/save hooks
+		 *    are only wired up for allowed roles in Main::plugins_loaded(), but we re-check
+		 *    here so this handler stays safe on its own, independent of hook wiring)
+		 * 5. we have AUHFC fields as an array
 		*/
 		if (
 			empty( $nonce )
 			|| ! wp_verify_nonce( $nonce, '_head_footer_code_nonce' )
 			|| ! current_user_can( 'edit_post', $post_id )
+			|| ! Common::user_has_allowed_role()
 			|| empty( $_POST['auhfc'] )
 			|| ! is_array( $_POST['auhfc'] )
 		) {

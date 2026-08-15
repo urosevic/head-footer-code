@@ -123,9 +123,16 @@ class Metabox_Taxonomy {
 			return;
 		}
 
-		// Dynamic capability check
+		// Dynamic capability check.
 		$tax_obj = get_taxonomy( $taxonomy );
 		if ( ! $tax_obj || ! current_user_can( $tax_obj->cap->edit_terms, $term_id ) ) {
+			return;
+		}
+
+		// Defense-in-depth: the save hook is only wired up for allowed roles in
+		// Main::plugins_loaded(), but we re-check here so this handler stays safe
+		// on its own, independent of hook wiring.
+		if ( ! Common::user_has_allowed_role() ) {
 			return;
 		}
 
