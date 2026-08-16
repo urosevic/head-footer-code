@@ -4,8 +4,8 @@ Contributors: urkekg, techwebux
 Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: head, body, footer, code, script
 Requires at least: 5.2
-Tested up to: 7.0
-Stable tag: 1.5.7
+Tested up to: 7.1
+Stable tag: 1.5.8
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -193,6 +193,11 @@ Introduced restriction for non-privileged roles (eg. Editor and Author) to acces
 
 ## Changelog
 
+### 1.5.8 (2026-08-16)
+* Fix: WP Plugin Check errors and warnings
+* Test: WordPress 7.1-RC3 and Twenty Twenty-Five 1.5 and Twenty Fifteen 4.2
+* Improve: Additional layer of protection for post and taxonomy meta boxes against unpriviledged roles
+
 ### 1.5.7 (2026-04-01)
 * Improve: Allow Programmable Search Engine tags (PageMap, DataObject and Attribute)
 * Test: WordPress 7.0-RC2
@@ -283,44 +288,3 @@ https://youtu.be/CXCWqNUQSF4
   * auhfc_out() -> Techwebux\Hfc\Common::out()
   * auhfc_head_note() -> Techwebux\Hfc\Settings::head_note()
   * auhfc_body_note() -> Techwebux\Hfc\Settings::body_note()
-
-### 1.3.7 (2024-11-18)
-* Fix: Compatibility with WordPress 6.7
-
-### 1.3.6 (2024-10-12)
-* Improve: Optimize strings for easier translation
-
-### 1.3.5 (2024-07-06)
-* Tested: PHP 8.3.7 and WordPress 6.6 with Twenty Twenty-Four theme 1.1 (Single and Multisite)
-* Change: Move the `Settings` link on plugins listing to 1st position
-
-### 1.3.4 (2024-06-30)
-* Tested: PHP 8.3.7 and WordPress 6.5.5 with Twenty Twenty-Four theme 1.1 (Single and Multisite)
-* Change: PHP version lowered to 5.5
-* Fix: Activation on deprecated PHP or WordPress
-
-### 1.3.3 (2023-07-21)
-* Tested: PHP 8.2.8 and WordPress 6.3-RC1 with Twenty Twenty-Three theme (Single and Multisite)
-
-### 1.3.2 (2023-06-02)
-* Tested: on PHP 8.2.6 and WordPress 6.2.2 with Twenty Twenty-Three theme (Single and Multisite)
-* Fixed: Deprecated and Warning notices in update.php on PHP 8.2.6
-* Improve: Multisite support CodeMirror on Article and Category
-
-### 1.3.1 (2023-03-18)
-* Tested: on PHP 8.1.14/8.2.1 and WordPress 6.2-RC2 with Twenty Twenty-Three theme (Single and Multisite)
-* Add: support do not add homepage in Blog Post related code on paged pages (2, 3, and so on)
-* Add: CodeEditor on textareas in article Meta boxes
-* Fix: Fatal error due to relocated plugin update file
-* Cleanup: Remove donate button from settings page
-* Improve: Security.
-* Improve: Coding Standard.
-
-### 1.3.0 (2022-05-08)
-
-* Tested: on PHP 8.1.5 and WordPress 6.0-RC1 with Twenty Twenty-Two theme (Single and Multisite)
-* Add: Support for Categotry specific code.
-* Improve: Coding Standard.
-* Improve: Important notes on settings page.
-* Improve: README converted to MarkDown.
-* Improve: Remove PayPal logo and load minified admin stylesheet.
