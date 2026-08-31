@@ -577,6 +577,79 @@ class Common {
 	}
 
 	/**
+	 * Restore a `_auhfc` value saved before the 1.5.8 wp_unslash()/wp_slash() round-trip fix,
+	 * which left pre-1.5.8 posts/terms permanently over-escaped once get_meta() stopped
+	 * compensating with an unconditional stripslashes_deep().
+	 *
+	 * Read-only heuristic, applied per fragment. A fragment is only unslashed when
+	 * `addslashes( stripslashes( $text ) ) === $text` - true for fully addslashes()'d legacy
+	 * text, essentially never true for real JS/CSS/JSON-LD (mixed bare/escaped quotes). This
+	 * runs per fragment rather than on the whole value because wp_kses() always rebuilds
+	 * `<script>`/`<style>` opening tags fresh, so their attribute quotes were never part of the
+	 * old escaping bug - only the content inside them was.
+	 *
+	 * @param mixed $value Raw meta field value as read from the database.
+	 * @return mixed Value with legacy over-escaping removed, or unchanged.
+	 */
+	private static function maybe_unslash_pre158_value( $value ) {
+		if ( ! is_string( $value ) || '' === $value ) {
+			return $value;
+		}
+
+		$placeholders = array();
+
+		// Extract <script>/<style> blocks: leave their opening/closing tags untouched and
+		// only round-trip-check the content between them.
+		$value = preg_replace_callback(
+			'#<(script|style)\b[^>]*>.*?</\1>#is',
+			function ( $matches ) use ( &$placeholders ) {
+				$cleaned = $matches[0];
+
+				if ( preg_match( '#^(<(?:script|style)\b[^>]*>)(.*)(</(?:script|style)>)$#is', $matches[0], $parts ) ) {
+					$cleaned = $parts[1] . self::maybe_unslash_fragment( $parts[2] ) . $parts[3];
+				}
+
+				$placeholder                  = '__TWU_UNSLASH_' . count( $placeholders ) . '__';
+				$placeholders[ $placeholder ] = $cleaned;
+				return $placeholder;
+			},
+			$value
+		);
+
+		// Round-trip-check whatever is left (text outside script/style tags, e.g. a comment).
+		$value = self::maybe_unslash_fragment( $value );
+
+		// Reinstate the (already individually checked) script/style blocks.
+		if ( ! empty( $placeholders ) ) {
+			$value = str_replace( array_keys( $placeholders ), array_values( $placeholders ), $value );
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Round-trip-check and, if safe, unslash a single fragment of text.
+	 *
+	 * @see Common::maybe_unslash_pre158_value()
+	 *
+	 * @param string $fragment Text fragment to check.
+	 * @return string Fragment with legacy over-escaping removed, or unchanged.
+	 */
+	private static function maybe_unslash_fragment( $fragment ) {
+		if ( '' === $fragment ) {
+			return $fragment;
+		}
+
+		$unslashed = stripslashes( $fragment );
+
+		if ( $unslashed !== $fragment && addslashes( $unslashed ) === $fragment ) {
+			return $unslashed;
+		}
+
+		return $fragment;
+	}
+
+	/**
 	 * Get values of metabox fields for Posts or Terms.
 	 *
 	 * @param string $field_name Field key.
@@ -598,16 +671,15 @@ class Common {
 
 		// Check if we got array and requested key exists.
 		if ( is_array( $data ) && isset( $data[ $field_name ] ) ) {
-			// No need for stripslashes_deep() here because we want to preserve any backslashes
-			// the user entered in their custom JS/CSS.
-			// The get_post_meta()/get_term_meta() return the stored value as-is, no slash handling
-			// in either direction).
-			// The write side already nets out clean - add_metadata()/update_metadata() internally
-			// call wp_unslash() on the value we pass them, which is why the save() methods in
+			// The write side nets out clean - add_metadata()/update_metadata() internally call
+			// wp_unslash() on the value we pass them, which is why the save() methods in
 			// Class_Metabox_Article/Class_Metabox_Taxonomy pass wp_slash( $data ) to
 			// update_post_meta()/update_term_meta() - that call cancels core's internal unslash
-			// so the stored value matches the sanitized input exactly.
-			return $data[ $field_name ];
+			// so the stored value matches the sanitized input exactly. No blanket
+			// stripslashes_deep() here by design: it would also strip backslashes the user
+			// intentionally entered in their custom JS/CSS/JSON-LD (regex, \uXXXX escapes,
+			// escaped quotes inside a JSON string, Windows paths, etc).
+			return self::maybe_unslash_pre158_value( $data[ $field_name ] );
 		}
 
 		// Default for behavior.

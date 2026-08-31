@@ -5,7 +5,7 @@ Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
 Tags: head, body, footer, code, script
 Requires at least: 5.2
 Tested up to: 7.1
-Stable tag: 1.5.8
+Stable tag: 1.5.9
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -179,6 +179,10 @@ Please report security bugs found in the source code of the Head & Footer Code p
 
 ## Upgrade Notice
 
+### 1.5.9
+
+Fixes a display regression from 1.5.8: article/category specific code saved before 1.5.8 (e.g. JSON-LD `<script type="application/ld+json">` blocks) could show backslash-escaped quotes, both in the metabox editor and on the front end. This release restores correct display automatically.
+
 ### 1.5.0
 
 To improve security and prevent XSS, this release introduce filtering of all opening SCRIPT and STYLE tags, and remove all not allowed attributes from them (eg. `onload`, `onmouseover`, etc).
@@ -192,6 +196,9 @@ Initial release of new plugin developed by Aleksandar Urosevic.
 Introduced restriction for non-privileged roles (eg. Editor and Author) to access HFC on pages, posts and custom CPTs. If you wish to allow them manage article-specific HFC, make sure you enable that at the bottom of the global plugin settings page.
 
 ## Changelog
+
+### 1.5.9 (2026-08-31)
+* Fix: JSON-LD and other article/category specific code saved before 1.5.8 could show backslash-escaped quotes; display is now corrected automatically without modifying stored post/term meta (thanks @sheenaljain for report)
 
 ### 1.5.8 (2026-08-16)
 * Fix: WP Plugin Check errors and warnings
