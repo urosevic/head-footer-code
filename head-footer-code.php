@@ -9,7 +9,7 @@
  * @link        https://www.techwebux.com/
  *
  * Plugin Name: Head & Footer Code
- * Plugin URI:  https://urosevic.net/wordpress/plugins/head-footer-code/
+ * Plugin URI:  https://devyard.urosevic.net/plugins/head-footer-code/
  * Description: Easy add site-wide, category or article specific custom code before the closing <strong>&lt;/head&gt;</strong> and <strong>&lt;/body&gt;</strong> or after opening <strong>&lt;body&gt;</strong> HTML tag.
  * Version:     1.5.9
  * Author:      Aleksandar Urošević

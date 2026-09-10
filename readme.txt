@@ -1,7 +1,7 @@
 # Head & Footer Code
 
 Contributors: urkekg, techwebux
-Donate link: https://urosevic.net/wordpress/donate/?donate_for=head-footer-code
+Donate link: https://devyard.urosevic.net/donate/?donate_for=head-footer-code
 Tags: head, body, footer, code, script
 Requires at least: 5.2
 Tested up to: 7.1
@@ -71,17 +71,17 @@ If you find **Head &amp; Footer Code** useful for your project, please [review p
 
 ### Features
 
-* **Multisite** and **PHP 8.5** compatible!
+* **Multisite**, **WooCommerce** and **PHP 8.5** compatible!
 * Set site-wide custom content for:
   * head page section (before the `</head>`)
-  * body section (after the `<body>`) - **Requires WordPress 5.2!**
+  * body section (after the `<body>`)
   * footer page section (before the `</body>`)
 * Homepage in Blog Posts mode:
   * set homepage specific custom code for head, body and/or footer
   * toggle homepage specific custom code on paged Homepage (page 2, 3, a nd so on)
 * Set article specific custom code for:
   * head page section (before the `</head>`)
-  * body section (after the `<body>`) - **Requires WordPress 5.2!**
+  * body section (after the `<body>`)
   * footer page section (before the `</body>`)
 * Set category specific custom code for head, body and/or footer of the page
 * Choose priority of printed custom code to head/body/footer sections (lower number mean far from `</head>` and `</body>` and closer to `<body>`, higher number means closer to `</head>` and `</body>` and farther to `<body>`)
